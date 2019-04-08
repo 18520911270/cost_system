@@ -1,0 +1,67 @@
+﻿<script src="~/Scripts/jquery-2.0.0.js"></script>
+<script src="~/Scripts/Bootstrap/bootstrap.js"></script>
+<script src="~/Scripts/Bootstrap/jquery.validate.js"></script>
+<script src="~/Scripts/layer/layer.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#content').removeClass('fullwidth');
+        $("#username").focus().select();
+        $('#form').validate({
+            errorElement: 'span',
+            errorClass: 'help-block',
+            focusInvalid: false,
+            rules: {
+                employeeNo: {
+                    required: true
+                },
+                password: {
+                    required: true
+                }
+            },
+            messages: {
+                employeeNo: {
+                    required: " "
+                },
+                password: {
+                    required: " "
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function (error, element) {
+                element.parent('div').append(error);
+            },
+            submitHandler: function (form) {
+                $('#content').removeClass('fullwidth').delay(10).queue(function (next) {
+                    $(this).addClass('fullwidth');
+                    next();
+                });
+
+                $.post("@Url.Content("~/Account/Login/")", { username: $("#username").val(), password: $("#password").val(), IsRemember: false }, function (result) {
+                    try {
+                        result = eval("(" + result + ")")
+                        if (result.Status == "100") {
+                            window.location.href = "@Url.Content("~/Home/Index")";
+
+                        } else if (result.Msg == "shopNull") {
+                            layer.msg('门店权限不足。。', { icon: 7 });
+                        }
+                        else {
+                            layer.msg(result.Msg, { icon: 7 });
+                        }
+
+                    } catch (ex) {
+                        layer.msg(ex.message.toString(), { icon: 7 });
+                    }
+                });
+
+            }
+        });
+    });
+</script>

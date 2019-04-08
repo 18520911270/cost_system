@@ -1,0 +1,293 @@
+﻿<div class="weui_dialog_confirm" id="dialogbox" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog" style="height: 130px;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">删除警告</strong></div>
+        <div class="weui_dialog_bd">您确定删除吗？删除后单据消失！</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    //第五种方法  
+    var idTmr;
+    function getExplorer() {
+        var explorer = window.navigator.userAgent;
+        //ie  
+        if (explorer.indexOf("MSIE") >= 0) {
+            return 'ie';
+        }
+            //firefox  
+        else if (explorer.indexOf("Firefox") >= 0) {
+            return 'Firefox';
+        }
+            //Chrome  
+        else if (explorer.indexOf("Chrome") >= 0) {
+            return 'Chrome';
+        }
+            //Opera  
+        else if (explorer.indexOf("Opera") >= 0) {
+            return 'Opera';
+        }
+            //Safari  
+        else if (explorer.indexOf("Safari") >= 0) {
+            return 'Safari';
+        }
+    }
+    function method5(tableid) {
+        if (getExplorer() == 'ie') {
+            var curTbl = document.getElementById(tableid);
+            var oXL = new ActiveXObject("Excel.Application");
+            var oWB = oXL.Workbooks.Add();
+            var xlsheet = oWB.Worksheets(1);
+            var sel = document.body.createTextRange();
+            sel.moveToElementText(curTbl);
+            sel.select();
+            sel.execCommand("Copy");
+            xlsheet.Paste();
+            oXL.Visible = true;
+
+            try {
+                var fname = oXL.Application.GetSaveAsFilename("Excel.xls", "Excel Spreadsheets (*.xls), *.xls");
+            } catch (e) {
+                print("Nested catch caught " + e);
+            } finally {
+                oWB.SaveAs(fname);
+                oWB.Close(savechanges = false);
+                oXL.Quit();
+                oXL = null;
+                idTmr = window.setInterval("Cleanup();", 1);
+            }
+
+        }
+        else {
+            tableToExcel(tableid)
+        }
+    }
+    function Cleanup() {
+        window.clearInterval(idTmr);
+        CollectGarbage();
+    }
+    var tableToExcel = (function () {
+        var uri = 'data:application/vnd.ms-excel;base64,',
+                template = '<html><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>',
+                base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) },
+                format = function (s, c) {
+                    return s.replace(/{(\w+)}/g,
+                            function (m, p) { return c[p]; })
+                }
+        return function (table, name) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+
+
+    function GetPrintList(tags, val) {
+        $.ajax({
+            url: "@Url.Content("~/Print/GetPrintList/")",
+            data: { Type: tags, Time: val },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                result = JSON.parse(result);
+                $("#vipData tr").remove();
+                if (result != null && result.info.length > 0) {
+                    //遍历返回的json                
+                    for (var i = 0; i < result.info.length; i++) {
+                        var Brand = "";
+                        if (result.info[i].PersonInfo.Brand != undefined) {
+                            for (var k = 0; k < result.info[i].PersonInfo.Brand.length; k++) {
+                                if (k < result.info[i].PersonInfo.Brand.length - 1) {
+                                    Brand += result.info[i].PersonInfo.Brand[k] + ","
+                                }
+                                else {
+                                    Brand += result.info[i].PersonInfo.Brand[k];
+                                }
+                            }
+                        }
+                        else {
+                            Brand = "无记账品牌";
+                        }
+                        var billtype;
+                        if (tags == "1") {
+                            billtype = "费用报销单";
+                            $("#btnPrint").show();
+                        }
+                        else if (tags == "2") {
+                            billtype = "付款通知书";
+                            $("#btnPrint").show();
+                        }
+                        else if (tags == "3") {
+                            billtype = "借款单";
+                            $("#btnPrint").show();
+                        }
+                        else if (tags == "4") {
+                            billtype = "还款单";
+                            $("#btnPrint").hide();
+                        }
+                        $("#billType").text(billtype);
+                        $("#billType10").text(billtype);
+                        if (result.info[i].ApprovalStatus == "0") {
+                            $("<tr><td><a onclick=\"GetVipDetail(this,'" + result.info[i].BillNo + "')\" style='color:blue;cursor:pointer;'>" + result.info[i].BillNo + "</a></td><td>"
+                              + billtype + "</td><td>"
+                              + result.info[i].PersonInfo.Department + "</td><td>"
+                              + Brand + "</td><td>"
+                              + result.info[i].Owner + "</td><td>"
+                              + result.info[i].TotalMoney + "</td><td>"
+                              + result.info[i].StringTime + "</td><td>"
+                              + ApprovalStatusMean(result.info[i].ApprovalStatus) + "</td><td style=\"text-align:left;\"><a onclick=\"showDialog('" + result.info[i].BillNo + "','" + tags + "')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a>&nbsp;&nbsp;<a onclick=\"DeleteMyBill('" + result.info[i].BillNo + "','" + tags + "')\" style='color:blue;cursor:pointer;'>" + '删除' + "</a></td><tr>").appendTo($("#vipData"));
+                        }
+                        else {
+                            $("<tr><td><a onclick=\"GetVipDetail(this,'" + result.info[i].BillNo + "')\" style='color:blue;cursor:pointer;'>" + result.info[i].BillNo + "</a></td><td>"
+                                + billtype + "</td><td>"
+                                + result.info[i].PersonInfo.Department + "</td><td>"
+                                + Brand + "</td><td>"
+                                + result.info[i].Owner + "</td><td>"
+                                + result.info[i].TotalMoney + "</td><td>"
+                                + result.info[i].StringTime + "</td><td>"
+                                + ApprovalStatusMean(result.info[i].ApprovalStatus) + "</td><td><a onclick=\"showDialog('" + result.info[i].BillNo + "','" + tags + "')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a></td><tr>").appendTo($("#vipData"));
+                        }
+                    }
+
+                    //得到pageIndex
+                    var currentPage = result.currentPage;
+                    //取到pageTotal的值
+                    var totalPages = result.totalPages;
+                    var pageSize = result.pageSize;
+
+                    var options = {
+                        currentPage: currentPage,  //当前页
+                        totalPages: totalPages,    //总页数
+                        numberOfPages: 5,
+                        itemTexts: function (type, page, current) {
+                            switch (type) {
+                                case "first":
+                                    return "首页";
+                                case "prev":
+                                    return "上一页";
+                                case "next":
+                                    return "下一页";
+                                case "last":
+                                    return "末页";
+                                case "page":
+                                    return page;
+                            }
+                        },
+                        onPageClicked: function (event, originalEvent, type, page) {  //page就是你点击的第几页
+                            $.ajax({
+                                url: "@Url.Content("~/Print/GetPrintList/")",
+                                datatype: "json",
+                                type: "GET",
+                                data: { Type: tags, Time: val, Page: page },
+                                success: function (output) {
+                                    output = JSON.parse(output);
+                                    //遍历返回的json
+                                    $("#vipData tr").remove();
+                                    for (var j = 0; j < output.info.length; j++) {
+                                        var Brand = "";
+                                        for (var m = 0; m < output.info[j].PersonInfo.Brand.length; m++) {
+                                            if (m < output.info[j].PersonInfo.Brand.length - 1) {
+                                                Brand += output.info[j].PersonInfo.Brand[m] + ","
+                                            }
+                                            else {
+                                                Brand += output.info[j].PersonInfo.Brand[m];
+                                            }
+                                        }
+                                        if (result.info[i].ApprovalStatus == "0") {
+                                            $("<tr><td><a onclick=\"GetVipDetail(this,'" + result.info[i].BillNo + "')\" style='color:blue;cursor:pointer;'>" + result.info[i].BillNo + "</a></td><td>"
+                                              + billtype + "</td><td>"
+                                              + result.info[i].PersonInfo.Department + "</td><td>"
+                                              + Brand + "</td><td>"
+                                              + result.info[i].Owner + "</td><td>"
+                                              + result.info[i].TotalMoney + "</td><td>"
+                                              + result.info[i].StringTime + "</td><td>"
+                                              + ApprovalStatusMean(result.info[i].ApprovalStatus) + "</td><td style=\"text-align:center;\"><a onclick=\"showDialog('" + result.info[i].BillNo + "','" + tags + "')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a><a onclick=\"DeleteMyBill('" + result.info[i].BillNo + "','" + tags + "')\" style='color:blue;cursor:pointer;'>" + '删除' + "</a></td><tr>").appendTo($("#vipData"));
+                                        }
+                                        else {
+                                            $("<tr><td><a onclick=\"GetVipDetail(this,'" + result.info[i].BillNo + "')\" style='color:blue;cursor:pointer;'>" + result.info[i].BillNo + "</a></td><td>"
+                                                + billtype + "</td><td>"
+                                                + result.info[i].PersonInfo.Department + "</td><td>"
+                                                + Brand + "</td><td>"
+                                                + result.info[i].Owner + "</td><td>"
+                                                + result.info[i].TotalMoney + "</td><td>"
+                                                + result.info[i].StringTime + "</td><td>"
+                                                + ApprovalStatusMean(result.info[i].ApprovalStatus) + "</td><td><a onclick=\"showDialog('" + result.info[i].BillNo + "','" + tags + "')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a></td><tr>").appendTo($("#vipData"));
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    };
+
+                    if (totalPages > 1) {
+                        $("#vipDataPage").bootstrapPaginator(options);
+                    }
+                    else {
+                        $("#vipDataPage").empty();
+                    }
+                }
+                else {
+                    $("#vipData tr").remove();
+                    $("#vipDataPage").empty();
+                }
+            }
+        });
+    }
+
+
+
+    function stateFormatter(value, row, index) {
+        if (row.Operation.indexOf("打印") >= 1) {
+            return {
+                disabled: false
+            };
+        }
+        else {
+            return {
+                disabled: true
+            };
+        }
+        return value;
+    }
+
+
+
+    function DeleteMyBill(BillNo, Type) {
+        Type = ChangeVersions2(Type);
+        $(".weui_btn_dialog").unbind('click');
+        var $dialog = $('#dialogbox');
+        $dialog.show();
+        $dialog.find('.weui_btn_dialog').one('click', function () {
+            $dialog.hide();
+            $("body").css("overflow", "auto");
+            jinzhi = 1;
+            if ($(this).text() == "确定") {
+                $.ajax({
+                    url: "@Url.Content("~/Print/DelectMyBill/")",
+                    data: { BillNo: BillNo, Type: Type },
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    type: "GET",
+                    success: function (result) {
+                        if (result) {
+                            submitMessageShow("删除成功!");
+                            GetMyBillList();
+                        }
+                        else {
+                            submitMessageShow("删除失败!", "error");
+                        }
+                    }
+                });
+            }
+        });
+        $("body").css("overflow", "hidden");
+        jinzhi = 0;
+    }
+</script>

@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://marisfrolg.com/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://marisfrolg.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://marisfrolg.com/">
+      <s:element name="CreateMenu">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="agentid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="strMenu" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateMenuResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateMenuResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendMessage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="agentid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="touser" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="content" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendMessageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SendMessageResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="code" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetUserIdResult" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOpenid">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="agentid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="openid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetOpenidResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetOpenidResult" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="openid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetconvertUserId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="openid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetconvertUserIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetconvertUserIdResult" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="userId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="auth_code" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetUserInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetUserInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetdepartmentList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetdepartmentListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetdepartmentListResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Createdepartment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreatedepartmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreatedepartmentResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Updatedepartment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="parentid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="order" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdatedepartmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdatedepartmentResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Deletedepartment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeletedepartmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="DeletedepartmentResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateMember">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="department" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="position" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="gender" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="weixinid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="avatar_mediaid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="extattr" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateMemberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreateMemberResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateMember">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="department" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="position" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mobile" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="gender" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="weixinid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="enable" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="avatar_mediaid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="extattr" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateMemberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateMemberResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteMember">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="userid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteMemberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="DeleteMemberResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BatchDeleteMember">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="useridlist" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BatchDeleteMemberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="BatchDeleteMemberResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetuseridInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetuseridInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetuseridInfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getdepartmenuser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="department_id" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fetch_child" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="status" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getdepartmenuserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getdepartmenuserResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getdepartmenuserinfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="department_id" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fetch_child" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="status" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getdepartmenuserinfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getdepartmenuserinfoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Getticket">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="identify" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetticketResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetticketResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CreateMenuSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateMenu" />
+  </wsdl:message>
+  <wsdl:message name="CreateMenuSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateMenuResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendMessageSoapIn">
+    <wsdl:part name="parameters" element="tns:SendMessage" />
+  </wsdl:message>
+  <wsdl:message name="SendMessageSoapOut">
+    <wsdl:part name="parameters" element="tns:SendMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUserId" />
+  </wsdl:message>
+  <wsdl:message name="GetUserIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetOpenidSoapIn">
+    <wsdl:part name="parameters" element="tns:GetOpenid" />
+  </wsdl:message>
+  <wsdl:message name="GetOpenidSoapOut">
+    <wsdl:part name="parameters" element="tns:GetOpenidResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetconvertUserIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GetconvertUserId" />
+  </wsdl:message>
+  <wsdl:message name="GetconvertUserIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GetconvertUserIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetUserInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetUserInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetUserInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetUserInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetdepartmentListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetdepartmentList" />
+  </wsdl:message>
+  <wsdl:message name="GetdepartmentListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetdepartmentListResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreatedepartmentSoapIn">
+    <wsdl:part name="parameters" element="tns:Createdepartment" />
+  </wsdl:message>
+  <wsdl:message name="CreatedepartmentSoapOut">
+    <wsdl:part name="parameters" element="tns:CreatedepartmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdatedepartmentSoapIn">
+    <wsdl:part name="parameters" element="tns:Updatedepartment" />
+  </wsdl:message>
+  <wsdl:message name="UpdatedepartmentSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdatedepartmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeletedepartmentSoapIn">
+    <wsdl:part name="parameters" element="tns:Deletedepartment" />
+  </wsdl:message>
+  <wsdl:message name="DeletedepartmentSoapOut">
+    <wsdl:part name="parameters" element="tns:DeletedepartmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateMemberSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateMember" />
+  </wsdl:message>
+  <wsdl:message name="CreateMemberSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMemberSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateMember" />
+  </wsdl:message>
+  <wsdl:message name="UpdateMemberSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteMemberSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteMember" />
+  </wsdl:message>
+  <wsdl:message name="DeleteMemberSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="BatchDeleteMemberSoapIn">
+    <wsdl:part name="parameters" element="tns:BatchDeleteMember" />
+  </wsdl:message>
+  <wsdl:message name="BatchDeleteMemberSoapOut">
+    <wsdl:part name="parameters" element="tns:BatchDeleteMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetuseridInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetuseridInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetuseridInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetuseridInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="getdepartmenuserSoapIn">
+    <wsdl:part name="parameters" element="tns:getdepartmenuser" />
+  </wsdl:message>
+  <wsdl:message name="getdepartmenuserSoapOut">
+    <wsdl:part name="parameters" element="tns:getdepartmenuserResponse" />
+  </wsdl:message>
+  <wsdl:message name="getdepartmenuserinfoSoapIn">
+    <wsdl:part name="parameters" element="tns:getdepartmenuserinfo" />
+  </wsdl:message>
+  <wsdl:message name="getdepartmenuserinfoSoapOut">
+    <wsdl:part name="parameters" element="tns:getdepartmenuserinfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetticketSoapIn">
+    <wsdl:part name="parameters" element="tns:Getticket" />
+  </wsdl:message>
+  <wsdl:message name="GetticketSoapOut">
+    <wsdl:part name="parameters" element="tns:GetticketResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MfWeiXinEmpServiceSoap">
+    <wsdl:operation name="CreateMenu">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">创建自定义菜单,返回0为成功(identify:公司名称,agentid:应用ID,strMenu:请求的菜单字符串)</wsdl:documentation>
+      <wsdl:input message="tns:CreateMenuSoapIn" />
+      <wsdl:output message="tns:CreateMenuSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendMessage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">发送信息给员工,返回0为成功(identify:公司名称,agentid:应用ID,touser:接收ID,content:发送内容)</wsdl:documentation>
+      <wsdl:input message="tns:SendMessageSoapIn" />
+      <wsdl:output message="tns:SendMessageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserId">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">根据code换取工号.(0成功,-1没有调用该接口权限,2失败)</wsdl:documentation>
+      <wsdl:input message="tns:GetUserIdSoapIn" />
+      <wsdl:output message="tns:GetUserIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetOpenid">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">根据userid工号转换成openid(0成功,-1没有调用该接口权限,2失败)</wsdl:documentation>
+      <wsdl:input message="tns:GetOpenidSoapIn" />
+      <wsdl:output message="tns:GetOpenidSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetconvertUserId">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">根据openid转换成userid(0成功,-1没有调用该接口权限,2失败)</wsdl:documentation>
+      <wsdl:input message="tns:GetconvertUserIdSoapIn" />
+      <wsdl:output message="tns:GetconvertUserIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取企业号登录用户信息</wsdl:documentation>
+      <wsdl:input message="tns:GetUserInfoSoapIn" />
+      <wsdl:output message="tns:GetUserInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetdepartmentList">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取部门列表,ID是部门ID，为0时获取所有的部门列表</wsdl:documentation>
+      <wsdl:input message="tns:GetdepartmentListSoapIn" />
+      <wsdl:output message="tns:GetdepartmentListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Createdepartment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">创建部门,部门id，整型。指定时必须大于1，不指定时则自动生成(公司,名称,父级ID,排序ID,指定部门ID)</wsdl:documentation>
+      <wsdl:input message="tns:CreatedepartmentSoapIn" />
+      <wsdl:output message="tns:CreatedepartmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Updatedepartment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">更新部门(公司,名称,父级ID,排序ID,部门ID)</wsdl:documentation>
+      <wsdl:input message="tns:UpdatedepartmentSoapIn" />
+      <wsdl:output message="tns:UpdatedepartmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Deletedepartment">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">删除部门(注：不能删除根部门；不能删除含有子部门、成员的部门)</wsdl:documentation>
+      <wsdl:input message="tns:DeletedepartmentSoapIn" />
+      <wsdl:output message="tns:DeletedepartmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateMember">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">创建成员[成员UserID,不可空],[成员名称,不可空],[成员所属部门id列表(1, 2),不可空],[职位信息],[手机号码],[性别。1表示男性，2表示女性,邮箱],[微信号],[成员头像的mediaid],[extattr(格式:[{"name":"爱好","value":"旅游"},{"name":"卡号","value":"1234567234"}])]</wsdl:documentation>
+      <wsdl:input message="tns:CreateMemberSoapIn" />
+      <wsdl:output message="tns:CreateMemberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMember">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">更新成员[成员UserID,不可空],[成员名称,不可空],[成员所属部门id列表(1, 2),不可空],[职位信息],[手机号码],[性别。1表示男性，2表示女性,邮箱],[微信号],[enable(1表示启用成员，0表示禁用成员)],[成员头像的mediaid],[extattr(格式:[{"name":"爱好","value":"旅游"},{"name":"卡号","value":"1234567234"}])]</wsdl:documentation>
+      <wsdl:input message="tns:UpdateMemberSoapIn" />
+      <wsdl:output message="tns:UpdateMemberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMember">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">删除成员(成员UserID,对应管理端的帐号)</wsdl:documentation>
+      <wsdl:input message="tns:DeleteMemberSoapIn" />
+      <wsdl:output message="tns:DeleteMemberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BatchDeleteMember">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">批量删除成员(成员useridlist,格式"zhangsan", "lisi")</wsdl:documentation>
+      <wsdl:input message="tns:BatchDeleteMemberSoapIn" />
+      <wsdl:output message="tns:BatchDeleteMemberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetuseridInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取单个成员</wsdl:documentation>
+      <wsdl:input message="tns:GetuseridInfoSoapIn" />
+      <wsdl:output message="tns:GetuseridInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getdepartmenuser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取部门成员(department_id:获取的部门id,fetch_child:1/0：是否递归获取子部门下面的成员,status:0获取全部成员，1获取已关注成员列表，2获取禁用成员列表，4获取未关注成员列表。status可叠加，未填写则默认为4)</wsdl:documentation>
+      <wsdl:input message="tns:getdepartmenuserSoapIn" />
+      <wsdl:output message="tns:getdepartmenuserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getdepartmenuserinfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"> 获取部门成员详情(department_id:获取的部门id,fetch_child:1/0：是否递归获取子部门下面的成员,status:0获取全部成员，1获取已关注成员列表，2获取禁用成员列表，4获取未关注成员列表。status可叠加，未填写则默认为4)</wsdl:documentation>
+      <wsdl:input message="tns:getdepartmenuserinfoSoapIn" />
+      <wsdl:output message="tns:getdepartmenuserinfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Getticket">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">获取权限签名算法的ticket值</wsdl:documentation>
+      <wsdl:input message="tns:GetticketSoapIn" />
+      <wsdl:output message="tns:GetticketSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MfWeiXinEmpServiceSoap" type="tns:MfWeiXinEmpServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateMenu">
+      <soap:operation soapAction="http://marisfrolg.com/CreateMenu" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendMessage">
+      <soap:operation soapAction="http://marisfrolg.com/SendMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserId">
+      <soap:operation soapAction="http://marisfrolg.com/GetUserId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOpenid">
+      <soap:operation soapAction="http://marisfrolg.com/GetOpenid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetconvertUserId">
+      <soap:operation soapAction="http://marisfrolg.com/GetconvertUserId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserInfo">
+      <soap:operation soapAction="http://marisfrolg.com/GetUserInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetdepartmentList">
+      <soap:operation soapAction="http://marisfrolg.com/GetdepartmentList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Createdepartment">
+      <soap:operation soapAction="http://marisfrolg.com/Createdepartment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Updatedepartment">
+      <soap:operation soapAction="http://marisfrolg.com/Updatedepartment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Deletedepartment">
+      <soap:operation soapAction="http://marisfrolg.com/Deletedepartment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateMember">
+      <soap:operation soapAction="http://marisfrolg.com/CreateMember" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMember">
+      <soap:operation soapAction="http://marisfrolg.com/UpdateMember" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMember">
+      <soap:operation soapAction="http://marisfrolg.com/DeleteMember" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchDeleteMember">
+      <soap:operation soapAction="http://marisfrolg.com/BatchDeleteMember" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetuseridInfo">
+      <soap:operation soapAction="http://marisfrolg.com/GetuseridInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getdepartmenuser">
+      <soap:operation soapAction="http://marisfrolg.com/getdepartmenuser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getdepartmenuserinfo">
+      <soap:operation soapAction="http://marisfrolg.com/getdepartmenuserinfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Getticket">
+      <soap:operation soapAction="http://marisfrolg.com/Getticket" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="MfWeiXinEmpServiceSoap12" type="tns:MfWeiXinEmpServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateMenu">
+      <soap12:operation soapAction="http://marisfrolg.com/CreateMenu" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendMessage">
+      <soap12:operation soapAction="http://marisfrolg.com/SendMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserId">
+      <soap12:operation soapAction="http://marisfrolg.com/GetUserId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetOpenid">
+      <soap12:operation soapAction="http://marisfrolg.com/GetOpenid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetconvertUserId">
+      <soap12:operation soapAction="http://marisfrolg.com/GetconvertUserId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserInfo">
+      <soap12:operation soapAction="http://marisfrolg.com/GetUserInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetdepartmentList">
+      <soap12:operation soapAction="http://marisfrolg.com/GetdepartmentList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Createdepartment">
+      <soap12:operation soapAction="http://marisfrolg.com/Createdepartment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Updatedepartment">
+      <soap12:operation soapAction="http://marisfrolg.com/Updatedepartment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Deletedepartment">
+      <soap12:operation soapAction="http://marisfrolg.com/Deletedepartment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateMember">
+      <soap12:operation soapAction="http://marisfrolg.com/CreateMember" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMember">
+      <soap12:operation soapAction="http://marisfrolg.com/UpdateMember" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMember">
+      <soap12:operation soapAction="http://marisfrolg.com/DeleteMember" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchDeleteMember">
+      <soap12:operation soapAction="http://marisfrolg.com/BatchDeleteMember" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetuseridInfo">
+      <soap12:operation soapAction="http://marisfrolg.com/GetuseridInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getdepartmenuser">
+      <soap12:operation soapAction="http://marisfrolg.com/getdepartmenuser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getdepartmenuserinfo">
+      <soap12:operation soapAction="http://marisfrolg.com/getdepartmenuserinfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Getticket">
+      <soap12:operation soapAction="http://marisfrolg.com/Getticket" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MfWeiXinEmpService">
+    <wsdl:port name="MfWeiXinEmpServiceSoap" binding="tns:MfWeiXinEmpServiceSoap">
+      <soap:address location="http://192.168.2.14/CompanyWXPlat/Weixin/MfWeiXinEmpService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="MfWeiXinEmpServiceSoap12" binding="tns:MfWeiXinEmpServiceSoap12">
+      <soap12:address location="http://192.168.2.14/CompanyWXPlat/Weixin/MfWeiXinEmpService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

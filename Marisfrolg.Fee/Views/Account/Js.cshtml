@@ -1,0 +1,105 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+        $('#content').removeClass('fullwidth');
+        $("#employeeNo").focus().select();
+        $('#form').validate({
+            errorElement: 'span',
+            errorClass: 'help-block',
+            focusInvalid: false,
+            rules: {
+                employeeNo: {
+                    required: true
+                },
+                password: {
+                    required: true
+                }
+            },
+            messages: {
+                employeeNo: {
+                    required: " "
+                },
+                password: {
+                    required: " "
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            success: function (label) {
+                label.closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            errorPlacement: function (error, element) {
+                element.parent('div').append(error);
+            },
+            submitHandler: function (form) {
+                $('#content').removeClass('fullwidth').delay(10).queue(function (next) {
+                    $(this).addClass('fullwidth');
+                    next();
+                });
+
+                $.post("@Url.Content("~/Account/Login/")", { employeeNo: $("#employeeNo").val(), password: $("#password").val() }, function (result) {
+                    try {
+                        result = eval("(" + result + ")")
+                        if (result.msg == "success") {
+                            //sessionStorage.setItem("shopList", JSON.stringify(result.shopList));
+                            ////加载网站权限，不要使用Cookie，该数据量较大
+                            //sessionStorage.setItem("perList", JSON.stringify(result.permissionList));
+                            window.location.href = "@Url.Content("~/Home/Index")";
+
+                        } else if (result.msg == "shopNull") {
+                            MessageBox("未授予店柜权限,请联系管理员!");
+                        }
+                        else {
+                            MessageBox(result.msg);
+                        }
+
+                    } catch (ex) {
+                        MessageBox(ex.message.toString());
+                    }
+                });
+
+            }
+        });
+
+        //debugLogin();
+    });
+
+    function debugLogin() {
+
+
+        $.post("@Url.Content("~/Account/Login/")", { employeeNo: '00275', password: '5520' }, function (result) {
+            try {
+                result = eval("(" + result + ")")
+                if (result.msg == "success") {
+                    sessionStorage.setItem("shopList", JSON.stringify(result.shopList));
+                    //加载网站权限，不要使用Cookie，该数据量较大
+                    sessionStorage.setItem("perList", JSON.stringify(result.permissionList));
+@*                    window.location.href = "@Url.Content("~/Home/Index/")";*@
+                    gotoPage("li1");
+                } else if (result.msg == "shopNull") {
+                    MessageBox("未授予店柜权限,请联系管理员!");
+                }
+                else {
+                    MessageBox(result.msg);
+                }
+
+            } catch (ex) {
+                MessageBox(ex.message.toString());
+            }
+        });
+
+
+
+    }
+
+
+    //提示框
+    function MessageBox(msg) {
+        $("#MsgContext").text(msg);
+        $('#Alert').modal({
+            keyboard: true
+        });
+    }
+
+</script>

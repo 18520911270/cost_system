@@ -1,0 +1,192 @@
+﻿@{
+    ViewBag.Title = "待办事项";
+}
+<style type="text/css">
+    .boxHeight {
+        height: 100px;
+    }
+
+    .showList {
+    }
+
+    .showBrand {
+        display: none;
+    }
+
+    .scrollDiv li {
+        line-height: 24px;
+        list-style: none;
+        border-bottom: #B7B7B7 dashed 1px;
+        overflow: hidden;
+    }
+
+    @@media screen and (max-width: 800px) {
+        #Interimnotice {
+            display: none;
+        }
+    }
+</style>
+
+<div class="weui_dialog_confirm" id="Interimnotice" style="display:none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 170px; width: 34%; background-color: antiquewhite">
+        <div class="weui_dialog_hd" style="font-size: 18px;"><strong class="weui_dialog_title" style="color: #F91961">重要通知</strong></div>
+        <p style="margin-left: 10px; font-size: 15px; margin-right: 10px; text-align: left">
+           重要通知：由于春节放假，公司总部财务在2月15日-2月22日无法支付款项，有在这期间需要支付的款项，请片区提前在2月9日前制单！请各位知悉！
+        </p>
+        <div class="row">
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="HideBanners('Interimnotice')">关闭</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="page">
+    <div class="hd">
+        <h2 class="page_title">待办事项</h2>
+    </div>
+    <div class="row ">
+        @* @Html.Partial("~/Views/Shared/PersonInfo.cshtml")*@
+        <div class="col-md-4" id="personinfoController">
+            <div class="weui_cells_title" style="color: black">个人信息</div>
+            <div class="weui_panel weui_panel_access">
+                <div class="weui_panel_bd">
+                    <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
+                        <div class="weui_media_hd">
+                            <img id="employeePhoto" class="weui_media_appmsg_thumb" alt="">
+                        </div>
+                        <div class="weui_media_bd">
+                            <h6 id="employeeName" class="weui_media_title"></h6>
+                            <p id="employeeWeixin" class="weui_media_desc"></p>
+
+                        </div>
+                    </a>
+                    <div class="weui_media_box weui_media_text">
+                        <h4 class="weui_media_title">绑定的银行卡</h4>
+                        <p id="BankCardNo" class="weui_media_desc"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4" id="tissueControlller">
+            <!-- 第2大块 -->
+            <div class="weui_cells_title" style="color: black">组织架构信息</div>
+            <div class="weui_panel weui_panel_access">
+                <div class="weui_panel_bd">
+                    <div class="weui_media_box weui_media_text" style="height: 93px;">
+                        <h4 id="IsBackOffice" class="weui_media_title">所在组织</h4>
+
+                        <table>
+                            <tr>
+                                <td style="width: auto;">
+                                    <p id="DepartmentName"></p>
+                                </td>
+                                <td style="width: auto;"></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="weui_media_box weui_media_text">
+                        <h4 class="weui_media_title">成本中心</h4>
+                        <p id="CostCenter" class="weui_media_desc" style="height: 15px;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui_cells_title">我填写的</div>
+    <div class="row" id="MyFill">
+        <div class="col-md-4">
+            <table style="background-color: white; width: 100%; margin-top: 10px; font-family: 'Microsoft YaHei'">
+                <td style="width: 50%; background-color: #F6AF00;">
+                    <div class="showList text-center" role="未办结的单据" id="NotDoBill">
+                        <h4>未办结的单据</h4>
+                        <h1>0单</h1>
+                    </div>
+                </td>
+                <td style="width: 50%; background-color: #02940D;">
+                    <div class="showList text-center" role="发票缺失" id="MissBillHome">
+                        <h4>发票缺失</h4>
+                        <h1>0单</h1>
+                    </div>
+                </td>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table style="background-color: white; width: 100%; margin-top: 10px; font-family: 'Microsoft YaHei'">
+                <td style="width: 50%; background-color: #0097CE;">
+                    <div class="showList text-center" role="借款未还" id="BorrowBill">
+                        <h4>借款未还</h4>
+                        <h1>0.00</h1>
+                    </div>
+                </td>
+                <td style="width: 50%; background-color: #FF7800;">
+                    <div class="showList text-center" role="押金" id="Deposit">
+                        <h4>押金</h4>
+                        <h1>0.00</h1>
+                    </div>
+                </td>
+            </table>
+        </div>
+    </div>
+
+    <div class="weui_cells_title">我审批的</div>
+    <div class="row" id="MyApproval">
+        <div class="col-md-4">
+            <table style="background-color: white; width: 100%; margin-top: 10px; font-family: 'Microsoft YaHei'">
+                <td style="width: 50%; background-color: #F91961; color: white;">
+                    <div class="showList text-center" role="费用报销单" id="FillBill">
+                        <h4>费用报销单</h4>
+                        <h1>0单</h1>
+                    </div>
+                </td>
+                <td style="width: 50%; background-color: #FF6F37; color: white;">
+                    <div class="showList text-center" role="付款通知书" id="Notice">
+                        <h4>付款通知书</h4>
+                        <h1>0单</h1>
+                    </div>
+                </td>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table style="background-color: white; width: 100%; margin-top: 10px; font-family: 'Microsoft YaHei'">
+                <td style="width: 50%; background-color: #65c294; color: white;">
+                    <div class="showList text-center" role="借款单" id="BorrowItem">
+                        <h4>借款单</h4>
+                        <h1>0单</h1>
+                    </div>
+                </td>
+                <td style="width: 50%; background-color: #694d9f; color: white;">
+                    <div class="showList text-center" role="还款单" id="RefundItem">
+                        <h4>还款单</h4>
+                        <h1>0单</h1>
+                    </div>
+                </td>
+            </table>
+        </div>
+    </div>
+
+    <div class="weui_cells_title">公告栏</div>
+    <div class="row">
+        <div class="col-md-4">
+            <div role="公告栏" class="scrollDiv" style="overflow: hidden; background-color: #f5f5f5; width: 100%; cursor: pointer; height: 115px; font-family: 'Microsoft YaHei'; border: 1px solid #CFCFCF;">
+                <h4 class="text-center"><span class="glyphicon glyphicon-volume-down"></span>公告栏</h4>
+                <ul class="mulitline" style="padding-right: 20px;">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/Home/Js.cshtml")
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/Shared/MyBillList.cshtml", ViewData["PageName"] = "Home")
+
+<!-- 查看单据 -->
+@Html.Partial("~/Views/Shared/PublicPrint.cshtml")

@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "创建费用报销单";
+}
+@*<link href="~/Scripts/webUploader/webuploader.css" rel="stylesheet" />
+<link href="~/Images/webUploader_style.css" rel="stylesheet" />*@
+<style type="text/css">
+    .showBrand {
+        display: block;
+    }
+
+@model Marisfrolg.Fee.Models.FeeBillModelRef
+</style>
+
+<script>
+    $(function () {
+        if ("@Model.BillNo" != "") {
+            $("#Draft").hide();
+            $("#DraftSub").attr("class", "col-md-8")
+        }
+    })
+    //radio标签控制
+    function InputControl(em) {
+        if ($(em).hasClass("SelectBrand label-success")) {
+            $(em).removeClass("SelectBrand label-success");
+        }
+        else {
+            var flag = $(em).attr("val");  //得到分组
+            $("#SpecialAttribute").children().each(function () {
+                var temp = $(this).attr("val");
+                if (flag == temp) {
+                    $(this).removeClass("SelectBrand label-success");
+                }
+            });
+            $(em).addClass("SelectBrand label-success");
+        }
+    }
+</script>
+
+<div class="page">
+
+    <div class="hd">
+        <h2 class="page_title">费用报销单</h2>
+    </div>
+    <div class="row ">
+        @Html.Partial("~/Views/Shared/PersonInfo.cshtml", ViewData["FeeBillModelRef"] = Model)
+    </div>
+
+    @Html.Partial("~/Views/Shared/FindAccount.cshtml")
+
+
+</div>
+
+
+
+<div class="row ">
+    <div class="col-md-4" id="Draft">
+        <div class="bd">
+            <div class="weui_cells">
+                <a href="javascript:;" class="weui_btn weui_btn_warn" id="btnSubmitFeeBillDraftBox">保存草稿</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-4" id="DraftSub">
+        <div class="bd">
+            <div class="weui_cells">
+                <a href="javascript:;" class="weui_btn weui_btn_primary" id="btnSubmitFeeBill">提交报销</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/FeeBill/Js.cshtml", ViewData["FeeBillModelRef"] = Model)
+
+@*引用脚本文件*@
+@Html.Partial("~/Views/Shared/MyBillList.cshtml")

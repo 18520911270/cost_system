@@ -1,0 +1,83 @@
+﻿.btnClose {
+    font-size:30px;
+    color:#999;
+}
+.btnClose:hover {
+    font-size:30px;
+    color:#666;
+    cursor:pointer;
+}
+.title {
+
+    margin:10px;
+}
+
+.line {
+    border-top:solid 1px black;
+    margin-right:10px;
+    height:0px;
+}
+.tableRow {
+    border:0px;
+    margin-top:10px;
+}
+
+.tableborder{border:solid black; border-width:0px 1px 1px 0px;width:210mm;}
+.tableborder th{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+.tableborder td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+
+
+.tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:210mm;}
+.tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+.tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:20mm;}
+
+/*.tableborder td > .money{text-align:right;}*/
+.money {
+    text-align:right;
+    margin-right:10px;
+}
+
+.total {
+    font-weight:bold;
+}
+
+.secionTop {
+    width:210mm;
+    height:40mm;
+    margin:10px;
+    color:black;
+}
+.secionMiddle {
+    width:210mm;
+    height:140mm;
+    margin:10px;
+    color:black;
+}
+.secionBottom {
+    width:210mm;
+    height:50mm;
+    margin:10px;
+    color:black;
+}
+
+.box 
+{
+    margin-left:20px;
+    width:15mm;
+    height:8mm;
+    transform: rotate(-30deg);
+    -o-transform: rotate(-30deg);
+    -webkit-transform: rotate(-30deg);
+    -moz-transform: rotate(-30deg);
+    filter:progid:DXImageTransform.Microsoft.BasicImage(Rotation=2);
+    border:2px solid red;
+    color:#FF0000;
+    font-weight:bold;
+    text-align:center;
+    vertical-align:middle;
+}
+
+#printContainer {
+    padding-bottom:100px;
+    margin-bottom:100px;
+}

@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "开票资料";
+}
+<h2>开票资料</h2>
+
+
+<div class="row" style="margin-top: 70px;">
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">公司简称:</div>
+        <div class="form-group">
+            <select id="lunchBegins" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="Please select a lunch ...">
+                <option class="bs-title-option" value="">请选择</option>
+                <option val="0">玛丝菲尔公司</option>
+                <option val="1">玛丝菲尔素公司</option>
+                <option val="2">噢姆公司</option>
+                <option val="3">克芮绮亚时装公司</option>
+                <option val="4">惠州市明佳豪实业有限公司</option>
+                <option val="5">玛丝菲尔设计研发公司</option>
+                <option val="6">深圳市朗伊尔时装有限公司</option>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 8px;">名称:</div>
+        <textarea class="form-control" style="width: 64%; color: black" id="InputBillNo1" disabled="disabled"></textarea>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 14px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 8px;">税务号:</div>
+        <input type="text" class="form-control" autocomplete="off" style="width: 64%; color: black" id="InputBillNo2" disabled="disabled">
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 14px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 8px;">地址:</div>
+        <textarea class="form-control" style="width: 64%; color: black" id="InputBillNo3" disabled="disabled">
+        </textarea>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 14px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+</div>
+
+
+<div class="row">
+
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 8px;">电话:</div>
+        <input type="text" class="form-control" autocomplete="off" style="width: 64%; color: black" id="InputBillNo4" disabled="disabled">
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 14px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 8px;">开户行:</div>
+        <textarea class="form-control" style="width: 64%; color: black" id="InputBillNo5" disabled="disabled">
+            </textarea>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 14px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 8px;">账号:</div>
+        <input type="text" class="form-control" autocomplete="off" style="width: 64%; color: black" id="InputBillNo6" disabled="disabled">
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 14px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+
+    <div class="col-md-3">
+        <button style="margin-left: 9%" class="btncopy" data-clipboard-action="copy" data-clipboard-target="#copytextarea" onclick="submitMessageShow('复制成功!')">复制到剪贴板</button>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 14px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+</div>
+
+
+<textarea id="copytextarea" style="width: 0px; height: 0px">
+
+</textarea>
+<script src="~/Scripts/clipboard.js"></script>
+<script>
+
+    var model = new Array();
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        var model1 = { ID: "1", Name: "深圳玛丝菲尔时装股份有限公司", Tax: "91440300715235452H", Site: "深圳市福田区车公庙天祥大厦2D", Tel: "0755-66866000", BankName: "招商银行深圳车公庙支行", BankNo: "813882368310001" };
+        var model2 = { ID: "2", Name: "深圳玛丝菲尔素时装有限公司", Tax: "91440300MA5DJAPF0P", Site: "深圳市龙华新区大浪街道浪腾路玛丝菲尔大厦501室", Tel: "0755-66866000", BankName: "中国建设银行股份有限公司深圳华侨城支行", BankNo: "44250100000700000385" };
+        var model3 = { ID: "3", Name: "深圳玛丝菲尔噢姆服饰有限公司", Tax: "91440300068597528Q", Site: "深圳市龙华新区大浪街道大浪北路玛丝菲尔工业厂区2厂房5楼", Tel: "0755-66869518", BankName: "招商银行股份有限公司深圳车公庙支行", BankNo: "755919999210501" };
+        var model4 = { ID: "4", Name: "克芮绮亚时装（中国）有限公司", Tax: "91440300088727561A", Site: "深圳市福田区沙头街道车公庙天祥大厦2C2-1", Tel: "0755-66866000", BankName: "中国银行股份有限公司深圳华润城支行", BankNo: "770567791300" };
+        var model5 = { ID: "5", Name: "惠州市明佳豪实业有限公司", Tax: "44138166504477X", Site: "惠阳区镇隆镇井龙村", Tel: "0752-3919586", BankName: "招商银行惠州分行营业部", BankNo: "752900079510281" };
+        var model6 = { ID: "6", Name: "深圳玛丝菲尔设计研发中心有限公司", Tax: "91440300MA5DA5CQ50", Site: "深圳市前海深港合作区前湾一路1号A栋201", Tel: "0755-66866000", BankName: "中国建设银行股份有限公司深圳华侨城支行", BankNo: "44250100000700000386" };
+        var model7 = { ID: "7", Name: "深圳市朗伊尔时装有限公司", Tax: "91440300MA5F1TRG7Y", Site: "深圳市龙华新区大浪街道新石社区浪腾路3号1栋2号楼2层", Tel: "0755-66866000", BankName: "招商银行深圳车公庙支行", BankNo: "755938067310601" };
+        model.push(model1, model2, model3, model4, model5, model6, model7);
+        $("#lunchBegins").bind("change", function () {
+            var tags = $("#lunchBegins").find("option:selected").attr("val");
+            $("#InputBillNo1").val(model[tags].Name);
+            $("#InputBillNo2").val(model[tags].Tax);
+            $("#InputBillNo3").val(model[tags].Site);
+            $("#InputBillNo4").val(model[tags].Tel);
+            $("#InputBillNo5").val(model[tags].BankName);
+            $("#InputBillNo6").val(model[tags].BankNo);
+
+            var contnet = "公司名称：" + model[tags].Name + "\n" + "税务号：" + model[tags].Tax + "\n" + "地址：" + model[tags].Site + "\n" + "电话：" + model[tags].Tel + "\n" + "开户行：" + model[tags].BankName + "\n" + "账号：" + model[tags].BankNo + "\n";
+
+            $("#copytextarea").html(contnet);
+
+            var clipboard = new Clipboard('.btncopy');
+        });
+    });
+
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link href="~/Scripts/Bootstrap/css/bootstrap-select.css" rel="stylesheet" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-select.js"></script>
+

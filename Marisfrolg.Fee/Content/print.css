@@ -1,0 +1,738 @@
+﻿/*version1 */
+.line {
+    border-top:solid 1px black;
+    margin-right:10px;
+    height:0px;
+}
+.tableRow {
+    border:0px;
+    margin-top:10px;
+    width:50%;
+    text-align:left;
+}
+
+/*.tableborder td > .money{text-align:right;}*/
+.money {
+    text-align:right;
+    margin-right:10px;
+}
+
+.total {
+    font-weight:bold;
+}
+
+
+.printPage {
+    width: 140mm;
+    height:175mm;
+}
+
+
+
+
+#printContainer {
+    width: 140mm;
+}
+
+#printContainer .secionTop {
+    width:130mm;
+    height:28mm;
+    margin:10px;
+    color:black;
+}
+#printContainer .secionMiddle {
+    width:130mm;
+    height:58mm;
+    margin:10px;
+    color:black;
+}
+#printContainer .secionBottom {
+    width:130mm;
+    height:40mm;
+    margin:10px;
+    color:black;
+}
+
+/*单据选项*/
+#printContainer .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:130mm;}
+#printContainer .tableborder th{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+#printContainer .tableborder td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+
+/*单据特殊属性*/
+#printContainer .table_spacial{border:solid black; border-width:0px;width:130mm;}
+
+/*单据流程*/
+#printContainer .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:130mm;}
+#printContainer .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printContainer .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+
+@media screen and (max-height: 768px) {
+.printPage {
+    height:145mm;
+}
+
+#printContainer .secionMiddle {
+    height:44mm;
+}
+
+}
+
+
+@media screen and (max-height: 568px) {
+.printPage {
+    height:125mm;
+}
+
+#printContainer .secionMiddle {
+    height:43mm;
+}
+
+#ttime { 
+    display:none;
+}
+}
+
+@media screen and (max-width: 1360px) {
+
+#printContainer .secionTop {
+    width:100mm;
+}
+#printContainer .secionMiddle {
+    width:100mm;
+}
+#printContainer .secionBottom {
+    width:100mm;
+}
+
+/*单据选项*/
+#printContainer .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+
+/*单据特殊属性*/
+#printContainer .table_spacial{border:solid black; border-width:0px;width:100mm;}
+
+/*单据流程*/
+#printContainer .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+#printContainer .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printContainer .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+
+
+.printPage {
+    width: 110mm;
+}
+}
+
+@media screen and (max-width: 415px) {
+
+#printContainer .secionTop {
+    width:100mm;
+}
+#printContainer .secionMiddle {
+    width:100mm;
+}
+#printContainer .secionBottom {
+    width:100mm;
+}
+.printPage {
+    width: 110mm;
+}
+#printContainer .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+/*单据特殊属性*/
+#printContainer .table_spacial{border:solid black; border-width:0px;width:100mm;}
+
+#printContainer .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+#printContainer .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printContainer .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+
+
+}
+
+@media screen and (max-width: 375px) {
+
+#printContainer .secionTop {
+    width:95mm;
+}
+#printContainer .secionMiddle {
+    width:95mm;
+}
+#printContainer .secionBottom {
+    width:95mm;
+}
+.printPage {
+    width: 110mm;
+}
+#printContainer .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:95mm;}
+/*单据特殊属性*/
+#printContainer .table_spacial{border:solid black; border-width:0px;width:95mm;}
+
+#printContainer .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:95mm;}
+#printContainer .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printContainer .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+@media screen and (max-width: 360px) 
+{
+    #printContainer .secionTop {
+        width:90mm;
+    }
+    #printContainer .secionMiddle {
+        width:90mm;
+    }
+    #printContainer .secionBottom {
+        width:90mm;
+    }
+    .printPage {
+        width: 100mm;
+    }
+    #printContainer .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:90mm;}
+    /*单据特殊属性*/
+    #printContainer .table_spacial{border:solid black; border-width:0px;width:90mm;}
+
+    #printContainer .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:90mm;}
+    #printContainer .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+    #printContainer .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+@media screen and (max-width: 320px) 
+{
+    #printContainer .secionTop {
+        width:80mm;
+    }
+    #printContainer .secionMiddle {
+        width:85mm;
+    }
+    #printContainer .secionBottom {
+        width:85mm;
+    }
+    .printPage {
+        width: 100mm;
+    }
+    #printContainer .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:80mm;}
+    /*单据特殊属性*/
+    #printContainer .table_spacial{border:solid black; border-width:0px;width:80mm;}
+
+    #printContainer .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:80mm;}
+    #printContainer .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+    #printContainer .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+@media screen and (max-width: 200px) 
+{
+    #printContainer .secionTop {
+        width:70mm;
+    }
+    #printContainer .secionMiddle {
+        width:70mm;
+    }
+    #printContainer .secionBottom {
+        width:70mm;
+    }
+    .printPage {
+        width: 80mm;
+    }
+    #printContainer .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:70mm;}
+    /*单据特殊属性*/
+    #printContainer .table_spacial{border:solid black; border-width:0px;width:70mm;}
+
+    #printContainer .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:70mm;}
+    #printContainer .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+    #printContainer .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+
+
+
+
+
+
+
+#printContainer10C {
+    width: 140mm;
+}
+
+#printContainer10C .secionTop {
+    width:130mm;
+    height:28mm;
+    margin:10px;
+    color:black;
+}
+#printContainer10C .secionMiddle {
+    width:130mm;
+    height:58mm;
+    margin:10px;
+    color:black;
+}
+#printContainer10C .secionBottom {
+    width:130mm;
+    height:40mm;
+    margin:10px;
+    color:black;
+}
+
+/*单据选项*/
+#printContainer10C .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:130mm;}
+#printContainer10C .tableborder th{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+#printContainer10C .tableborder td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+
+/*单据特殊属性*/
+#printContainer10C .table_spacial{border:solid black; border-width:0px;width:130mm;}
+
+/*单据流程*/
+#printContainer10C .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:130mm;}
+#printContainer10C .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printContainer10C .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+
+@media screen and (max-height: 768px) {
+.printPage {
+    height:145mm;
+}
+
+#printContainer10C .secionMiddle {
+    height:44mm;
+}
+
+}
+
+
+@media screen and (max-height: 568px) {
+.printPage {
+    height:125mm;
+}
+
+#printContainer10C .secionMiddle {
+    height:43mm;
+}
+
+#ttime { 
+    display:none;
+}
+}
+
+@media screen and (max-width: 1360px) {
+
+#printContainer10C .secionTop {
+    width:100mm;
+}
+#printContainer10C .secionMiddle {
+    width:100mm;
+}
+#printContainer10C .secionBottom {
+    width:100mm;
+}
+
+/*单据选项*/
+#printContainer10C .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+
+/*单据特殊属性*/
+#printContainer10C .table_spacial{border:solid black; border-width:0px;width:100mm;}
+
+/*单据流程*/
+#printContainer10C .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+#printContainer10C .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printContainer10C .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+
+
+.printPage {
+    width: 110mm;
+}
+}
+
+@media screen and (max-width: 415px) {
+
+#printContainer10C .secionTop {
+    width:100mm;
+}
+#printContainer10C .secionMiddle {
+    width:100mm;
+}
+#printContainer10C .secionBottom {
+    width:100mm;
+}
+.printPage {
+    width: 110mm;
+}
+#printContainer10C .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+/*单据特殊属性*/
+#printContainer10C .table_spacial{border:solid black; border-width:0px;width:100mm;}
+
+#printContainer10C .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+#printContainer10C .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printContainer10C .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+
+
+}
+
+@media screen and (max-width: 375px) {
+
+#printContainer10C .secionTop {
+    width:95mm;
+}
+#printContainer10C .secionMiddle {
+    width:95mm;
+}
+#printContainer10C .secionBottom {
+    width:95mm;
+}
+.printPage {
+    width: 110mm;
+}
+#printContainer10C .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:95mm;}
+/*单据特殊属性*/
+#printContainer10C .table_spacial{border:solid black; border-width:0px;width:95mm;}
+
+#printContainer10C .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:95mm;}
+#printContainer10C .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printContainer10C .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+@media screen and (max-width: 360px) 
+{
+    #printContainer10C .secionTop {
+        width:90mm;
+    }
+    #printContainer10C .secionMiddle {
+        width:90mm;
+    }
+    #printContainer10C .secionBottom {
+        width:90mm;
+    }
+    .printPage {
+        width: 100mm;
+    }
+    #printContainer10C .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:90mm;}
+    /*单据特殊属性*/
+    #printContainer10C .table_spacial{border:solid black; border-width:0px;width:90mm;}
+
+    #printContainer10C .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:90mm;}
+    #printContainer10C .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+    #printContainer10C .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+@media screen and (max-width: 320px) 
+{
+    #printContainer10C .secionTop {
+        width:80mm;
+    }
+    #printContainer10C .secionMiddle {
+        width:85mm;
+    }
+    #printContainer10C .secionBottom {
+        width:85mm;
+    }
+    .printPage {
+        width: 100mm;
+    }
+    #printContainer10C .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:80mm;}
+    /*单据特殊属性*/
+    #printContainer10C .table_spacial{border:solid black; border-width:0px;width:80mm;}
+
+    #printContainer10C .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:80mm;}
+    #printContainer10C .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+    #printContainer10C .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+@media screen and (max-width: 200px) 
+{
+    #printContainer10C .secionTop {
+        width:70mm;
+    }
+    #printContainer10C .secionMiddle {
+        width:70mm;
+    }
+    #printContainer10C .secionBottom {
+        width:70mm;
+    }
+    .printPage {
+        width: 80mm;
+    }
+    #printContainer10C .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:70mm;}
+    /*单据特殊属性*/
+    #printContainer10C .table_spacial{border:solid black; border-width:0px;width:70mm;}
+
+    #printContainer10C .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:70mm;}
+    #printContainer10C .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+    #printContainer10C .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+
+
+
+
+
+
+
+
+
+
+#printData {
+    width: 140mm;
+}
+
+#printData .secionTop {
+    width:130mm;
+    height:28mm;
+    margin:10px;
+    color:black;
+}
+#printData .secionMiddle {
+    width:130mm;
+    height:58mm;
+    margin:10px;
+    color:black;
+}
+#printData .secionBottom {
+    width:130mm;
+    height:40mm;
+    margin:10px;
+    color:black;
+}
+
+/*单据选项*/
+#printData .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:130mm;}
+#printData .tableborder th{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+#printData .tableborder td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+
+/*单据特殊属性*/
+#printData .table_spacial{border:solid black; border-width:0px;width:130mm;}
+
+/*单据流程*/
+#printData .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:130mm;}
+#printData .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printData .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+
+@media screen and (max-height: 768px) {
+.printPage {
+    height:145mm;
+}
+
+#printData .secionMiddle {
+    height:44mm;
+}
+
+}
+
+
+@media screen and (max-height: 568px) {
+.printPage {
+    height:125mm;
+}
+
+#printData .secionMiddle {
+    height:43mm;
+}
+
+#ttime { 
+    display:none;
+}
+}
+
+@media screen and (max-width: 1360px) {
+
+#printData .secionTop {
+    width:100mm;
+}
+#printData .secionMiddle {
+    width:100mm;
+}
+#printData .secionBottom {
+    width:100mm;
+}
+
+/*单据选项*/
+#printData .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+
+/*单据特殊属性*/
+#printData .table_spacial{border:solid black; border-width:0px;width:100mm;}
+
+/*单据流程*/
+#printData .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+#printData .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printData .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+
+
+.printPage {
+    width: 110mm;
+}
+}
+
+@media screen and (max-width: 415px) {
+
+#printData .secionTop {
+    width:100mm;
+}
+#printData .secionMiddle {
+    width:100mm;
+}
+#printData .secionBottom {
+    width:100mm;
+}
+.printPage {
+    width: 110mm;
+}
+#printData .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+/*单据特殊属性*/
+#printData .table_spacial{border:solid black; border-width:0px;width:100mm;}
+
+#printData .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:100mm;}
+#printData .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printData .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+
+
+}
+
+@media screen and (max-width: 375px) {
+
+#printData .secionTop {
+    width:95mm;
+}
+#printData .secionMiddle {
+    width:95mm;
+}
+#printData .secionBottom {
+    width:95mm;
+}
+.printPage {
+    width: 110mm;
+}
+#printData .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:95mm;}
+/*单据特殊属性*/
+#printData .table_spacial{border:solid black; border-width:0px;width:95mm;}
+
+#printData .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:95mm;}
+#printData .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#printData .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+@media screen and (max-width: 360px) 
+{
+    #printData .secionTop {
+        width:90mm;
+    }
+    #printData .secionMiddle {
+        width:90mm;
+    }
+    #printData .secionBottom {
+        width:90mm;
+    }
+    .printPage {
+        width: 100mm;
+    }
+    #printData .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:90mm;}
+    /*单据特殊属性*/
+    #printData .table_spacial{border:solid black; border-width:0px;width:90mm;}
+
+    #printData .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:90mm;}
+    #printData .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+    #printData .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+@media screen and (max-width: 320px) 
+{
+    #printData .secionTop {
+        width:80mm;
+    }
+    #printData .secionMiddle {
+        width:85mm;
+    }
+    #printData .secionBottom {
+        width:85mm;
+    }
+    .printPage {
+        width: 100mm;
+    }
+    #printData .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:80mm;}
+    /*单据特殊属性*/
+    #printData .table_spacial{border:solid black; border-width:0px;width:80mm;}
+
+    #printData .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:80mm;}
+    #printData .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+    #printData .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+@media screen and (max-width: 200px) 
+{
+    #printData .secionTop {
+        width:70mm;
+    }
+    #printData .secionMiddle {
+        width:70mm;
+    }
+    #printData .secionBottom {
+        width:70mm;
+    }
+    .printPage {
+        width: 80mm;
+    }
+    #printData .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:70mm;}
+    /*单据特殊属性*/
+    #printData .table_spacial{border:solid black; border-width:0px;width:70mm;}
+
+    #printData .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:70mm;}
+    #printData .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+    #printData .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:7mm;}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*打印版本*/
+#NewPrintContainer .tableborder{border:solid black; border-width:0px 1px 1px 0px;width:230mm;}
+#NewPrintContainer .tableborder th{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+#NewPrintContainer .tableborder td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;}
+
+/*打印版本*/
+#NewPrintContainer .tableFlow{border:solid black; border-width:0px 1px 1px 0px;width:230mm;}
+#NewPrintContainer .tableFlow th{border:solid black; border-width:1px 0px 0px 1px;text-align:center;width:20mm;height:8mm;}
+#NewPrintContainer .tableFlow td{border:solid black; border-width:1px 0px 0px 1px;text-align:left;width:20mm;height:20mm;}
+
+#NewPrintContainer .secionTop {
+    width:230mm;
+    height:40mm;
+    margin:10px;
+    color:black;
+}
+#NewPrintContainer .secionMiddle {
+    width:230mm;
+    height:180mm;
+    margin:10px;
+    color:black;
+}
+#NewPrintContainer .secionBottom {
+    width:230mm;
+    height:40mm;
+    margin:10px;
+    color:black;
+}
+
+.box 
+{
+    margin-left:20px;
+    width:15mm;
+    height:8mm;
+    transform: rotate(-30deg);
+    -o-transform: rotate(-30deg);
+    -webkit-transform: rotate(-30deg);
+    -moz-transform: rotate(-30deg);
+    filter:progid:DXImageTransform.Microsoft.BasicImage(Rotation=2);
+    border:2px solid red;
+    color:#FF0000;
+    font-weight:bold;
+    text-align:center;
+    vertical-align:middle;
+}
+
+.invoicePhoto {
+  float: left;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  width: 40px;
+  height: 40px;
+  background: no-repeat center center;
+  background-size: cover;
+}

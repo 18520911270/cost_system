@@ -1,0 +1,472 @@
+﻿<script type="text/javascript" src="~/Scripts/Jquery.Barcode/jquery.jqprint-0.3.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.Barcode/jquery-barcode.js"></script>
+<link rel="stylesheet" href="~/Content/print.css" />
+
+<!--BEGIN 弹出层-->
+<div class="weui_dialog_confirm js_container" id="dialogPrint" style="display: none;">
+    <div class="weui_mask">打印预览</div>
+    <div class="weui_dialog" style="width: 230mm; overflow-y: auto;">
+        <!-- 标题 -->
+        <div>
+            <div class="col-md-6">
+                <h5 id="btnPrint" onclick="printContent()" class="text-left" style="font-weight: bold; color: blue; cursor: pointer;">点击打印</h5>
+            </div>
+            <div class="col-md-6 text-right ">
+                <i class="icon iconfont btnClose">&#xe600;</i>
+            </div>
+        </div>
+
+
+        <!-- 标题 -->
+
+        <div id="printContainer" class="scaleTest">
+            <!-- A4内容开始 -->
+            <div style="max-height: 297mm; font-family: 'Microsoft YaHei';">
+                <div>
+                    <h3 class="text-center" id="billType">费用报销单</h3>
+                </div>
+
+                <table class="secionTop">
+                    <tr class="line">
+                        <td colspan="99"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow">
+                            <div id="barcodeTarget" style="margin-left: -15px;"></div>
+                        </td>
+                        <td>
+                            <h4 class="text-right" id="Clerk">制单：陆帅华 2016年6月21日</h4>
+                        </td>
+                    </tr>
+                    <tr class="line">
+                        <td colspan="99"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left">
+                            <h4 id="CompanyName">公司名称：深圳玛丝菲尔时装股份有限公司</h4>
+                        </td>
+                        <td class="tableRow text-left">
+                            <h4 id="Brand">发生品牌：MA,SU,ZH</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left">
+                            <h4 id="DepartmentName">报消方：数据控制中心</h4>
+                        </td>
+                        <td class="tableRow text-left">
+                            <h4 id="CostCenter">成本中心：200100100</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left">
+                            <h4 id="Person">报销人：孙佳莹</h4>
+                        </td>
+                        <td class="tableRow text-left">
+                            <h4 id="DateTime">业务日期：2016年6月27日</h4>
+                        </td>
+                    </tr>
+                </table>
+                <div class="secionMiddle">
+                    <table class="tableborder">
+                        <thead>
+                            <tr>
+                                <th>科目号</th>
+                                <th>科目名称</th>
+                                <th>币种</th>
+                                <th class="money">金额</th>
+                                <th class="money">税额</th>
+                                <th>原因代码</th>
+                            </tr>
+                        </thead>
+                        <tbody id="Content">
+                            <tr>
+                                <td>6601020071</td>
+                                <td>办事处房租1</td>
+                                <td>CNY</td>
+                                <td class="money">101.00</td>
+                                <td>107</td>
+                            </tr>
+                            <tr>
+                                <td>6601020072</td>
+                                <td>办事处房租2</td>
+                                <td>CNY</td>
+                                <td class="money">102.00</td>
+                                <td>107</td>
+                            </tr>
+                            <tr>
+                                <td>6601020073</td>
+                                <td>办事处房租3</td>
+                                <td>CNY</td>
+                                <td class="money">103.00</td>
+                                <td>107</td>
+                            </tr>
+                            <tr class="total">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="money">306.00</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="secionBottom">
+                    <h4 class="text-left">[用户标注]</h4>
+
+                    <table class="secionTop">
+                        <tr class="line">
+                            <td colspan="99"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableRow text-left">
+                                <h4 id="Funds">是否活动经费：是</h4>
+                            </td>
+                            <td class="tableRow text-left">
+                                <h4 id="MarketDebt">是否商场账扣：是</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tableRow text-left">
+                                <h4 id="BankDebt">是否银行账扣：不是</h4>
+                            </td>
+                            <td class="tableRow text-left">
+                                <h4 id="Agent">是否代理商费用：不是</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tableRow text-left">
+                                <h4 id="Check">本单是否考核：不是</h4>
+                            </td>
+                            <td class="tableRow text-left">
+                                <h4 id="deposit">是否押金账扣：不是</h4>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <h4 class="text-left">[审批流程]</h4>
+                    <table class="tableFlow">
+                        <tr id="tbody">
+                            @*  <th>开始</th>*@
+                            <th>部门负责人</th>
+                            <th>财务负责人</th>
+                            <th>总经办</th>
+                            <th>出纳</th>
+                        </tr>
+                        <tr id="tfoot">
+                            @*  <td>
+                                    <div id="00275" class="box"></div>
+                                </td>*@
+                            <td>孙佳莹</td>
+                            <td>李知力</td>
+                            <td>张楠</td>
+                            <td>隋敏霞</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <!-- A4内容结束 -->
+
+        </div>
+
+
+        @*        <div class="weui_dialog_ft" style="">
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a id="btnSubmit" href="javascript:printContent();" class="weui_btn_dialog primary">开始打印</a>
+        </div>*@
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        GetPrintList(1, 1);
+    });
+
+    function InitPageData(BillNo) {
+        //填写打印内容
+        $("#barcodeTarget").barcode(BillNo, "code128", { barWidth: 2.5, barHeight: 35 });
+
+    }
+
+
+    function printContent() {
+        $("#printContainer").jqprint({
+            debug: false, //如果是true则可以显示iframe查看效果（iframe默认高和宽都很小，可以再源码中调大），默认是false
+            importCSS: true, //true表示引进原来的页面的css，默认是true。（如果是true，先会找$("link[media=print]")，若没有会去找$("link")中的css文件）
+            printContainer: true, //表示如果原来选择的对象必须被纳入打印（注意：设置为false可能会打破你的CSS规则）。
+            operaSupport: false//表示如果插件也必须支持歌opera浏览器，在这种情况下，它提供了建立一个临时的打印选项卡。默认是true
+        });
+
+    }
+
+    //绘制签名
+    function printPersonSign() {
+
+    }
+
+    //将信息填充到打印界面
+    function SubmitDataInfo(BillNo) {
+        $.ajax({
+            url: "@Url.Content("~/Print/GetDataFromBillNo/")",
+            data: { BillNo: BillNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    var Brand = "";
+                    for (var k = 0; k < result.PersonInfo.Brand.length; k++) {
+                        if (k < result.PersonInfo.Brand.length - 1) {
+                            Brand += result.PersonInfo.Brand[k] + ","
+                        }
+                        else {
+                            Brand += result.PersonInfo.Brand[k];
+                        }
+                    }
+                    $("#Clerk").text("制单：" + employeeInfo.EmployeeName + " " + result.StringTime + "");
+                    $("#CompanyName").text("公司名称：" + result.PersonInfo.Company + " ");
+                    $("#Brand").text("发生品牌：" + Brand + "");
+                    $("#DepartmentName").text("报销方：" + result.PersonInfo.Department + "");
+                    $("#CostCenter").text("成本中心：" + result.PersonInfo.CostCenter + "");
+                    $("#Person").text("报销人：" + result.Owner + "");
+                    $("#DateTime").text("业务日期：" + result.StringTime + "");
+                    $("#Content tr").remove();
+                    for (var m = 0; m < result.Items.length; m++) {
+                        if (result.Items[m].reason_code == null) {
+                            result.Items[m].reason_code = "无";
+                        }
+                        $("<tr><td>" + result.Items[m].code + "</td><td>" + result.Items[m].name + "</td><td>CNY</td> <td class=\"money\">" + result.Items[m].money + "</td><td class=\"money\">" + result.Items[m].taxmoney + "</td><td>" + result.Items[m].reason_code + "</td></tr>").appendTo($("#Content"));
+                    }
+                    $("<tr class=\"total\"><td></td><td></td><td></td><td class=\"money\">" + result.TotalMoney + "</td><td></td><td></td></tr>").appendTo($("#Content"));
+                    $("#Funds").text("是否活动经费：" + RetrunString(result.SpecialAttribute.Funds) + "");
+                    $("#MarketDebt").text("是否商场账扣：" + RetrunString(result.SpecialAttribute.MarketDebt) + "");
+                    $("#BankDebt").text("是否银行账扣：" + RetrunString(result.SpecialAttribute.BankDebt) + "");
+                    $("#Agent").text("是否代理商费用：" + RetrunString(result.SpecialAttribute.Agent) + "");
+                    $("#Check").text("本单是否考核：" + RetrunString(result.SpecialAttribute.Check) + "");
+                    $("#deposit").text("是否押金账扣：" + RetrunString(result.SpecialAttribute.Cash) + "");
+                }
+            }
+        });
+    }
+
+    function RetrunString(val) {
+        if (val == "0") {
+            return "不是";
+        }
+        else if (val == "1") {
+            return "是"
+        }
+    }
+
+    function showDialog(BillNo) {
+        var $dialog = $('#dialogPrint');
+        $dialog.show();
+
+        // printPersonSign();        //绘制签名
+        SubmitDataInfo(BillNo);  //将信息填充到打印界面
+        InitPageData(BillNo);   //填写打印内容
+        GetWorkFlow(BillNo);  //获取流程实例
+        $dialog.find('.weui_btn_dialog').one('click', function () {
+            $dialog.hide();
+            $("body").css("overflow", "auto");
+            jinzhi = 1;
+        });
+        $(".btnClose").one('click', function () {
+            $dialog.hide();
+            $("body").css("overflow", "auto");
+            jinzhi = 1;
+        });
+        $("body").css("overflow", "hidden");
+        jinzhi = 0;
+    }
+
+    //标签点击事件
+    function tagClick(eml) {
+        //设置标签状态
+        $(eml).siblings().removeClass("SelectTabItem label label-success").addClass("NormalTabItem label label-default").end().addClass("SelectTabItem label label-success");
+        var rfm = "";
+        var tags = "";
+
+        //获取选中的值
+        $(".SearchKeywords").children("div").each(function () {
+            if ($(this).hasClass("SelectTabItem")) {
+
+                var val = $(this).attr("val");
+                if (val.indexOf("s") >= 0) {
+                    tags = val.split('s')[1];
+                } else {
+                    rfm = val.split('y')[1];
+                }
+            }
+        })
+        //获取打印数据
+        GetPrintList(tags, rfm);
+    }
+
+    function GetPrintList(tags, val) {
+        $.ajax({
+            url: "@Url.Content("~/Print/GetPrintList/")",
+            data: { Type: tags, Time: val },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                result = JSON.parse(result);
+                if (result != null && result.info.length > 0) {
+                    //遍历返回的json
+                    $("#vipData tr").remove();
+                    for (var i = 0; i < result.info.length; i++) {
+                        var Brand = "";
+                        for (var k = 0; k < result.info[i].PersonInfo.Brand.length; k++) {
+                            if (k < result.info[i].PersonInfo.Brand.length - 1) {
+                                Brand += result.info[i].PersonInfo.Brand[k] + ","
+                            }
+                            else {
+                                Brand += result.info[i].PersonInfo.Brand[k];
+                            }
+                        }
+                        var billtype;
+                        if (tags == "1") {
+                            billtype = "费用报销单";
+                        }
+                        else if (tags == "2") {
+                            billtype = "付款通知书";
+                        }
+                        else if (tags == "3") {
+                            billtype = "借款单";
+                        }
+                        else if (tags == "4") {
+                            billtype = "还款单";
+                        }
+                        $("<tr><td><a onclick=\"GetVipDetail(this,'" + result.info[i].BillNo + "')\" style='color:blue;cursor:pointer;'>" + result.info[i].BillNo + "</a></td><td>"
+                            + billtype + "</td><td>"
+                            + result.info[i].PersonInfo.Department + "</td><td>"
+                            + Brand + "</td><td>"
+                            + result.info[i].Owner + "</td><td>"
+                            + result.info[i].TotalMoney + "</td><td>"
+                            + result.info[i].StringTime + "</td><td>"
+                            + result.info[i].Status + "</td><td><a onclick=\"showDialog('" + result.info[i].BillNo + "')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a></td><tr>").appendTo($("#vipData"));
+                    }
+
+                    //得到pageIndex
+                    var currentPage = result.currentPage;
+                    //取到pageTotal的值
+                    var totalPages = result.totalPages;
+                    var pageSize = result.pageSize;
+
+                    var options = {
+                        currentPage: currentPage,  //当前页
+                        totalPages: totalPages,    //总页数
+                        numberOfPages: 5,
+                        itemTexts: function (type, page, current) {
+                            switch (type) {
+                                case "first":
+                                    return "首页";
+                                case "prev":
+                                    return "上一页";
+                                case "next":
+                                    return "下一页";
+                                case "last":
+                                    return "末页";
+                                case "page":
+                                    return page;
+                            }
+                        },
+                        onPageClicked: function (event, originalEvent, type, page) {  //page就是你点击的第几页
+                            $.ajax({
+                                url: "@Url.Content("~/Print/GetPrintList/")",
+                                datatype: "json",
+                                type: "GET",
+                                data: { Type: tags, Time: val, Page: page },
+                                success: function (output) {
+                                    output = JSON.parse(output);
+                                    //遍历返回的json
+                                    $("#vipData tr").remove();
+                                    for (var j = 0; j < output.info.length; j++) {
+                                        var Brand = "";
+                                        for (var m = 0; m < output.info[j].PersonInfo.Brand.length; m++) {
+                                            if (m < output.info[j].PersonInfo.Brand.length - 1) {
+                                                Brand += output.info[j].PersonInfo.Brand[m] + ","
+                                            }
+                                            else {
+                                                Brand += output.info[j].PersonInfo.Brand[m];
+                                            }
+                                        }
+                                        $("<tr><td><a onclick=\"GetVipDetail(this,'" + output.info[j].BillNo + "')\" style='color:blue;cursor:pointer;'>" + output.info[j].BillNo + "</a></td><td>"
+                                            + billtype + "</td><td>"
+                                            + output.info[j].PersonInfo.Department + "</td><td>"
+                                            + Brand + "</td><td>"
+                                            + output.info[j].Owner + "</td><td>"
+                                            + result.info[j].TotalMoney + "</td><td>"
+                                            + result.info[j].StringTime + "</td><td>"
+                                            + output.info[j].Status + "</td><td><a onclick=\"showDialog('" + result.info[j].BillNo + "')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a></td><tr>").appendTo($("#vipData"));
+                                    }
+                                }
+                            });
+                        }
+                    };
+
+                    if (totalPages > 1) {
+                        $("#vipDataPage").bootstrapPaginator(options);
+                    }
+                    else {
+                        $("#vipDataPage").empty();
+                    }
+                }
+                else {
+                    $("#vipData tr").remove();
+                    $("#vipDataPage").empty();
+                }
+            }
+        });
+    }
+
+
+    //单据详情
+    function GetVipDetail(obj, mobile) {
+        var url = "@Url.Content("~/Print/BillDetails")?NO=" + mobile;
+        $(obj).parent().powerFloat({
+            width: "300px",
+            eventType: "click",
+            target: url,
+
+            targetMode: "ajax"
+        });
+    }
+    //获取流程实例
+    function GetWorkFlow(BillNo) {
+        $.ajax({
+            url: "@Url.Content("~/Print/GetWorkFlowList/")",
+            data: { BillNo: BillNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#tfoot td").text("");
+                if (result) {
+                    $("#tbody").children().remove();
+                    $("#tfoot").children().remove();
+                    var result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<th>" + result[i].Description + "</th>").appendTo($("#tbody"));
+                        var personName = "";
+                        for (var j = 0; j < result[i].PersonName.length; j++) {
+                            if (j < result[i].PersonName.length - 1) {
+                                personName += result[i].PersonName[j] + ","
+                            }
+                            else {
+                                personName += result[i].PersonName[j]
+                            }
+                        }
+                        $("<td  style=\"text-align:center\">" + personName + "</td>").appendTo($("#tfoot"));
+                    }
+                }
+            }
+        })
+    };
+</script>

@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "审批历史";
+}
+<h2 id="tempdata111" style="display: none">审批历史</h2>
+<style type="text/css">
+    html {
+        -webkit-text-size-adjust: none;
+    }
+
+    .NormalTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #CCCCCC;
+        float: left;
+    }
+
+    .SelectTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #5CB85C;
+        float: left;
+    }
+
+    .input_date {
+        width: 100%;
+        border: 0;
+        outline: 0;
+        -webkit-appearance: none;
+        background-color: transparent;
+        font-size: inherit;
+        color: inherit;
+        height: 14px;
+        line-height: 14px;
+    }
+
+    @@media screen and (max-width: 800px) {
+        #tempdata111 {
+            display: block !important;
+        }
+
+        #tempdata112 {
+            display: none;
+        }
+
+        #BillTypes {
+            padding-left: 28px !important;
+        }
+
+        #tempdata113 {
+            display: none;
+        }
+
+        #tempdata114 {
+            padding-left: 28px !important;
+        }
+
+        #tempdata115 {
+            margin-top: 45px !important;
+        }
+
+        #tempdata116 {
+            display: none;
+        }
+
+        #tempdata117 {
+            display: none;
+        }
+
+        #tempdata119 {
+            display: none;
+        }
+
+        #tempdata120 {
+            padding-left: 28px !important;
+        }
+    }
+</style>
+
+<div class="row" style="margin-top: 70px;" id="tempdata115">
+    <div>
+        <div style="width: 80px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;" id="tempdata116">选择片区:</div>
+        <div class="col-md-2 SearchKeywords" style="margin-top: 3px;">
+            <input id="providerText" class="awesomplete" style="min-width: 100px; margin-left: 15px; border: 0; outline: 0; -webkit-appearance: none; background-color: transparent; font-size: inherit; color: inherit; height: 1.41176471em; line-height: 1.41176471;"
+                pattern="*" placeholder="不填写，表示全部片区" />
+
+        </div>
+        <div class="col-md-3 ">
+            <div id="selectedArea" style="font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;">
+            </div>
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div>
+        <div style="width: 80px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;" id="tempdata112">单据类型:</div>
+        <div class="SearchKeywords" style="padding-left: 100px;" id="BillTypes">
+            <div val="s0" class="SelectTabItem label label-success" onclick="tagClick(this)">全部</div>
+            <div val="s1" class="NormalTabItem label label-success" onclick="tagClick(this)">费用报销单</div>
+            <div val="s2" class="NormalTabItem label label-default" onclick="tagClick(this)">付款通知书</div>
+            <div val="s3" class="NormalTabItem label label-default" onclick="tagClick(this)">借款单</div>
+            <div val="s4" class="NormalTabItem label label-default" onclick="tagClick(this)">还款单</div>
+
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div>
+        <div style="width: 80px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;" id="tempdata113">审批日期:</div>
+        <div class="SearchKeywords" style="padding-left: 100px;" id="tempdata114">
+            @* <div val="y1" class="NormalTabItem label label-success hide">全部</div>*@
+            <div val="y2" class="SelectTabItem label label-success" onclick="tagClick(this)">当天</div>
+            <div val="y3" class="NormalTabItem label label-default hide">本周</div>
+            <div val="y4" class="NormalTabItem label label-default hide">本月</div>
+            <div val="y5" class="NormalTabItem label label-default hide">上月</div>
+            <div val="y6" class="NormalTabItem label label-default" onclick="tagClick(this)">自定义</div>
+            <div style="background-color: #5CB85C; display: none; margin-top: 2px;" id="CreateTimeDefined">
+                <input class="input_date" type="date" style="display: block; width: 120px; float: left;" id="UserDefinedOne">
+                <input class="input_date" type="date" style="display: block; width: 120px; float: left;" id="UserDefinedTwo">
+                <span id="fail" style="font-size: 14px; padding-top: 0px; padding-bottom: 0px;" onclick="UserDefinedFunction()">搜索</span>
+
+            </div>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+
+    <div>
+        <div style="width: 80px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;" id="tempdata119">操作类型:</div>
+        <div class="SearchKeywords" style="padding-left: 100px;" id="tempdata120">
+            <div val="m0" class="SelectTabItem label label-success" onclick="tagClick(this)">审批的单</div>
+            <div val="m1" class="NormalTabItem label label-success" onclick="tagClick(this)">搁置的单</div>
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3" id="tempdata117">
+        <a href="javascript:BulkPrint();" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-left: 13px; margin-top: 6px;">批量打印</a>
+         <a href="javascript:DownloadFile();" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-left: 13px; margin-top: 6px;">导出到excle</a>
+    </div>
+</div>
+
+
+<div class="row" id="CheckAccounting1" style="display: none">
+    <div style="margin: 15px;">
+        <table id="table"
+            data-mobile-responsive="true"
+            data-height="560">
+            <thead>
+                <tr>
+                    <th data-sortable="true">所在片区</th>
+                    <th data-sortable="true">单号</th>
+                    <th data-sortable="true">单据类型</th>
+                    <th data-sortable="true">制单人</th>
+                    <th data-sortable="true">业务人</th>
+                    <th data-sortable="true">发生金额</th>
+                    <th data-sortable="true">创建日期</th>
+                    <th data-sortable="true">审批日期</th>
+                    <th data-sortable="true">操作</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="~/Scripts/awesomplete/awesomplete.css" />
+<script type="text/javascript" src="~/Scripts/awesomplete/awesomplete.js"></script>
+
+<link rel="stylesheet" href="~/Scripts/Bootstrap/css/bootstrap-table.css" />
+<link rel="stylesheet" href="~/Scripts/Bootstrap/css/bootstrap-table-fixed-columns.css">
+
+<script src="~/Scripts/Bootstrap/js/bootstrap-table.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-table-mobile.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-table-fixed-columns.js"></script>
+@Html.Partial("~/Views/CheckAccounting/Js.cshtml")
+@Html.Partial("~/Views/Shared/PublicPrint.cshtml")

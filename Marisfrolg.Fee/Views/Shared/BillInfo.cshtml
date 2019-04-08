@@ -1,0 +1,513 @@
+﻿<style type="text/css">
+    @@media screen and (max-width: 1300px) {
+        #AccountTimeList {
+            padding: 1px 15px !important;
+        }
+    }
+
+    .my_weui_cells {
+        margin-top: 1.17647059em;
+        background-color: #FFFFFF;
+        line-height: 1.41176471;
+        font-size: 17px;
+        position: relative;
+    }
+</style>
+
+
+<div class="col-md-4" id="BillInfoList">
+    <!-- 第3大块 -->
+    <div class="weui_cells_title" style="color: black;">单据信息</div>
+    <div class="my_weui_cells " id="billInfo_LeftPanel">
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label" style="width: 5em;" id="bxr">报销人</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input class="weui_input" type="text" placeholder="请输入报销人姓名" id="FeeBillName" autocomplete="off" aria-autocomplete="list">
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label" style="width: 5em;">业务日期</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input id="busDate" class="weui_input" type="date" value="" style="display: block; width: auto; float: left;" />
+            </div>
+        </div>
+
+        <div class="weui_cell" id="AccountTimeList" style="display: none;">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label" style="width: 6em;">对应结算期</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input id="AccountTime1" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+                <input id="AccountTime2" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label" style="width: 5em;" id="hbType">货币类型</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p id="MoneyName" style="color: black; font-size: 15px;" moneytype="CNY">元</p>
+            </div>
+            <div class="weui_cell_ft"><a id="MoneyType" class="weui_btn weui_btn_mini weui_btn_default" role="货币类型">修改</a></div>
+        </div>
+    </div>
+</div>
+<div class="col-md-4" id="CollectionInfoList">
+    <!-- 第4大块 -->
+    <div class="weui_cells_title" style="color: black;" id="CollectionInfoDetail">
+        收款信息
+        <a style="color: #4E82D0; font-size: 12px; cursor: pointer; margin-left: 10px;" onclick="SetDefaultCollectionInformation()">设为默认收款信息</a>&nbsp&nbsp&nbsp<a href="http://210.75.13.196/Marisfrolg.Fee/Upload/Notice/收款信息和供应商信息录入详情.docx" style="color: #4E82D0; font-size: 12px; cursor: pointer;">收款信息有疑问点我</a>
+    </div>
+    <div id="OpenCard" class="my_weui_cells weui_cells_form">
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: auto;">开卡姓名</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary" style="padding-left: 10px;">
+                <input class="weui_input" type="text" placeholder="请输入开卡姓名" val="4" id="CollectionInfoName">
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: auto;">开卡支行</label>
+            </div>
+
+            <div class="weui_cell_bd weui_cell_primary" style="padding-left: 10px;" id="SubbranchBankFather">
+                <input class="weui_input" type="text" placeholder="如 民生 深圳 皇岗 点回车" val="5" id="CollectionInfoSubbranchBank">
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: auto;">开卡卡号</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary" style="padding-left: 10px;">
+                <input class="weui_input" type="text" placeholder="请输入开卡卡号" val="3" id="CollectionInfoBankCode">
+            </div>
+        </div>
+
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: auto;">联行号</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary" style="padding-left: 10px;">
+                <input class="weui_input" type="text" placeholder="选择正确支行即可带出联行号" val="6" id="Unionlinenumber" readonly="readonly">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-4" style="display: none; color: black" id="ProviderInfoList">
+    <!-- 供应商信息块 -->
+    <div class="weui_cells_title" style="color: black;">供应商信息<a href="http://210.75.13.196/Marisfrolg.Fee/Upload/Notice/收款信息和供应商信息录入详情.docx" style="color: #4E82D0; font-size: 12px; cursor: pointer; margin-left: 10px;">支行有疑问点我</a></div>
+    <div class="my_weui_cells" id="providerPanel">
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: 70px;">供应商</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary" id="providerFather">
+                <input id="providerText" class="weui_input awesomplete" style="min-width: 250px;" pattern="*" placeholder="输入模糊信息" />
+            </div>
+        </div>
+        <div class="weui_cell" style="height: 49px;">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: auto; font-weight: normal">供应商名称</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input id="ProviderName" class="weui_input awesomplete" style="margin-left: 15px;" pattern="*" placeholder="供应商名称" readonly="readonly" />
+            </div>
+        </div>
+        <div class="weui_cell" style="height: 49px;">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: auto; font-weight: normal">开户支行</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary" id="ProviderBankNameFather">
+                <input id="ProviderBankName" class="weui_input" style="margin-left: 15px;" pattern="*" placeholder="如 民生 深圳 皇岗 点回车" />
+            </div>
+        </div>
+        <div class="weui_cell" style="height: 49px;">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: auto; font-weight: normal">银行账号</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+
+                <input id="ProviderBankNo" class="weui_input awesomplete" style="margin-left: 15px;" pattern="*" placeholder="输入银行账号" />
+
+            </div>
+        </div>
+        <div class="weui_cell" style="height: 49px;">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: auto; font-weight: normal">银行代码(SWIFT)</label>
+            </div>
+
+            <div class="weui_cell_bd weui_cell_primary">
+                <input id="ProviderBankCode" class="weui_input awesomplete" style="margin-left: 15px;" pattern="*" placeholder="输入SWIFT码（非必填）" />
+            </div>
+
+        </div>
+        <div class="weui_cell" style="height: 49px;">
+            <div class="weui_cell_hd">
+                <label class="weui_label" style="width: auto; font-weight: normal" id="IBANNAME">IBAN</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+
+                <input id="ProviderIBAN" class="weui_input awesomplete" style="margin-left: 15px;" pattern="*" placeholder="输入IBAN码（非必填）" />
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="weui_dialog_confirm js_container" id="dialog2" style="display: none;">
+    <div class="weui_mask">修改报销人</div>
+    <div class="weui_dialog weui_dialog_ours" style="overflow-y: hidden;">
+        <div class="weui_dialog_hd">
+            <strong class="weui_dialog_title">修改报销人</strong>
+        </div>
+
+        <div class="bd">
+            <div class="weui_search_bar weui_search_focusing" id="search_bar">
+                <div class="weui_search_outer">
+                    <div class="weui_search_inner">
+                        <i class="weui_icon_search"></i>
+                        <input type="search" class="weui_search_input" placeholder="搜索" id="querytext" required />
+                        <a href="javascript:" class="weui_icon_clear" id="search_clear" onclick="ClearInputValue()"></a>
+                    </div>
+
+                </div>
+                <a href="javascript:" class="weui_search_cancel" id="search_cancel" onclick="QueryPersonList()">查找</a>
+            </div>
+        </div>
+
+        <div style="margin: 15px;">
+            <div class="weui_cells">
+
+                <div class="weui_cells weui_cells_checkbox " id="PersonList" style="display: block; margin-top: 0; max-height: 442px; overflow-y: auto;">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="weui_dialog_bd">
+            @*陈旭确定*@
+        </div>
+
+
+        <div class="weui_dialog_ft" style="">
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a id="btnSubmit" href="javascript:ChangePerson();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+
+
+@{
+    Marisfrolg.Fee.Models.FeeBillModelRef FeeModel = ViewData["FeeBillModelRef"] as Marisfrolg.Fee.Models.FeeBillModelRef;
+    if (FeeModel == null)
+    {
+        FeeModel = new Marisfrolg.Fee.Models.FeeBillModelRef();
+    }
+    string Type = FeeModel.BillNo == null ? "FeeBill" : "Draft";
+}
+
+<script type="text/javascript">
+
+    var ModelString;  //定义费用报销对象
+    Date.prototype.Format = function (fmt) { //author: meizz 
+        var o = {
+            "M+": this.getMonth() + 1, //月份 
+            "d+": this.getDate(), //日 
+            "h+": this.getHours(), //小时 
+            "m+": this.getMinutes(), //分 
+            "s+": this.getSeconds(), //秒 
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+            "S": this.getMilliseconds() //毫秒 
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    $(function () {
+
+        $("#MoneyType").click(function () {
+            $("#big_title").text($(this).attr("role"));
+            $('#showList').trigger("click");
+        })
+        if ("@FeeModel.RefundType" == "FeeBill") {
+            $("#MoneyType").hide();
+            $("#ProviderInfoList").hide();
+            $("#CollectionInfoDetail").html("<a style=\"color: #4E82D0; font-size: 12px; cursor: pointer;\" onclick=\"SetDefaultCollectionInformation()\">设为还款收款信息</a></span>");
+        }
+        if ("@FeeModel.PageName" == "Notice") {
+            $("#CollectionInfoList").hide();
+            $("#ProviderInfoList").show();
+        }
+
+        $("#changePerson").click(function () {
+            var $dialog = $('#dialog2');
+            $dialog.show();
+            $dialog.find('.weui_btn_dialog').one('click', function () {
+                $dialog.hide();
+                $("body").css("overflow", "auto");
+                jinzhi = 1;
+            });
+            $("body").css("overflow", "hidden");
+            jinzhi = 1;
+
+        });
+
+        if ('@Type' != 'Draft' && ('@FeeModel.PageName' == "FeeBill" || '@FeeModel.PageName' == "Borrow" || '@FeeModel.RefundType' == "FeeBill")) {
+            var No = "";
+            if ('@FeeModel.RefundType' == "FeeBill") {
+                No = employeeInfo.EmployeeNo + "X";
+            }
+            else {
+                No = employeeInfo.EmployeeNo;
+            }
+
+            $.ajax({
+                url: "@Url.Content("~/FeeBill/GetInitCollectionInfo/")",
+                data: { No: No },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    if (result) {
+                        result = JSON.parse(result);
+                        $("#CollectionInfoName").val(result.NAME);
+                        $("#CollectionInfoBankCode").val(result.BANKACCOUNT);
+                        $("#CollectionInfoSubbranchBank").val(result.SUBBRANCHBANK);
+                        if (result.SUBBRANCHBANKCODE) {
+                            $("#Unionlinenumber").val(result.SUBBRANCHBANKCODE);
+                        }
+                        else {
+                            $("#CollectionInfoSubbranchBank").attr("style", "background-color:darkorange");
+                        }
+                    }
+                }
+            });
+        }
+        if ('@FeeModel.PageName' == "FeeBill") {
+            $("#bxr").text("报销人");
+        }
+        else if ('@FeeModel.PageName' == "Notice" || '@FeeModel.PageName' == "Borrow") {
+            $("#bxr").text("申请人");
+        }
+        //如果单据类型为还款单
+        if ('@FeeModel.PageName' == "Refund") {
+            $("#changePerson").hide();
+            if ('@Type' != 'Draft') {
+                $("#FeeBillName").attr("disabled", "disabled");
+            }
+        }
+
+        $("#querytext").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                QueryPersonList();
+            }
+        });
+
+        $("#CollectionInfoSubbranchBank").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                loadAutoSubBranch("CollectionInfoSubbranchBank", "SubbranchBankFather");
+            }
+        });
+
+
+        $("#ProviderBankName").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                loadAutoSubBranch("ProviderBankName", "ProviderBankNameFather");
+            }
+        });
+
+        //控制高度
+        modifyBillInfoSameHeight();
+        loadAutoCompleteForPersonList();
+    });
+
+    function modifyBillInfoSameHeight() {
+        if ("@FeeModel.PageName" == "Notice") {
+            $("#billInfo_LeftPanel").css("height", $("#providerPanel").css("height"));
+        }
+        else {
+            if ($("#OpenCard").css("height") != "0px") {
+                $("#billInfo_LeftPanel").css("height", $("#OpenCard").css("height"));
+            }
+        }
+
+    }
+
+
+    function loadAutoCompleteForPersonList() {
+        var input = document.getElementById("FeeBillName");
+        $.ajax({
+            url: "@Url.Content("~/Shared/GetPersonlist/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    var complete = new Awesomplete(input, {
+                        list: result,
+                        replace: function (text) {
+                            this.input.setAttribute("completeValue", text);
+                            this.input.value = text;
+                            this.input.setAttribute("code", text.value);
+
+                        }
+                    });
+
+                    events(input, 'awesomplete-selectcomplete', function (e) {
+
+                        var inputcode = input.getAttribute("code");
+                        var completeValue = input.getAttribute("completeValue");
+                    })
+                }
+            }
+        });
+    }
+
+
+
+    //获取指定支行
+    function loadAutoSubBranch(ID, IDFather) {
+        var value = $("#" + ID + "").val();
+
+        if (value == "") {
+            submitMessageShow("请输入检索条件!", "error");
+            return;
+        }
+
+        $("#" + IDFather + "").children().remove();
+        if (IDFather == "ProviderBankNameFather") {
+            $("#" + IDFather + "").append(" <input id=\"ProviderBankName\" class=\"weui_input\" style=\"margin-left: 15px;\" pattern=\"*\" placeholder=\"如 民生 深圳 皇岗 点回车\"  value=\"" + value + "\"/>");
+        }
+        else {
+            $("#" + IDFather + "").append("<input class=\"weui_input\" type=\"text\" placeholder=\"如 民生 深圳 皇岗 点回车\" val=\"5\" id=\"CollectionInfoSubbranchBank\"  value=\"" + value + "\">");
+        }
+
+
+        //绑定change事件
+        $("#" + ID + "").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                loadAutoSubBranch(ID, IDFather);
+            }
+        });
+
+
+        var input = document.getElementById(ID);
+
+        $.ajax({
+            url: "@Url.Content("~/FeeBill/LoadSubBankData/")",
+            data: { value: value },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            synch: true,
+            success: function (result) {
+                if (result != "" && result != "[]") {
+                    var result = JSON.parse(result);
+                    var complete = new Awesomplete(input, {
+                        list: result,
+                        replace: function (text) {
+                            this.input.setAttribute("completeValue", text);
+                            this.input.value = text;
+                            this.input.setAttribute("code", text.value);
+                        },
+                    });
+
+                    if ($.isNumeric(value)) {
+                        $("#" + ID + "").val(result[0])
+                    }
+
+                    $("#" + ID + "").focus();
+                    complete.evaluate();
+
+                    events(input, 'awesomplete-selectcomplete', function (e) {
+                        var completeValue = input.getAttribute("completeValue");
+                        $("#" + ID + "").val(completeValue);
+
+                        if (IDFather != "ProviderBankNameFather") {
+                            $.ajax({
+                                url: "@Url.Content("~/FeeBill/GetSubbranchBankCode/")",
+                                data: { name: completeValue },
+                                contentType: "application/json; charset=utf-8",
+                                datatype: "json",
+                                type: "GET",
+                                success: function (result) {
+                                    if (result) {
+                                        $("#Unionlinenumber").val(result);
+                                        $("#" + ID + "").attr("style", "");
+                                    }
+                                    else {
+                                        submitMessageShow("支行数据错误!", "error");
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+                else {
+                    submitMessageShow("无相应数据!", "error");
+                }
+            }
+        });
+    }
+
+
+
+
+
+    function SetDefaultCollectionInformation() {
+        var a = $("#CollectionInfoName").val();
+        var d = $("#CollectionInfoBankCode").val();
+        var e = $("#CollectionInfoSubbranchBank").val();
+        var g = $("#Unionlinenumber").val();
+        if (a == "" || d == "" || e == "" || g == "") {
+            submitMessageShow("收款信息不能为空!", "error");
+            return;
+        }
+
+        var No = "";
+        debugger;
+        if ('@FeeModel.RefundType' == "FeeBill") {
+            No = employeeInfo.EmployeeNo + "X";
+        }
+        else {
+            No = employeeInfo.EmployeeNo;
+        }
+
+        $.ajax({
+            url: "@Url.Content("~/FeeBill/UpdateCollectionInfo/")",
+            data: { No: No, Name: a, SubBranch: e, Code: d, Unionlinenumber: g },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                result = JSON.parse(result);
+                if (result.error == "0") {
+                    submitMessageShow(result.msg);
+                }
+                else {
+                    submitMessageShow(result.msg, "error");
+                }
+            }
+        })
+    }
+
+    function ClearInputValue() {
+        $("#querytext").val("");
+    }
+</script>

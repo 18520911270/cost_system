@@ -1,0 +1,72 @@
+﻿<script type="text/javascript" src="~/Scripts/jquery.cookies.2.2.0.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<script type="text/javascript" src="~/Scripts/ajaxfileupload.js"></script>
+
+
+<script type="text/javascript">
+
+
+    $(function () {
+        InitPageData();
+    });
+
+    function InitPageData()
+    {
+        $('.showList').click(function (e) {
+            $('.showList').parent().attr("style", "width:50%;background-color:#white;");
+            $(this).parent().attr("style","width:50%;background-color:#5cb85c;");
+            $("#big_title").text($(this).attr("role"));
+            $('#showList').trigger("click");
+
+        });
+        InitData(1);
+        InitData(2);
+        InitData(3);
+        InitData(4);
+    }
+
+    function InitData(type) {
+        $.ajax({
+            url: "@Url.Content("~/DraftBox/GetDraftBoxByParameter/")",
+            data: { "type": type },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result != "Fail") {
+                    result = JSON.parse(result);
+                    switch (type) {
+                        case 1:
+                            $("#todayCount").text(result.Count);
+                            $("#todayTotalMoney").text(result.TotalMoney);
+                            break;
+                        case 2:
+                            $("#weekCount").text(result.Count);
+                            $("#weekTotalMoney").text(result.TotalMoney);
+                            break;
+                        case 3:
+                            $("#lastWeekCount").text(result.Count);
+                            $("#lastWeekTotalMoney").text(result.TotalMoney);
+                            break;
+                        case 4:
+                            $("#lastMonthCount").text(result.Count);
+                            $("#lastMonthTotalMoney").text(result.TotalMoney);
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                }
+                else if (result == "Fail") {
+                    submitMessageShow("提交失败!", "error");
+                } else {
+                    submitMessageShow(result, "error");
+                }
+            }
+        });
+    }
+
+</script>
+
+
+

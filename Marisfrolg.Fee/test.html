@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>jQuery炫酷Material Design风格全屏隐藏菜单特效|DEMO_jQuery之家-自由分享jQuery、html5、css3的插件库</title>
+	<!-- <link rel="stylesheet" type="text/css" href="css/normalize.css" /> -->
+<!-- 	<link rel="stylesheet" type="text/css" href="css/default.css"> -->
+	<style type="text/css">
+	* { margin: 0px; padding: 0px; }
+	body {
+		background: #383c55;
+		width: 100%; 
+		height: 100%;
+	}
+	#view-code{
+	  color:#4183d7; 
+	  font-size:13px;
+	  text-transform:uppercase;
+	  font-weight:700;
+	  text-decoration:none;
+	  position:absolute;top:640px; left:50%;margin-left:-35px;
+	}
+	div.screen{
+		width:320px;
+		height:560px;
+		overflow:hidden;
+		position:absolute; 
+		left:50%;
+	    margin-left:-160px;
+		background:#31558a;
+	}
+
+	.list{margin-top:36px; text-align:left;}
+	.item{
+		height:115px;
+		margin-top:30px 0;
+		padding-left:115px;
+		clear:both;
+	}
+	.item .img, .item span{background:#214273; border-radius:3px;}
+	.item .img{float:left; width:71px; height:71px; margin-left:-93px;}
+	.item span{height:11px; width:180px; margin-bottom:19px; float:left;}
+	.item span:nth-of-type(3){width:75px; margin-botom:0;}
+
+	div.burger {
+		height: 30px; 
+		width: 40px;
+		position: absolute;
+		top: 11px; 
+		left: 21px;
+		cursor: pointer;	
+	}
+		div.x,
+		div.y,
+		div.z {
+			position: absolute; margin: auto;
+			top: 0px; bottom: 0px;		
+			background: #fff;
+			border-radius:2px;
+			-webkit-transition: all 200ms ease-out;
+			   -moz-transition: all 200ms ease-out;
+			    -ms-transition: all 200ms ease-out;
+			     -o-transition: all 200ms ease-out;
+			        transition: all 200ms ease-out;
+		}		
+		div.x, div.y, div.z { height: 3px; width: 26px; }
+		div.y{top: 18px;}
+		div.z{top: 37px;}
+		div.collapse{
+			top: 20px;
+			background:#4a89dc;
+			-webkit-transition: all 70ms ease-out;
+			   -moz-transition: all 70ms ease-out;
+			    -ms-transition: all 70ms ease-out;
+			     -o-transition: all 70ms ease-out;
+			        transition: all 70ms ease-out;
+		}
+		 
+		
+		div.rotate30{
+			-ms-transform: rotate(30deg); 
+	    	-webkit-transform: rotate(30deg); 
+		    transform: rotate(30deg);	
+			-webkit-transition: all 50ms ease-out;
+			   -moz-transition: all 50ms ease-out;
+			    -ms-transition: all 50ms ease-out;
+			     -o-transition: all 50ms ease-out;
+			        transition: all 50ms ease-out;					
+		}
+		div.rotate150{
+			-ms-transform: rotate(150deg); 
+	    	-webkit-transform: rotate(150deg); 
+		    transform: rotate(150deg);	
+			-webkit-transition: all 50ms ease-out;
+			   -moz-transition: all 50ms ease-out;
+			    -ms-transition: all 50ms ease-out;
+			     -o-transition: all 50ms ease-out;
+			        transition: all 50ms ease-out;					
+		}
+		
+		div.rotate45{
+			-ms-transform: rotate(45deg); 
+	    	-webkit-transform: rotate(45deg); 
+		    transform: rotate(45deg);	
+			-webkit-transition: all 100ms ease-out;
+			   -moz-transition: all 100ms ease-out;
+			    -ms-transition: all 100ms ease-out;
+			     -o-transition: all 100ms ease-out;
+			        transition: all 100ms ease-out;					
+		}
+		div.rotate135{
+			-ms-transform: rotate(135deg); 
+	    	-webkit-transform: rotate(135deg); 
+		    transform: rotate(135deg);	
+			-webkit-transition: all 100ms ease-out;
+			   -moz-transition: all 100ms ease-out;
+			    -ms-transition: all 100ms ease-out;
+			     -o-transition: all 100ms ease-out;
+			        transition: all 100ms ease-out;					
+		}
+
+	div.navbar{height:73px;background:#385e97;}
+
+	div.circle{	
+		border-radius: 50%;
+		width: 0px;
+		height: 0px; 
+		position:absolute;
+		top: 35px;
+		left: 36px;
+		background:#fff;
+		opacity:1;
+		-webkit-transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		   -moz-transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		    -ms-transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		     -o-transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		        transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);	
+	}
+	div.circle.expand{
+		width:1200px;
+		height:1200px;
+		top: -560px;
+		left: -565px; 	
+		-webkit-transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		   -moz-transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		    -ms-transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		     -o-transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		        transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);					
+		
+	}
+	div.menu {
+		height: 568px; 
+		width: 320px;
+		position: absolute;
+		top: 0px; left: 0px;
+	}
+	div.menu ul li {
+		list-style: none;
+		position:absolute;
+		top:50px;;
+		left:0;
+		opacity:0;
+		width:320px;
+		text-align:center;
+		font-size:0px;
+		-webkit-transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		   -moz-transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		    -ms-transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		     -o-transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		        transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+	}
+	div.menu ul li a {
+		color:#4a89dc;
+		text-transform:uppercase;
+		text-decoration:none;	
+		letter-spacing:3px;			
+	}
+
+	div.menu li.animate{
+		font-size:21px;
+		opacity:1;
+		-webkit-transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		   -moz-transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		    -ms-transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		     -o-transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+		        transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+	}
+	div.menu li.animate:nth-of-type(1){	
+		top:120px;
+		transition-delay: 0.0s;	
+	}
+	div.menu li.animate:nth-of-type(2){
+		top:190px;
+		transition-delay: 0.03s;	
+				
+	}
+	div.menu li.animate:nth-of-type(3){
+		top:260px;
+		transition-delay: 0.06s;		
+		
+	}
+	div.menu li.animate:nth-of-type(4){
+		top:330px;
+		transition-delay: 0.09s;		
+		
+	}
+	div.menu li.animate:nth-of-type(5){
+		top:400px;
+		transition-delay: 0.12s;		
+		
+	}
+	div.menu li.animate:nth-of-type(6){
+		top:470px;
+		transition-delay: 0.15s;	
+				
+	}
+	</style>
+	<!-- <link href='http://fonts.useso.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>	 -->
+	<!--[if IE]>
+		<script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<div class="htmleaf-container">
+<!-- 		<header class="htmleaf-header">
+			<h1>jQuery炫酷Material Design风格全屏隐藏菜单特效 <span>A jQuery full screen Material Design menu</span></h1>
+			<div class="htmleaf-links">
+				<a class="htmleaf-icon icon-htmleaf-home-outline" href="http://www.htmleaf.com/" title="jQuery之家" target="_blank"><span> jQuery之家</span></a>
+				<a class="htmleaf-icon icon-htmleaf-arrow-forward-outline" href="http://www.htmleaf.com/jQuery/Menu-Navigation/201505181855.html" title="返回下载页" target="_blank"><span> 返回下载页</span></a>
+			</div>
+		</header> -->
+		<div class="htmleaf-content">
+			<div class="screen">
+	        	<div class="navbar"></div>
+	        	<div class="list">
+	            	<div class="item">
+	                	<div class="img"></div>
+	                    <span></span>
+	                    <span></span>
+	                    <span></span>                    
+	                </div>
+	                
+	                <div class="item">
+	                	<div class="img"></div>
+	                    <span></span>
+	                    <span></span>
+	                    <span></span>                    
+	                </div>
+	                
+	                <div class="item">
+	                	<div class="img"></div>
+	                    <span></span>
+	                    <span></span>
+	                    <span></span>                    
+	                </div>
+	                
+	                <div class="item">
+	                	<div class="img"></div>
+	                    <span></span>
+	                    <span></span>
+	                    <span></span>                    
+	                </div>
+	            </div>
+	        
+		        <div class="circle"></div>
+				<div class="menu">
+					<ul>
+						<li><a href="">菜单1</a></li>
+						<li><a href="">菜单1</a></li>
+						<li><a href="">Activity</a></li>
+	                    <li><a href="">Settings</a></li>
+	                    <li><a href="">Contact</a></li>
+					</ul>
+				</div>			            
+				<div class="burger">
+					<div class="x"></div>
+					<div class="y"></div>
+	                <div class="z"></div>
+				</div>    
+			</div>	
+		</div>
+		<!-- <div class="related">
+		    <h3>如果你喜欢这个插件，那么你可能也喜欢:</h3>
+		    <a href="http://www.htmleaf.com/jQuery/Menu-Navigation/201504281750.html">
+			  <img src="related/1.jpg" width="300" alt="jQuery简单实用的隐藏全屏导航菜单插件"/>
+			  <h3>jQuery简单实用的隐藏全屏导航菜单插件</h3>
+			</a>
+			<a href="http://www.htmleaf.com/css3/daohangcaidan/201503121508.html">
+			  <img src="related/2.jpg" width="300" alt="4种CSS3超酷移动手机滑动隐藏侧边栏菜单特效"/>
+			  <h3>4种CSS3超酷移动手机滑动隐藏侧边栏菜单特效</h3>
+			</a>
+		</div> -->
+	</div>
+	
+	<script src="http://libs.useso.com/js/jquery/1.11.0/jquery.min.js"></script>
+	<script>
+	if ('ontouchstart' in window) {
+	    var click = 'touchstart';
+	} else {
+	    var click = 'click';
+	}
+	$('div.burger').on(click, function () {
+	    if (!$(this).hasClass('open')) {
+	        openMenu();
+	    } else {
+	        closeMenu();
+	    }
+	});
+	$('div.menu ul li a').on(click, function (e) {
+	    e.preventDefault();
+	    closeMenu();
+	});
+	function openMenu() {
+	    $('div.circle').addClass('expand');
+	    $('div.burger').addClass('open');
+	    $('div.x, div.y, div.z').addClass('collapse');
+	    $('.menu li').addClass('animate');
+	    setTimeout(function () {
+	        $('div.y').hide();
+	        $('div.x').addClass('rotate30');
+	        $('div.z').addClass('rotate150');
+	    }, 70);
+	    setTimeout(function () {
+	        $('div.x').addClass('rotate45');
+	        $('div.z').addClass('rotate135');
+	    }, 120);
+	}
+	function closeMenu() {
+	    $('div.burger').removeClass('open');
+	    $('div.x').removeClass('rotate45').addClass('rotate30');
+	    $('div.z').removeClass('rotate135').addClass('rotate150');
+	    $('div.circle').removeClass('expand');
+	    $('.menu li').removeClass('animate');
+	    setTimeout(function () {
+	        $('div.x').removeClass('rotate30');
+	        $('div.z').removeClass('rotate150');
+	    }, 50);
+	    setTimeout(function () {
+	        $('div.y').show();
+	        $('div.x, div.y, div.z').removeClass('collapse');
+	    }, 70);
+	}
+	</script>
+</body>
+</html>

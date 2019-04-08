@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "我的打印";
+}
+
+<style type="text/css">
+    .NormalTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #CCCCCC;
+        float: left;
+    }
+
+    .SelectTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #5CB85C;
+        float: left;
+    }
+</style>
+
+<div class="row" style="margin-top: 100px;">
+    <div>
+        <div style="width: 70px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;">单据类型:</div>
+        <div class="SearchKeywords" id="BillTypes">
+            <div val="s1" class="SelectTabItem label label-success" onclick="tagClick(this)">费用报销单</div>
+            <div val="s2" class="NormalTabItem label label-default" onclick="tagClick(this)">付款通知书</div>
+            <div val="s3" class="NormalTabItem label label-default" onclick="tagClick(this)">借款单</div>
+            <div val="s4" class="NormalTabItem label label-default" onclick="tagClick(this)">还款单</div>
+
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 1px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div>
+        <div style="width: 70px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;">日期范围:</div>
+        <div class="SearchKeywords">
+            <div val="y1" class="SelectTabItem label label-success" onclick="tagClick(this)">全部</div>
+            <div val="y2" class="NormalTabItem label label-default" onclick="tagClick(this)">当天</div>
+            <div val="y3" class="NormalTabItem label label-default" onclick="tagClick(this)">本周</div>
+            <div val="y4" class="NormalTabItem label label-default" onclick="tagClick(this)">本月</div>
+            <div val="y5" class="NormalTabItem label label-default" onclick="tagClick(this)">上月</div>
+
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 1px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+        <div id="tags"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive table-striped">
+            <thead>
+                <tr style="color: #757374">
+                    <th>单号</th>
+                    <th>单据类型</th>
+                    <th>报销方</th>
+                    <th>发生品牌</th>
+                    <th>报销人</th>
+                    <th>总金额</th>
+                    <th>业务日期</th>
+                    <th>打印状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="vipData" class="tbody_tr_td">
+               
+                <tr></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination" id="vipDataPage" style="float: right">
+        <ul>
+            <li class="active"><a title="Current page is 1">1</a></li>
+            <li><a title="Go to page 2">2</a></li>
+            <li><a title="Go to page 3">3</a></li>
+            <li><a title="Go to page 4">4</a></li>
+            <li><a title="Go to page 5">5</a></li>
+            <li><a title="Go to next page">下一页</a></li>
+            <li><a title="Go to last page">末页</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="floatBox_ajax" class="float_ajax_box" style="display: none; width: 300px; position: absolute; left: 31px; top: 2068px; z-index: 999;">
+    <div class="float_ajax_data">
+        <div>
+            <div style="padding: 0px 5px">
+                <h5>卡号()</h5>
+            </div>
+            <div style="border-top: #cccccc 1px solid; overflow: hidden; height: 1px"></div>
+            <div style="padding: 8px 8px; overflow: auto; height: 265px;">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="width: 75px; text-align: right;">卡号：</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td style="width: 75px; text-align: right;">名称：</td>
+                            <td>&nbsp;陈满欣</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td style="width: 75px; text-align: right;">电话：</td>
+                            <td>&nbsp;13324478889</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td style="width: 75px; text-align: right;">办卡日期：</td>
+                            <td>&nbsp;2008-02-18</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td style="width: 75px; text-align: right;">生日：</td>
+                            <td>&nbsp;1966-04-08</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td style="width: 75px; text-align: right;">开卡人：</td>
+                            <td>&nbsp;吴春平-北京(11401)</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td style="width: 75px; text-align: right;">卡类型：</td>
+                            <td>&nbsp;正式卡</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <td style="width: 75px; text-align: right;" valign="top">地址：</td>
+                            <td style="word-wrap: break-word;">&nbsp;吉林省吉林大学第一医院ICU科</td>
+                        </tr>
+                        <tr></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/Print/Js.cshtml")
+
+
+<script src="~/Scripts/Bootstrap/js/bootstrap.min.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-paginator.js"></script>
+<script src="~/Scripts/JqueryPowerFloat/js/jquery-powerFloat.js"></script>
+<link href="~/Scripts/JqueryPowerFloat/css/powerFloat.css" rel="stylesheet" />

@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "我的草稿箱";
+}
+
+<div class="page" >
+    <div class="hd">
+        <h2 class="page_title">草稿箱</h2>
+    </div>
+
+        <div class="weui_cells_title">费用报销单草稿</div>
+        <div class="row">
+            <div class="col-md-4">
+               <table style="background-color:white;width:100%;margin-top:10px;font-family:'Microsoft YaHei'">
+                   <td style="width:50%;background-color:#5cb85c;">
+                       <div class="showList text-center" role="今天">
+                           <h4>今天 <span id="todayCount"></span>单</h4>
+                           <h1 id="todayTotalMoney"></h1>
+                       </div>
+                   </td>
+                   <td style="width:50%;background-color:white;">
+                        <div class="showList text-center" role="本周">
+                            <h4>本周 <span id="weekCount"></span>单</h4>
+                            <h1 id="weekTotalMoney"></h1>
+                       </div>
+                   </td>
+               </table>
+            </div>
+            <div class="col-md-4">
+               <table style="background-color:white;width:100%;margin-top:10px;font-family:'Microsoft YaHei'">
+                   <td style="width:50%;background-color:white;">
+                       <div class="showList text-center" role="本月">
+                            <h4>本月 <span id="lastWeekCount"></span>单</h4>
+                            <h1 id="lastWeekTotalMoney"></h1>
+                       </div>
+                   </td>
+                   <td style="width:50%;background-color:white;">
+                        <div class="showList text-center" role="上月">
+                            <h4>上月 <span id="lastMonthCount"></span>单</h4>
+                            <h1 id="lastMonthTotalMoney"></h1>
+                       </div>
+                   </td>
+               </table>
+            </div>
+        </div>
+
+
+  
+
+
+</div>
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/DraftBox/Js.cshtml")
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/Shared/MyBillList.cshtml",ViewData["PageName"]="DraftBox")

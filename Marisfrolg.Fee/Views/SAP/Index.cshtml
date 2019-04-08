@@ -1,0 +1,425 @@
+﻿@{
+    ViewBag.Title = "SAP审批台";
+}
+<style type="text/css">
+    html {
+        -webkit-text-size-adjust: none;
+    }
+
+    .NormalTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #CCCCCC;
+        float: left;
+    }
+
+    .SelectTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #5CB85C;
+        float: left;
+    }
+
+    /*李经理*/
+    @@media screen and (min-width: 800px) {
+        #InputBillNo, #InputRemark {
+            width: 76% !important;
+        }
+
+        #ButtonSearch1 {
+            margin-left: 2px !important;
+            margin-top: 26px !important;
+        }
+
+        #ButtonSearch {
+            margin-top: 27px !important;
+        }
+
+        #SapCommitNo, #AppendRemark, #BillNo, #SapUploadTime, #OverTimeCssForPrint {
+            margin-top: 25px;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 28% !important;
+        }
+
+        #MoenyCountReport {
+            float: none !important;
+        }
+
+        #SapConfirm {
+            margin-top: 25px;
+        }
+
+        #weui_dialog {
+            width: 95% !important;
+        }
+    }
+    /*我的电脑和丹丹的*/
+    @@media screen and (min-width: 1320px) {
+        #InputBillNo, #InputRemark {
+            width: 67% !important;
+        }
+
+        #ButtonSearch1 {
+            margin-left: 21px !important;
+            margin-top: 10px !important;
+        }
+
+        #ButtonSearch {
+            margin-top: 0px !important;
+        }
+
+        #SapCommitNo, #AppendRemark, #BillNo, #SapUploadTime, #OverTimeCssForPrint {
+            margin-top: 0px;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 25% !important;
+        }
+
+        #MoenyCountReport {
+            float: left !important;
+        }
+
+        #SapConfirm {
+            margin-top: 0px;
+        }
+
+        #weui_dialog {
+            width: 85% !important;
+        }
+    }
+    /*公司同事*/
+    @@media screen and (min-width: 1600px) {
+        #InputBillNo, #InputRemark {
+            width: 56% !important;
+        }
+
+        #ButtonSearch1 {
+            margin-left: 21px !important;
+        }
+
+        #ButtonSearch {
+            margin-top: 0px !important;
+        }
+
+        #AccountTime1, #AccountTime2, #AccountTime3, #AccountTime4 {
+            margin-top: 5px;
+        }
+
+        #SapCommitNo, #AppendRemark, #BillNo, #SapUploadTime, #OverTimeCssForPrint {
+            margin-top: 3px;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 21% !important;
+        }
+
+        #MoenyCountReport {
+            float: left !important;
+        }
+
+        #SapConfirm {
+            margin-top: 0px;
+        }
+    }
+    /*陆哥电脑*/
+    @@media screen and (min-width: 1700px) {
+        #InputBillNo, #InputRemark {
+            width: 49% !important;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 18% !important;
+        }
+
+        #MoenyCountReport {
+            float: left !important;
+        }
+    }
+    /*何奕电脑*/
+    @@media screen and (min-width: 2000px) {
+        #InputBillNo, #InputRemark {
+            width: 43% !important;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 16% !important;
+        }
+
+        #MoenyCountReport {
+            float: left !important;
+        }
+
+        #SapConfirm {
+            margin-top: 0px;
+        }
+    }
+</style>
+
+<div class="weui_tab" style="margin-top: 4%">
+    <div class="weui_navbar" style="font-weight: 600;">
+        <div class="weui_navbar_item" onclick="HideOrShow('list1')">
+            快速审单
+        </div>
+        <div class="weui_navbar_item" onclick="HideOrShow('list2')">
+            查询单据
+        </div>
+        <div class="weui_navbar_item weui_bar_item_on">
+            正在开发。。。
+        </div>
+    </div>
+    <div class="weui_tab_bd">
+    </div>
+</div>
+
+@*显示的容器*@
+<div class="row" id="FatherRow" style="margin-left: 10px; margin-right: 10px;">
+
+    <div id="list1" style="margin-top: 100px; display: none">
+        <div class="row">
+            <div class="col-md-3">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">输入单号:</div>
+                <input type="text" class="form-control" autocomplete="off" placeholder="支持输入多个单号" style="width: 68%" id="SapCommitNo">
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 20px; margin-top: 0px; margin-bottom: 5px;"></div>
+            </div>
+
+            <div class="col-md-3">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">指定公司:</div>
+                <div class="form-group">
+                    <select id="SapCompanycode" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="请选择">
+                        <optgroup label="" id="">
+                            <option val="1000">1000</option>
+                            <option val="2000">2000</option>
+                            <option val="1300">1300</option>
+                            <option val="2100">2100</option>
+                            <option val="2300">2300</option>
+                            <option val="2200">2200</option>
+                            <option val="4000">4000</option>
+                            <option val="1010">1010</option>
+                            <option val="1020">1020</option>
+                            <option val="1030">1030</option>
+                            <option val="1330">1330</option>
+                            <option val="">请选择</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+            </div>
+
+
+            <div class="col-md-3">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">添加备注:</div>
+                <input type="text" class="form-control" autocomplete="off" placeholder="输入添加备注" style="width: 68%" id="AppendRemark">
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 20px; margin-top: 0px; margin-bottom: 5px;"></div>
+            </div>
+
+
+            <div class="col-md-3">
+                <button id="SapConfirm" type="button" class="btn btn-success form-control" style="width: 80px;" onclick="GenerateSap()">生成凭证</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="list2" style="margin-top: 25px; display: none">
+        <div class="row">
+            <div class="col-md-3">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">单据类型:</div>
+
+                <div class="form-group" style="float: left; display: block;">
+
+                    <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="MybillType">
+                        <optgroup label="">
+                            <option value="1">费用报销单</option>
+                            <option value="2">付款通知书</option>
+                            <option value="3">借款单</option>
+                            <option value="4">还款单</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+            </div>
+
+            <div class="col-md-3">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">指定公司:</div>
+                <div class="form-group">
+                    <select id="MyCompanycode" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="请选择">
+                        <optgroup label="" id="MyCompanycodeSon">
+                            <option val="1000">1000</option>
+                            <option val="2000">2000</option>
+                            <option val="1300">1300</option>
+                            <option val="2100">2100</option>
+                            <option val="2300">2300</option>
+                            <option val="2200">2200</option>
+                            <option val="4000">4000</option>
+                            <option val="1010">1010</option>
+                            <option val="1020">1020</option>
+                            <option val="1030">1030</option>
+                            <option val="1330">1330</option>
+                            <option val="">请选择</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+            </div>
+
+            <div class="col-md-3">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">凭证类型:</div>
+                <div class="form-group">
+                    <select id="SapProof" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="Please select a lunch ...">
+                        <option class="bs-title-option" val="0">全部凭证</option>
+                        <option val="0">全部凭证</option>
+                        <option val="1">待上传凭证</option>
+                        <option val="2">已上传凭证</option>
+                        <option val="3">我上传的凭证</option>
+                    </select>
+                </div>
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+            </div>
+
+            <div class="col-md-3">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">特殊选项:</div>
+                <div class="form-group" style="float: left; display: block;">
+                    <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="SpecialProperty">
+                        <optgroup label="活动经费">
+                            <option value="hd1">是</option>
+                            <option value="hd0">否</option>
+                        </optgroup>
+                        <optgroup label="代理商费用">
+                            <option value="dl1">是</option>
+                            <option value="dl0">否</option>
+                        </optgroup>
+                        <optgroup label="商场账扣">
+                            <option value="sc1">是</option>
+                            <option value="sc0">否</option>
+                        </optgroup>
+                        <optgroup label="银行账扣">
+                            <option value="yh1">是</option>
+                            <option value="yh0">否</option>
+                        </optgroup>
+                        <optgroup label="押金账扣">
+                            <option value="yj1">是</option>
+                            <option value="yj0">否</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3" id="SapUploadTime">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">凭证上传时间:</div>
+
+                <div class="input-group" style="display: table;">
+                    <input type="text" class="form-control" style="width: 90px; font-size: 12px;" id="SAPTime1" placeholder="日期" readonly="">
+                    <div class="input-group-addon" style="width: 40px;">到</div>
+                    <input type="text" class="form-control" style="width: 90px; font-size: 12px;" id="SAPTime2" placeholder="日期" readonly="">
+                </div>
+
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+            </div>
+
+            <div class="col-md-3" id="BillNo">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">创建时间:</div>
+
+                <div class="input-group" style="display: table;">
+                    <input type="text" class="form-control" style="width: 90px; font-size: 12px;" id="AccountTime1" placeholder="日期" readonly="">
+                    <div class="input-group-addon" style="width: 40px;">到</div>
+                    <input type="text" class="form-control" style="width: 90px; font-size: 12px;" id="AccountTime2" placeholder="日期" readonly="">
+                </div>
+
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+            </div>
+
+            <div class="col-md-3" id="OverTimeCssForPrint">
+                <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">办结日期:</div>
+
+
+                <div class="input-group" style="display: table;">
+                    <input type="text" class="form-control" style="width: 90px; font-size: 12px;" id="AccountTime3" placeholder="日期" readonly="">
+                    <div class="input-group-addon" style="width: 40px;">到</div>
+                    <input type="text" class="form-control" style="width: 90px; font-size: 12px;" id="AccountTime4" placeholder="日期" readonly="">
+                </div>
+
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+            </div>
+
+            <div class="col-md-3" id="ButtonSearch">
+                <a id="ButtonSearch1" href="javascript:GetReportData();" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-left: 21px; margin-top: 10px;">查询</a>
+                <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <span style="margin-left: 4px; color: #F00; margin-left: 10px;" id="ShowBillStatus"></span>
+            </div>
+        </div>
+
+        <div class="row" id="SAPControl" style="display: none">
+            <div style="margin: 15px;">
+                <table id="table"
+                    data-pagination="true"
+                    data-search="true"
+                    data-mobile-responsive="true"
+                    data-check-on-init="true" style="overflow: auto">
+                    <thead>
+                        <tr>
+                            <th data-field="BillNo" data-sortable="true">单号</th>
+                            <th data-field="Type" data-sortable="true">单据类型</th>
+                            <th data-field="Department" data-sortable="true">部门</th>
+                            <th data-field="Brand" data-sortable="true">发生品牌</th>
+                            <th data-field="TotalMoney" data-sortable="true">发生金额</th>
+                            <th data-field="CreateTime" data-sortable="true">创建日期</th>
+                            <th data-field="ApprovalTime" data-sortable="true">办结日期</th>
+                            <th data-field="Remark" data-sortable="true">备注</th>
+                            <th data-field="Operation" data-sortable="true">操作</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@Html.Partial("~/Views/SAP/Js.cshtml")
+<link href="~/Scripts/Bootstrap/css/bootstrap-table.css" rel="stylesheet" />
+<script src="~/Scripts/Bootstrap/js/bootstrap-table.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-table-mobile.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link href="~/Scripts/Bootstrap/css/bootstrap-select.css" rel="stylesheet" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-select.js"></script>
+
+@*<script src="https://docs.handsontable.com/pro/1.10.2/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
+<link type="text/css" rel="stylesheet" href="https://docs.handsontable.com/pro/1.10.2/bower_components/handsontable-pro/dist/handsontable.full.min.css">*@
+<script src="~/Scripts/handsontable/handsontable.full.js"></script>
+<link href="~/Scripts/handsontable/handsontable.full.min.css" rel="stylesheet" />
+
+@Html.Partial("~/Views/Shared/PublicPrint.cshtml")
+

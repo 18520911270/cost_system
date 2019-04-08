@@ -1,0 +1,109 @@
+﻿<script>
+    function GetSysUsers() {
+        $("#_SystemTable").children().remove();
+        $("#NoData").children().remove();
+        layer.load();
+        $.ajax({
+            url: "@Url.Content("~/System/GetSysUsers/")",
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (outcome) {
+                debugger;
+                setTimeout(function () {
+                    layer.closeAll('loading');
+                }, 1000);
+
+                outcome = JSON.parse(outcome);
+                if (outcome.Status == "100" && outcome.Data.length > 0) {
+                    RenderingTable(outcome.Data);
+                }
+                else {
+                    $("#NoData").append("<div style='margin-left:35%;margin-top:25px;font-size:18px;font-family:Microsoft YaHei;'><img src='/Images/Null.jpg' />未查询到相关记录</div>");
+                }
+            }
+        })
+    }
+
+
+    function RenderingTable(result) {
+        var phead = "<tr>";
+        var keys1 = [];
+        for (var p1 in result[0]) {
+            if (result[0].hasOwnProperty(p1))
+                keys1.push(p1)
+        }
+        for (var i = 0; i < keys1.length; i++) {
+            phead += "<td>" + keys1[i] + "</td>"
+        }
+        phead += "</tr>";
+        $(phead).appendTo($("#_SystemTable"));
+        var IM_TotalMoney = 0;
+        for (var i = 0; i < result.length; i++) {
+            var pbody = "<tr>";
+            for (var key in result[i]) {
+                if (result[i][key]) {
+                    if (key == "付款总额" || key == "财务付款金额") {
+                        IM_TotalMoney += parseFloat(result[i][key]);
+                        pbody += "<td>" + result[i][key] + "</td>";
+                    }
+                    else {
+                        pbody += "<td>" + result[i][key] + "</td>";
+                    }
+                }
+                else {
+                    if (key == "全选") {
+                        pbody += "<td><input type=\"checkbox\" style=\"margin-left:35%\"></td>";
+                    }
+                    else {
+                        pbody += "<td></td>";
+                    }
+                }
+            }
+            pbody += "</tr>";
+            $(pbody).appendTo($("#_SystemTable"));
+        }
+    }
+
+
+    function btnAdd() {
+        var type = $("#tablist .active");
+        var name = type.children().text();
+
+        if (name == "人员清单") {
+            //页面层
+            layer.open({
+                type: 1 //Page层类型
+              , area: ['350px', '300px']
+              , title: '新增人员'
+              , btn: ['取消', '添加']
+              , btn2: function (index, layero) {
+                  //按钮【按钮二】的回调
+                  var no = $("#_No").val();
+                  if (no) {
+                      //调用同步方法
+                      $.ajax({
+                          url: "@Url.Content("~/System/AddPerson/")",
+                          data: { No: no },
+                          contentType: "application/json; charset=utf-8",
+                          datatype: "json",
+                          async: false,
+                          type: "GET",
+                          success: function (reult) {
+                              layer.msg('添加成功。。', { icon: 1 });
+                          }
+                      })
+                  }
+                  else {
+                      layer.msg('工号不能为空。。', { icon: 7 });
+                      return false;
+                  }
+              }
+              , shade: 0.6 //遮罩透明度
+              , maxmin: true //允许全屏最小化
+              , anim: -1 //0-6的动画形式，-1不开启
+              , content: '<div style="margin-top:20px;"><div class="col-md-12"><div class="col-md-4" style="line-height:33px;" >工号</div><div class="col-md-6"><input class="form-control" placeholder="输入工号" id="_No"></div></div></div>'
+            });
+      }
+  }
+</script>

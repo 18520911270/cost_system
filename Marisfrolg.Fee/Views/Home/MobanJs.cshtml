@@ -1,0 +1,357 @@
+﻿<script type="text/javascript" src="~/Scripts/Jquery.Barcode/jquery.jqprint-0.3.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.Barcode/jquery-barcode.js"></script>
+<link rel="stylesheet" href="~/Content/print.css" />
+
+
+
+
+
+<!--BEGIN 弹出层-->
+<div class="weui_dialog_confirm js_container" id="dialogPrint" style="display: none;">
+    <div class="weui_mask">打印预览</div>
+    <div class="weui_dialog" style="width: 130mm; overflow-y: auto;">
+        <!-- 标题 -->
+        <div>
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6 text-right ">
+                <i class="icon iconfont btnClose">&#xe600;</i>
+            </div>
+        </div>
+
+        <div class="weui_dialog_bd">
+            <!-- 内容开始 -->
+
+            <!-- 标题 -->
+
+            <div id="printContainer">
+                <!-- A4内容开始 -->
+                <div style="max-height: 149mm; font-family: 'Microsoft YaHei';">
+                    <div>
+                        <sapn class="text-center" id="billType">费用报销单</sapn>
+                    </div>
+
+                    <table class="">
+                        <tr class="line">
+                            <td colspan="99"></td>
+                        </tr>
+                        <tr>
+                            <td class="">
+                                <div id="barcodeTarget" style="margin-left: -15px;"></div>
+                            </td>
+                            <td>
+                                <h4 class="text-right" id="Clerk">制单：陆帅华 2016年6月21日</h4>
+                            </td>
+                        </tr>
+                        <tr class="line">
+                            <td colspan="99"></td>
+                        </tr>
+                        <tr>
+                            <td class=" text-left">
+                                <h4 id="CompanyName">公司名称：深圳玛丝菲尔时装股份有限公司</h4>
+                            </td>
+                            <td class=" text-left">
+                                <h4 id="Brand">发生品牌：MA,SU,ZH</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class=" text-left">
+                                <h4 id="DepartmentName">报消方：数据控制中心</h4>
+                            </td>
+                            <td class=" text-left">
+                                <h4 id="CostCenter">成本中心：200100100</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class=" text-left">
+                                <h4 id="Person">报销人：孙佳莹</h4>
+                            </td>
+                            <td class=" text-left">
+                                <h4 id="DateTime">业务日期：2016年6月27日</h4>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="">
+                        <table class="">
+                            <thead>
+                                <tr>
+                                    <th>科目号</th>
+                                    <th>科目名称</th>
+                                    <th>币种</th>
+                                    <th class="money">金额</th>
+                                    <th class="money">税额</th>
+                                    <th>原因代码</th>
+                                </tr>
+                            </thead>
+                            <tbody id="Content">
+                                <tr>
+                                    <td>6601020071</td>
+                                    <td>办事处房租1</td>
+                                    <td>CNY</td>
+                                    <td class="money">101.00</td>
+                                    <td>107</td>
+                                </tr>
+                                <tr>
+                                    <td>6601020072</td>
+                                    <td>办事处房租2</td>
+                                    <td>CNY</td>
+                                    <td class="money">102.00</td>
+                                    <td>107</td>
+                                </tr>
+                                <tr>
+                                    <td>6601020073</td>
+                                    <td>办事处房租3</td>
+                                    <td>CNY</td>
+                                    <td class="money">103.00</td>
+                                    <td>107</td>
+                                </tr>
+                                <tr class="total">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="money">306.00</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="secionBottom">
+                        <h4 class="text-left">[用户标注]</h4>
+
+                        <table class="secionTop">
+                            <tr class="line">
+                                <td colspan="99"></td>
+                            </tr>
+                            <tr>
+                                <td class="tableRow text-left">
+                                    <h4 id="Funds">是否活动经费：是</h4>
+                                </td>
+                                <td class="tableRow text-left">
+                                    <h4 id="MarketDebt">是否商场账扣：是</h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tableRow text-left">
+                                    <h4 id="BankDebt">是否银行账扣：不是</h4>
+                                </td>
+                                <td class="tableRow text-left">
+                                    <h4 id="Agent">是否代理商费用：不是</h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tableRow text-left">
+                                    <h4 id="deposit">是否押金账扣：不是</h4>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <h4 class="text-left">[审批流程]</h4>
+                        <table class="tableFlow">
+                            <tr id="tbody">
+                                @*  <th>开始</th>*@
+                                <th>部门负责人</th>
+                                <th>财务负责人</th>
+                                <th>总经办</th>
+                                <th>出纳</th>
+                            </tr>
+                            <tr id="tfoot">
+                                @*  <td>
+                                <div id="00275" class="box"></div>
+                                </td>*@
+                                <td>孙佳莹</td>
+                                <td>李知力</td>
+                                <td>张楠</td>
+                                <td>隋敏霞</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+                <!-- A4内容结束 -->
+
+            </div>
+
+
+            <div class="weui_dialog_ft" style="">
+
+                <a class=" default" href="javascript:SubmitWorkFlow('0');">不通过</a>
+                <a class=" default" href="javascript:SubmitWorkFlow('1');">通过</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        // <a class=" default" href="javascript:SubmitWorkFlow('0');">不通过</a>
+        function InitBillPageData(BillNo) {
+            //填写打印内容
+            $("#barcodeTarget").barcode(BillNo, "code128", { barWidth: 1.25, barHeight: 17.5 });
+
+        }
+
+
+
+        //绘制签名
+        function printPersonSign() {
+
+            $("#00275").text("陆帅华");
+        }
+
+        //将信息填充到打印界面
+        function SubmitDataInfo(BillNo, Type) {
+            $.ajax({
+                url: "@Url.Content("~/Print/GetDataFromBillNo/")",
+                data: { BillNo: BillNo, Type: Type },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    if (result) {
+                        var result = JSON.parse(result);
+                        var Brand = "";
+                        for (var k = 0; k < result.PersonInfo.Brand.length; k++) {
+                            if (k < result.PersonInfo.Brand.length - 1) {
+                                Brand += result.PersonInfo.Brand[k] + ","
+                            }
+                            else {
+                                Brand += result.PersonInfo.Brand[k];
+                            }
+                        }
+                        $("#Clerk").text("制单：" + employeeInfo.EmployeeName + " " + result.StringTime + "");
+                        $("#CompanyName").text("公司名称：" + result.PersonInfo.Company + " ");
+                        $("#Brand").text("发生品牌：" + Brand + "");
+                        $("#DepartmentName").text("报销方：" + result.PersonInfo.Department + "");
+                        $("#CostCenter").text("成本中心：" + result.PersonInfo.CostCenter + "");
+                        $("#Person").text("报销人：" + result.Owner + "");
+                        $("#DateTime").text("业务日期：" + result.StringTime + "");
+                        $("#Content tr").remove();
+                        for (var m = 0; m < result.Items.length; m++) {
+                            if (result.Items[m].reason_code == null) {
+                                result.Items[m].reason_code = "无";
+                            }
+                            $("<tr><td>" + result.Items[m].code + "</td><td>" + result.Items[m].name + "</td><td>CNY</td> <td class=\"money\">" + result.Items[m].money + "</td><td class=\"money\">" + result.Items[m].taxmoney + "</td><td>" + result.Items[m].reason_code + "</td></tr>").appendTo($("#Content"));
+                        }
+                        $("<tr class=\"total\"><td></td><td></td><td></td><td class=\"money\">" + result.TotalMoney + "</td><td></td><td></td></tr>").appendTo($("#Content"));
+                        $("#Funds").text("是否活动经费：" + RetrunString(result.SpecialAttribute.Funds) + "");
+                        $("#MarketDebt").text("是否商场账扣：" + RetrunString(result.SpecialAttribute.MarketDebt) + "");
+                        $("#BankDebt").text("是否银行账扣：" + RetrunString(result.SpecialAttribute.BankDebt) + "");
+                        $("#Agent").text("是否代理商费用：" + RetrunString(result.SpecialAttribute.Agent) + "");
+                        $("#Check").text("本单是否考核：" + RetrunString(result.SpecialAttribute.Check) + "");
+                        $("#deposit").text("是否押金账扣：" + RetrunString(result.SpecialAttribute.Cash) + "");
+                        //付款通知书的显示
+                        if (result.PageName == "Notice") {
+                            $("#MarketDebt").parent().hide();
+                            $("#BankDebt").parent().hide();
+                            $("#Check").parent().hide();
+                            $("#deposit").parent().hide();
+                        }
+                        //费用报销单的显示
+                        if (result.PageName == "FeeBill") {
+                            $("#MarketDebt").parent().show();
+                            $("#BankDebt").parent().show();
+                            $("#Check").parent().show();
+                            $("#deposit").parent().show();
+                        }
+                    }
+                }
+            });
+        }
+
+        function RetrunString(val) {
+            if (val == "0") {
+                return "否";
+            }
+            else if (val == "1") {
+                return "是"
+            }
+        }
+
+        function showDialog(BillNo, Type) {
+            var $dialog = $('#dialogPrint');
+            $dialog.show();
+
+            // printPersonSign();        //绘制签名
+            //SubmitDataInfo(BillNo, Type);  //将信息填充到打印界面
+            //GetWorkFlow(BillNo, Type);  //获取流程实例
+            $dialog.find('.weui_btn_dialog').one('click', function () {
+                $dialog.hide();
+                $("body").css("overflow", "auto");
+                jinzhi = 1;
+            });
+            $(".btnClose").one('click', function () {
+                $dialog.hide();
+                $("body").css("overflow", "auto");
+                jinzhi = 1;
+            });
+            $("body").css("overflow", "hidden");
+            jinzhi = 0;
+        }
+
+        //提交审批(跟单据类型无关)
+        function SubmitWorkFlow(work) {
+            $.ajax({
+                url: "@Url.Content("~/Home/SubmitWorkFlowList/")",
+                data: { AssignmentID: $("#editValue").attr("code"), ActionName: work, Remark: "" },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    if (result) {
+                        submitMessageShow("审批已完成!");
+                    }
+                    else {
+                        submitMessageShow("失败!","error");
+                    }
+                }
+            })
+        };
+
+        //获取流程实例
+        function GetWorkFlow(BillNo, Type) {
+            $.ajax({
+                url: "@Url.Content("~/Print/GetWorkFlowList/")",
+                data: { BillNo: BillNo, Type: Type },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    $("#tfoot td").text("");
+                    if (result) {
+                        $("#tbody").children().remove();
+                        $("#tfoot").children().remove();
+                        var result = JSON.parse(result);
+                        for (var i = 0; i < result.length; i++) {
+                            $("<th>" + result[i].Description + "</th>").appendTo($("#tbody"));
+                            var personName = "";
+                            for (var j = 0; j < result[i].PersonName.length; j++) {
+                                if (result[i].PersonName[j].indexOf("-") >= 0) {
+                                    result[i].PersonName[j] = result[i].PersonName[j].split('-')[0];
+                                }
+                                if (j < result[i].PersonName.length - 1) {
+                                    personName += result[i].PersonName[j] + "(" + KeyWorkSetCN(result[i].KeyWord[j]) + "),"
+                                }
+                                else {
+                                    personName += result[i].PersonName[j] + "(" + KeyWorkSetCN(result[i].KeyWord[j]) + ")"
+                                }
+                            }
+                            $("<td  style=\"text-align:center\">" + personName + "</td>").appendTo($("#tfoot"));
+                        }
+                    }
+                }
+            })
+        };
+        function KeyWorkSetCN(keyword) {
+            if (keyword == "12002") {
+                return "通过";
+            }
+            if (keyword == "12003") {
+                return "驳回";
+            }
+            if (keyword == "12005") {
+                return "拒绝";
+            }
+        }
+    </script>

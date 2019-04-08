@@ -1,0 +1,257 @@
+﻿<script type="text/javascript">
+    $(function () {
+        InitPageData();
+
+    });
+
+    function InitPageData() {
+        loadAutoComplete();
+        $('#providerText').bind('input propertychange', function (event) {
+
+            if ($('#providerText').val().length == 0) {
+                $("#selectedArea").text("");
+                var input = document.getElementById("providerText");
+                input.setAttribute("code", "0");
+
+                tagClick(null);//刷新一次数据
+            }
+        });
+        GetReportData(0, 2, 0);
+    }
+
+    function loadAutoComplete() {
+        var input = document.getElementById("providerText");
+        $.ajax({
+            url: "@Url.Content("~/CheckAccounting/GetDistributionCenter/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    var complete = new Awesomplete(input, {
+                        list: result,
+                        replace: function (text) {
+                            this.input.setAttribute("completeValue", text);
+                            this.input.value = text;
+                            this.input.setAttribute("code", text.value);
+                        },
+
+                    });
+
+                    events(input, 'awesomplete-selectcomplete', function (e) {
+                        var inputcode = input.getAttribute("code");
+                        $("#selectedArea").text(input.getAttribute("completeValue"));
+                        tagClick(null);//刷新一次数据
+
+                    });
+
+                }
+            }
+        });
+
+    }
+
+
+    //标签点击事件
+    function tagClick(eml) {
+        //设置标签状态
+        if (eml != null) {
+            $(eml).siblings().removeClass("SelectTabItem label label-success").addClass("NormalTabItem label label-default").end().addClass("SelectTabItem label label-success");
+        }
+
+        var rfm = "";
+        var tags = "";
+        var hg = "";
+
+        //获取选中的值
+        $(".SearchKeywords").children("div").each(function () {
+            if ($(this).hasClass("SelectTabItem")) {
+
+                var val = $(this).attr("val");
+                if (val.indexOf("s") >= 0) {
+                    tags = val.split('s')[1];
+                }
+                else if (val.indexOf("m") >= 0) {
+                    hg = val.split('m')[1];
+                }
+                else {
+                    rfm = val.split('y')[1];
+                }
+            }
+        });
+        if (rfm == "6") {
+            $("#CreateTimeDefined").show();
+            if (eml == null) {
+                GetReportData(tags, rfm, hg);
+            }
+        }
+        else {
+            $("#CreateTimeDefined").hide();
+            //获取打印数据
+            GetReportData(tags, rfm, hg);
+        }
+    }
+
+    function UserDefinedFunction() {
+        //获取选中的值
+        $(".SearchKeywords").children("div").each(function () {
+            if ($(this).hasClass("SelectTabItem")) {
+
+                var val = $(this).attr("val");
+                if (val.indexOf("s") >= 0) {
+                    tags = val.split('s')[1];
+                }
+                else if (val.indexOf("m") >= 0) {
+                    hg = val.split('m')[1];
+                }
+                else {
+                    rfm = val.split('y')[1];
+                }
+            }
+        });
+        GetReportData(tags, rfm, hg);
+    }
+
+    function GetReportData(tags, rfm, hg) {
+
+        $("#loadingToast").show();
+        var input = document.getElementById("providerText");
+        var inputcode = input.getAttribute("code");
+        $.ajax({
+            url: "@Url.Content("~/CheckAccounting/GetReportData/")",
+            data: { "billType": tags, Time: rfm, "departmentID": (inputcode == null ? 0 : inputcode), operation: hg, StartTime: $("#UserDefinedOne").val(), EndTime: $("#UserDefinedTwo").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#CheckAccounting1").show();
+                $("#loadingToast").hide();
+                if (result) {
+                    result = JSON.parse(result);
+                    var columns = result.Columns;
+                    var rows = result.Rows;
+                    var $table = $('#table');
+                    buildTable($table, columns, rows);
+
+                    //$table.columns
+                }
+            }
+        })
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="like" href="javascript:void(0)" title="Like">',
+            '查看',
+            '</a>  ',
+             '<a class="Print" href="javascript:void(0)" title="Print">',
+            '打印',
+            '</a>  '
+        ].join('');
+    }
+
+    function buildTable($el, columns, rows) {
+        window.operateEvents = {
+            'click .like': function (e, value, row, index) {
+                showDialog(row.单号, row.单据类型, "");   //点击确定后调用的方法
+            },
+            'click .Print': function (e, value, row, index) {
+                PrintOneBill(row.单号, row.单据类型);   //点击确定后调用的方法
+            }
+        };
+
+        var i, j, row,
+                $columns = [],
+                $data = [];
+        try {
+
+            $columns.push({
+                field: "CheckStatus",
+                sortable: false,
+                width: 50,
+                checkbox: true
+            });
+
+            for (i = 0; i < columns.length; i++) {
+                if (i == 0) {
+                    $columns.push({
+                        field: columns[i],
+                        title: columns[i],
+                        sortable: true
+                    });
+                    continue;
+                }
+                if (columns[i] == "审批日期") {
+                    $columns.push({
+                        field: columns[i],
+                        title: columns[i],
+                        sortable: true
+                    });
+                    continue;
+                }
+                $columns.push({
+                    field: columns[i],
+                    title: columns[i],
+                    sortable: false
+                });
+            }
+
+            $columns.push({
+                title: "操作",
+                align: 'center',
+                events: operateEvents,
+                formatter: operateFormatter
+            });
+
+            for (i = 0; i < rows.length; i++) {
+                row = {};
+                for (j = 0; j < columns.length; j++) {
+                    row[columns[j]] = rows[i][j];
+                }
+                $data.push(row);
+            }
+        } catch (e) {
+
+        }
+
+
+
+
+
+        $el.bootstrapTable('destroy').bootstrapTable({
+            columns: $columns,
+            data: $data,
+            search: true,
+            fixedColumns: false,
+            fixedNumber: 2,
+            pagination: true
+        });
+    }
+
+
+    function DownloadFile() {
+        $.ajax({
+            url: "@Url.Content("~/Report/DownloadFile/")",
+            data: { flag: "审批历史", parameterList: "" },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                result = JSON.parse(result);
+                if (result.error == "1") {
+                    submitMessageShow(result.msg, "error");
+                }
+                else {
+                    var src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/ExcelDownLoad/" + result.data;
+                    window.location.href = src_remoute;
+                    submitMessageShow(result.msg);
+                }
+            }
+        })
+    }
+
+</script>
+

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://wx.marisfrolg.com/CompanyWXPlat/Weixin/MfWeiXinEmpService.asmx?wsdl" docRef="http://wx.marisfrolg.com/CompanyWXPlat/Weixin/MfWeiXinEmpService.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://wx.marisfrolg.com/CompanyWXPlat/Weixin/MfWeiXinEmpService.asmx" xmlns:q1="http://marisfrolg.com/" binding="q1:MfWeiXinEmpServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://wx.marisfrolg.com/CompanyWXPlat/Weixin/MfWeiXinEmpService.asmx" xmlns:q2="http://marisfrolg.com/" binding="q2:MfWeiXinEmpServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

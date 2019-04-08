@@ -1,0 +1,392 @@
+﻿<script src="~/Scripts/mobiscroll/mobiscroll-2.13.2.full.min.js"></script>
+<script src="~/Scripts/Bootstrap/bootstrap-table.js"></script>
+<script src="~/Scripts/Bootstrap/bootstrap-table-mobile.js"></script>
+<script src="~/Scripts/mobiscroll/mobiscroll-2.13.2.full.min.js"></script>
+
+<script>
+    $(function () {
+        $("#StartTime").mobiscroll().date({
+            theme: "Default light",
+            lang: "zh",
+            cancelText: null,
+            dateFormat: 'yy-mm-dd', //返回结果格式化为年月格式  
+        });
+
+        $("#StartTime").val(GetCurrentTime());
+
+        GetUserHabit();
+
+        _GetIndexData("prepay");
+    })
+
+
+    function GetCurrentTime() {
+        var now = new Date();
+        var str = now.getFullYear() + "-" + ((now.getMonth() + 1) < 10 ? "0" : "") + (now.getMonth() + 1) + "-" + (now.getDate() < 10 ? "0" : "") + now.getDate();
+        return str;
+    }
+
+    function GetUserHabit() {
+        $.ajax({
+            url: '@Url.Content("~/PayFee/GetUserHabit/")',
+            data: {},
+            datatype: "json",
+            async: false,
+            type: "GET",
+            success: function (result) {
+                result = JSON.parse(result);
+                var habit = result.Data;
+                if (habit.PayCompanyCode) {
+                    $('#PayCompanyCode option').each(function () {
+                        $(this).removeAttr("selected");
+                        if ($(this).val() == habit.PayCompanyCode) {
+                            $(this).attr("selected", "selected");
+                        }
+                    });
+                }
+                if (habit.City) {
+                    $('#City option').each(function () {
+                        $(this).removeAttr("selected");
+                        if ($(this).val() == habit.City) {
+                            $(this).attr("selected", "selected");
+                        }
+                    });
+                }
+                if (habit.BillType) {
+                    $('#BillType option').each(function () {
+                        $(this).removeAttr("selected");
+                        if ($(this).val() == habit.BillType) {
+                            $(this).attr("selected", "selected");
+                        }
+                    });
+                }
+
+                if (habit.TradeType) {
+                    $('#TradeType option').each(function () {
+                        $(this).removeAttr("selected");
+                        if ($(this).val() == habit.TradeType) {
+                            $(this).attr("selected", "selected");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+    function _GetIndexData(Type) {
+        $("#Revoke").hide();
+        $("#SubmitData").hide();
+        $("#SubmitButton").hide();
+        $("#_PayFeeTable").children().remove();
+        $("#NoData").children().remove();
+
+        if (Type == "prepay") {
+            $("#tablist li").removeClass("active");
+            $("#tablist li").eq(0).addClass("active");
+        }
+
+
+        layer.load();
+        $.ajax({
+            url: "@Url.Content("~/PayFee/GetIndexData/")",
+            data: { Time: $("#StartTime").val(), Type: Type, City: $("#City").val(), BillType: $("#BillType").val(), PayCompanyCode: $("#PayCompanyCode").val(), TradeType: $("#TradeType").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (outcome) {
+
+                setTimeout(function () {
+                    layer.closeAll('loading');
+                }, 1000);
+
+                outcome = JSON.parse(outcome);
+                if (outcome.Status == "100" && outcome.Data.length > 0) {
+                    $("#SubmitData").show();
+
+                    //$("#SubmitButton").show();
+
+                    if (Type == "prepay" && $("#StartTime").val() == GetCurrentTime()) {
+                        $("#SubmitButton").show();
+                    }
+                    else if (Type == "fail") {
+                        $("#Revoke").show();
+                    }
+
+
+                    var result = outcome.Data;
+                    var phead = "<tr>";
+                    var keys1 = [];
+                    for (var p1 in result[0]) {
+                        if (result[0].hasOwnProperty(p1))
+                            keys1.push(p1)
+                    }
+                    for (var i = 0; i < keys1.length; i++) {
+                        if (keys1[i] == "全选") {
+                            phead += "<td style=\"text-align: center;\"><a style=\"cursor: pointer;\" onclick=\"SelectAll(this)\">" + keys1[i] + "</a></td>"
+                        }
+                        else if (keys1[i] == "预付编号") {
+                            phead += "<td style=\"text-align: center;\">" + keys1[i] + "</td>"
+                        }
+                        else {
+                            phead += "<td>" + keys1[i] + "</td>"
+                        }
+                    }
+                    phead += "</tr>";
+                    $(phead).appendTo($("#_PayFeeTable"));
+                    var IM_TotalMoney = 0;
+                    for (var i = 0; i < result.length; i++) {
+                        var pbody = "<tr>";
+                        for (var key in result[i]) {
+                            if (result[i][key]) {
+                                if (key == "付款总额" || key == "财务付款金额") {
+                                    IM_TotalMoney += parseFloat(result[i][key]);
+                                    pbody += "<td>" + result[i][key] + "</td>";
+                                }
+                                else if (key == "预付编号") {
+                                    pbody += "<td style=\"text-align: center;\"><a style=\"cursor: pointer;\" onclick=\"ShowPreNumTips('" + result[i][key] + "')\" id=\"" + result[i][key] + "\">" + result[i][key] + "</a></td>"
+                                }
+                                else if (Type == "prepay" && key == "收款人") {
+                                    pbody += "<td><a style=\"cursor: pointer;\" onclick=\"CheckButton(this)\">" + result[i][key] + "</a></td>"
+                                }
+                                else {
+                                    pbody += "<td>" + result[i][key] + "</td>";
+                                }
+                            }
+                            else {
+                                if (key == "全选" && Type == "prepay") {
+                                    pbody += "<td><input type=\"checkbox\" style=\"margin-left:35%\" num=\"" + result[i]["预付编号"] + "\" money=\"" + result[i]["付款总额"] + "\"></td>";
+                                }
+                                else if (key == "全选" && Type == "fail") {
+                                    pbody += "<td><input type=\"checkbox\" style=\"margin-left:35%\" num=\"" + result[i]["付款编号"] + "\"></td>";
+                                }
+                                else {
+                                    pbody += "<td></td>";
+                                }
+                            }
+                        }
+                        pbody += "</tr>";
+                        $(pbody).appendTo($("#_PayFeeTable"));
+                    }
+
+                    var IM_text = "合计金额为：";
+                    IM_text = "财务汇款总金额为：";
+                    $("<tr><td colspan=\"" + keys1.length + "\">合计总单数为：" + result.length + "，" + IM_text + "" + toDecimal2(IM_TotalMoney) + "</td></tr>").appendTo($("#_PayFeeTable"));
+                }
+                else {
+                    $("#NoData").append("<div style='margin-left:35%;margin-top:25px;font-size:18px;font-family:Microsoft YaHei;'><img src='../Images/Null.jpg' />未查询到相关记录</div>");
+                }
+            }
+        })
+    }
+
+
+    function ShowPreNumTips(num) {
+
+        var newNum = "#" + num;
+
+        $.ajax({
+            url: "@Url.Content("~/PayFee/ShowPreNumDetailInfo/")",
+            data: { PreNum: num },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+
+                result = JSON.parse(result);
+                if (result.Status == "100") {
+
+                    layer.tips(result.Msg, newNum, {
+                        tips: [1, '#0FA6D8'] //还可配置颜色
+                    });
+                }
+            }
+        })
+    }
+
+
+    function SubmitData() {
+        var checked = $("#_PayFeeTable input:checkbox:checked");
+        if (checked.length > 0) {
+
+            var _str = "";
+            var IM_TotalMoney = 0;
+
+            checked.each(function () {
+                _str += this.getAttribute("num") + ",";
+                IM_TotalMoney += parseFloat(this.getAttribute("money"));
+            });
+
+            var Prompt = '总单数' + checked.length + '，总金额' + toDecimal2(IM_TotalMoney) + "，确认提交？";
+
+            layer.confirm(Prompt, {
+                btn: ['取消', '提交'] //按钮
+            }, function () {
+                layer.msg('取消成功', { icon: 1 }); //取消
+            }, function () {
+
+                //禁止按钮再次点击
+                $("#SubmitButton").children().eq(0).attr("disabled", true);
+
+                $.post("@Url.Content("~/PayFee/SubmitFeeData/")", { PrepaidBankNum: _str }, function (result) {
+                    try {
+
+                        result = eval("(" + result + ")");
+
+                        if (result.Status == "100") {
+                            layer.msg('提交成功。。', { icon: 1 });
+
+                            $("#SubmitButton").children().eq(0).attr("disabled", false);
+
+                            _GetIndexData("prepay");
+                        }
+                        else {
+
+                        }
+
+                    } catch (ex) {
+
+                    }
+                });
+            });
+        }
+        else {
+
+            layer.msg('请勾选要提交的内容。。', { icon: 7 });
+            return;
+        }
+    }
+
+
+    function downloadExcel() {
+        var type = $("#tablist .active");
+        var name = type.children().text();
+
+        $.ajax({
+            url: "@Url.Content("~/PayFee/DownLoad/")",
+            data: { tableName: name },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+
+                    var src_remoute = "http://" + "@this.Request.Url.Authority" + "/MultiBank/Upload/ExcelDownLoad/" + result;
+                    window.location.href = src_remoute;
+
+                    layer.msg('导出成功。。', { icon: 1 });
+                }
+            }
+        })
+    }
+
+    function CollectionHabit() {
+
+        $.ajax({
+            url: "@Url.Content("~/PayFee/CollectionHabit/")",
+            data: { City: $("#City").val(), BillType: $("#BillType").val(), PayCompanyCode: $("#PayCompanyCode").val(), TradeType: $("#TradeType").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                result = JSON.parse(result);
+                if (result.Status == "100") {
+                    layer.msg(result.Msg, { icon: 1 });
+                }
+                else {
+                    layer.msg(result.Msg, { icon: 7 });
+                    return false;
+                }
+            }
+        })
+    }
+
+
+    function SelectAll(self) {
+        var value = $(self).text();
+        if (value == "全选") {
+            $("#_PayFeeTable :checkbox").prop("checked", true);
+            $(self).text("不选");
+        }
+            //全不选
+        else {
+            $("#_PayFeeTable :checkbox").prop("checked", false);
+            $(self).text("全选");
+        }
+    }
+
+
+    function SynchData() {
+        $.ajax({
+            url: "@Url.Content("~/PayFee/SynchData/")",
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                result = JSON.parse(result);
+                if (result.Status == "100") {
+                    layer.msg(result.Msg, { icon: 1 });
+                    _GetIndexData("prepay");  //刷新
+                }
+                else {
+                    layer.msg(result.Msg, { icon: 7 });
+                    return false;
+                }
+            }
+        })
+    }
+
+
+    //回退操作
+    function UndoOperation() {
+
+        var checked = $("#_PayFeeTable input:checkbox:checked");
+        if (checked.length > 0) {
+            var _str = "";
+
+            checked.each(function () {
+                _str += this.getAttribute("num") + ",";
+            });
+
+            $.post("@Url.Content("~/PayFee/RevokeOperation/")", { PrepaidBankNum: _str }, function (result) {
+                try {
+
+                    result = eval("(" + result + ")");
+
+                    if (result.Status == "100") {
+                        layer.msg('回退成功。。', { icon: 1 });
+                        _GetIndexData("prepay");
+                    }
+                    else {
+
+                    }
+
+                } catch (ex) {
+
+                }
+            });
+
+        }
+        else {
+
+            layer.msg('请勾选要提交的内容。。', { icon: 7 });
+            return;
+        }
+    }
+
+
+    function CheckButton(self) {
+
+        var input = $(self).parent().parent().find("input");
+
+        var ischecked = input.prop('checked');
+
+        if (ischecked) {
+            input.prop('checked', false);
+        }
+        else {
+            input.prop('checked', true);
+        }
+    }
+
+</script>

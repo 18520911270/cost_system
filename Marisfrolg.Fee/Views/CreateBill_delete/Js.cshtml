@@ -1,0 +1,65 @@
+﻿<script type="text/javascript">
+
+    
+
+
+    $(function () {
+        InitPageData();
+    });
+
+    function InitPageData()
+    {
+        //$("#busDate").val(defaultDate);
+        $('#showDialog').click(function () {
+            $('#FindAccount').trigger("click");
+        });
+
+        $('#showToast').click(function () {
+            submitMessageShow("失败");
+        });
+
+
+    }
+
+    function submitMessageShow(message) {
+        var $toast = $('#toast');
+        if ($toast.css('display') != 'none') {
+            return;
+        }
+
+        $('#toast').find(".weui_toast_content").text(message);
+
+        $toast.show();
+        setTimeout(function () {
+            $toast.hide();
+        }, 2000);
+
+    }
+
+    function editList(edit) {
+        var index = $("#listAccount").find("*").length;
+
+
+        if (edit && edit.money) {
+            
+            $("<label class=\"weui_cell weui_check_label\" for=\"check" + index + "\">"
+                + "<div class=\"weui_cell_hd\">"
+                    + "<input type=\"checkbox\" class=\"weui_check\" name=\"checkbox1\" id=\"check" + index + "\" checked=\"checked\">"
+                    + "<i class=\"weui_icon_checked\"></i>"
+                + "</div>"
+                + "<div class=\"weui_cell_bd weui_cell_primary\">"
+                    + "<h4>" + edit.code+ edit.name+ "</h4>"
+                + "</div>"
+                + "<div class=\"weui_cell_ft\">" + edit.money + "</div>"
+            + "</label>").insertBefore($("#btnAdd"));
+
+        }
+        else {
+            return false;
+        }
+
+    }
+</script>
+
+
+

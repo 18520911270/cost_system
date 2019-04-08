@@ -1,0 +1,1149 @@
+﻿<div class="weui_dialog_confirm" id="dialogSAPCommit" style="display: none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 530px; width: 95%; background-color: antiquewhite" id="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="EditContentView" style="font-size: 9mm">SAP审单台</strong></div>
+
+        <div class="row" style="margin-left: 5px; text-align: left; margin-top: 15px;">
+            <div class="col-md-3">
+                <span style="float: left; margin-top: 6px;">业务日期：</span>
+                <input type="text" class="form-control" style="width: 105px;" id="SAP_TransactionDate" placeholder="业务日期" readonly="">
+            </div>
+
+            <div class="col-md-3">
+                <span style="float: left; margin-top: 6px;">过账日期：&nbsp&nbsp&nbsp</span>
+                <input type="text" class="form-control" style="width: 105px;" id="SAP_ApprovalTime" placeholder="过账日期" readonly="">
+            </div>
+
+            <div class="col-md-3" style="text-align: center">
+                公司代码：
+                <select class="weui_select" name="select2" id="SAP_CompanyCode" style="margin-top: -5px;">
+                    <option>1000
+                    </option>
+                    <option>2000
+                    </option>
+                    <option>1300
+                    </option>
+                    <option>2100
+                    </option>
+                    <option>2300
+                    </option>
+                    <option>2200
+                    </option>
+                    <option>4000
+                    </option>
+                    <option>1010
+                    </option>
+                    <option>1020
+                    </option>
+                    <option>1030
+                    </option>
+                    <option>1330
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                参照：
+            <input type="text" class="form-control" autocomplete="off" placeholder="参照" style="width: 125px; display: -webkit-inline-box;" id="Reference" disabled="disabled">
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-left: 5px; text-align: left">
+            <div class="col-md-3">
+                过账期间：&nbsp
+            <input type="number" class="form-control" autocomplete="off" placeholder="过账期间" style="width: 105px; margin-left: -7px; display: -webkit-inline-box;" id="SAP_Access">
+            </div>
+
+            <div class="col-md-9" id="SAPRemarkFather">
+                行项目文本：&nbsp
+            <input type="text" id="SAPRemark" class="form-control" autocomplete="off" placeholder="行项目文本" style="max-width: 416px; margin-left: -7px; display: -webkit-inline-box; font-size: 12px;">
+            </div> 
+            
+             <div class="col-md-9" id="SAPRemarkFather2">
+                抬头文本：&nbsp
+            <input type="text" id="SAPRemark2" class="form-control" autocomplete="off" placeholder="行项目文本" style="max-width: 416px; margin-left: -7px; display: -webkit-inline-box; font-size: 12px;">
+            </div>  
+        </div>
+
+        <div id="example1" class="hot handsontable htColumnHeaders" style="margin-left: 20px; margin-top: 40px;"></div>
+
+        @*<div class="row" style="margin-left: 20px; overflow: auto; margin-top: 10px; width: 96%">
+          
+        </div>*@
+
+
+        <div class="row" id="SAPIshide">
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" id="SAPSummit" style="width: 100px; height: 30px; margin-left: 10px; font-size: 16px;">提交</a>
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="SAP_hideDialog('dialogSAPCommit')" style="width: 100px; height: 30px; font-size: 16px;">取消</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="weui_dialog_confirm" id="SAP_Proof_P" style="display: none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 150px; width: 25%; background-color: antiquewhite">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="_SAP_Value0">SAP凭证信息</strong></div>
+        <p id="_SAP_Value1"></p>
+        <p id="_SAP_Value2"></p>
+        <div class="row">
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="SAP_hideDialog('SAP_Proof_P')">关闭</a>
+        </div>
+    </div>
+</div>
+
+
+<input id="SAP_hiddenInput" type="hidden" />
+
+<link href="~/Content/mobiscroll-2.13.2.full.min.css" rel="stylesheet" />
+<script src="~/Scripts/mobiscroll-2.13.2.full.min.js"></script>
+
+<script>
+    $(function () {
+        $("#AccountTime1,#AccountTime2,#AccountTime3,#AccountTime4,#SAPTime1,#SAPTime2,#SAP_TransactionDate,#SAP_ApprovalTime").mobiscroll().date({
+            theme: "Default light",
+            lang: "zh",
+            cancelText: null,
+            dateFormat: 'yy-mm-dd', //返回结果格式化为年月格式  
+        });
+
+        //全局绑定回车事件
+        document.onkeydown = function (e) {
+            var ev = document.all ? window.event : e;
+            if (ev.keyCode == 13) {
+                SAP_hideDialog('SAP_Proof_P');
+            }
+        }
+
+    })
+
+
+    function SAP_hideDialog(id) {
+        $("#" + id + "").hide();
+    }
+
+
+    //提交SAP单据
+    function SAP_CommitSAPData($md, IsOK) {
+        var count = $md.countRows();
+        if (count <= 0) {
+            submitMessageShow("数据错误！", "error");
+        }
+
+        var PostingPeriod = $("#SAP_Access").val();
+        if (PostingPeriod) {
+            if (PostingPeriod <= 12) {
+                submitMessageShow("只允许填写大于12的过账期间！", "error");
+                return;
+            }
+        }
+
+        var maxLength = $("#SAPRemark").val().length;
+        if (maxLength > 40 && IsOK == false) {
+            submitMessageShow("行项目文本不能超过40个字符！", "error");
+            return;
+        }
+        if (IsOK) {
+            //清空原始值
+            $("#SAPRemark").val("");
+        }
+        if (maxLength == 0 && IsOK == false) {
+            submitMessageShow("行项目文本不能为空！", "error");
+            return;
+        }
+        var brMoney = 0;
+        var dyMoney = 0;
+        //数据采集
+        var Items = new Array();
+        for (var i = 0; i < count; i++) {
+
+            var Item = { CosterCenter: "", ChargeCode: "", BSCHL_Sign: "", Code: "", OriginalName: "", SapName: "", Money: "", CoinType: "", ExchangeRate: "", ProfitCenter: "", ReasonCode: "", ProofType: "", SubjectType: "", SpareRemark: "", ALLOC_NMBR: "", PO_NUMBER: "", HideName: "", AssetsNum: "", InvoiceNum: "" };
+
+            var temp = $md.getDataAtRow(i);
+            Item.CosterCenter = temp[0];
+            Item.ChargeCode = temp[1];
+            Item.BSCHL_Sign = temp[2];
+            Item.Code = temp[3];
+            Item.OriginalName = temp[4];
+            if (temp[5] == undefined || temp[5] == null || temp[5] == "") {
+                submitMessageShow("SAP名称不允许为空！", "error");
+                return;
+            }
+            Item.SapName = temp[5];
+            Item.Money = temp[6];
+            Item.CoinType = temp[7];
+            Item.ExchangeRate = temp[8];
+            Item.ProfitCenter = temp[9];
+            Item.ReasonCode = temp[10];
+            Item.ProofType = temp[11];
+            Item.SubjectType = temp[12];
+            Item.ALLOC_NMBR = temp[13];
+            Item.SpareRemark = temp[14];
+            Item.PO_NUMBER = temp[15];
+            Item.HideName = temp[16];
+            Item.AssetsNum = temp[17];
+            Item.InvoiceNum = temp[18];
+            Items.push(Item);
+            if (Item.Money > 0) {
+                brMoney = Number(brMoney) + Number(Item.Money);
+            }
+            else {
+                dyMoney = Number(dyMoney) + Number(Item.Money);
+            }
+        }
+
+        brMoney = toDecimal2(brMoney);
+        dyMoney = toDecimal2(dyMoney);
+        if (brMoney != (-1 * dyMoney)) {
+            submitMessageShow("借贷金额不等！", "error");
+            return;
+        }
+
+        $("#SAPIshide").hide();
+
+        //提交数据
+        var postData = {
+            UserName: $("#SAP_hiddenInput").attr("EmployeeNo"),
+            //Head_txt: $("#SAP_hiddenInput").attr("Head_txt"),
+              Head_txt:$("#SAPRemark2").val(),
+            CompanyCode: $("#SAP_CompanyCode").val(),
+            TransactionDate: $("#SAP_TransactionDate").val(),
+            ApprovalTime: $("#SAP_ApprovalTime").val(),
+            Items: Items,
+            Remark: $("#SAPRemark").val(),
+            BillNo: $("#SAP_hiddenInput").attr("BillNo"),
+            PageName: $("#SAP_hiddenInput").attr("PageName"),
+            Reference: $("#Reference").val(),
+            PostingPeriod: PostingPeriod
+        }
+
+        $.ajax({
+            url: "@Url.Content("~/SAP/CallSapMethod/")",
+            data: JSON.stringify(postData),
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "POST",
+            async: false,
+            success: function (result) {
+                if (result) {
+                    $("#SAPIshide").show();
+                    result = JSON.parse(result);
+                    if (result) {
+                        if (result.error == true) {
+                            ShowError(result.errorMsg);
+                        }
+                        else if (result.TYPE == "S") {
+
+                            //批量生成的单据
+                            if (IsOK) {
+
+                                for (var i = 0; i < Items.length; i++) {
+                                    //成功之后跟新jS
+                                    UpdateData(Items[i].ALLOC_NMBR, postData.PageName, result.VOUCHER);
+                                }
+                                $("#SapCommitNo").val("");
+                            }
+                            else {
+                                //提示字样
+                                $("#ShowBillStatus").text("单号" + postData.BillNo + "上传凭证成功");
+
+                                //成功之后跟新jS
+                                UpdateData(postData.BillNo, postData.PageName, result.VOUCHER);
+                            }
+
+                            //显示凭证信息
+                            ShowSAPProof(result.VOUCHER);
+
+
+                            //隐藏弹出框
+                            SAP_hideDialog('dialogSAPCommit');
+                        }
+                        else {
+                            //submitMessageShow("上传失败,失败信息为" + result.MESSAGE, "error");
+                            ShowError(result.MESSAGE);
+                        }
+                    }
+                    else {
+                        submitMessageShow("系统错误！", "error");
+                    }
+                }
+            }
+        });
+    }
+
+
+    //异步调用刷新页面
+    function UpdateData(sapbillno, pageName, proof) {
+        var NewArrayDatas = new Array();
+        for (var i = 0; i < uiDatas.length; i++) {
+            if (uiDatas[i].BillNo != sapbillno) {
+                NewArrayDatas.push(uiDatas[i]);
+            }
+            else {
+                var Operation = "<a onclick=\"showDialog('" + sapbillno + "','" + pageName + "')\" style='color:blue;cursor:pointer;'>" + '查看单据' + "</a>&nbsp&nbsp<a onclick=\"ShowSAPProof('" + proof + "')\" style='color:blue;cursor:pointer;'>" + '查看SAP凭证' + "</a>";
+                uiDatas[i].Operation = Operation;
+                NewArrayDatas.push(uiDatas[i]);
+            }
+        };
+        uiDatas = NewArrayDatas;
+        $("#table").find("tbody").remove();
+        $('#table').bootstrapTable({
+            data: NewArrayDatas
+        });
+        $('#table').bootstrapTable('refreshOptions', {
+            data: NewArrayDatas,
+            quickConfirm: true,
+            onQuickConfirm: quickHandleBill
+        });
+    }
+
+
+
+    function GetALLAreaList() {
+        $.ajax({
+            url: "@Url.Content("~/SAP/GetDepartment/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: true,
+            success: function (result) {
+                if (result) {
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<option value=\"" + result[i].ID + "\">" + result[i].NAME + "</option>").appendTo("#KpiArea");
+                    }
+                    $("#InDepartment").selectpicker("refresh");
+                }
+            }
+        })
+    }
+
+
+    function LoadInitialData() {
+        var reTemp = new Array();
+        //导入凭证数据
+        $.ajax({
+            url: "@Url.Content("~/SAP/GetProofType/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result) {
+                    reTemp = JSON.parse(result);
+                }
+            }
+        });
+        return reTemp;
+    }
+
+
+    function UploadSAP(BillNo, BillType) {
+
+        $("#example1").children().remove();
+        $(".htMenu").remove();
+        //强制替换
+        var SAPMyCompanycode = $("#MyCompanycode").find("option:selected").attr("val");
+
+        $.ajax({
+            url: "@Url.Content("~/SAP/FillSapData/")",
+            data: { BillNo: BillNo, BillType: BillType, companyCode: SAPMyCompanycode },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result) {
+                    result = JSON.parse(result);
+                    if (result.error == "1") {
+                        submitMessageShow(result.msg, "error");
+                        return;
+                    }
+                    var IsHeadOffice = result.IsHeadOffice
+                    result = result.data;
+
+                    $("#SAP_TransactionDate").val(result.TransactionDate.split('T')[0]);
+                    $("#SAP_ApprovalTime").val(result.ApprovalTime.split('T')[0]);
+                    $("#SAP_CompanyCode").val(result.CompanyCode);
+                    $("#Reference").val(employeeInfo.EmployeeNo + "/" + employeeInfo.EmployeeName.split('-')[0]);
+                    if (SAPMyCompanycode) {
+                        $("#SAP_CompanyCode").val(SAPMyCompanycode);
+                    }
+
+                    //给隐藏域赋值
+                    $("#SAP_hiddenInput").attr("EmployeeNo", employeeInfo.EmployeeNo);
+                    //$("#SAP_hiddenInput").attr("Remark", result.Remark);
+                    //$("#SAP_hiddenInput").attr("Head_txt", result.Head_txt);
+                    $("#SAPRemark2").val(result.Head_txt);
+                    $("#SAP_hiddenInput").attr("BillNo", result.BillNo);
+                    $("#SAP_hiddenInput").attr("PageName", result.PageName);
+                    $("#SAPRemarkFather").show();
+                    $("#SAPRemarkFather2").hide();
+                    $("#SAPRemark").val(result.Remark);
+
+                    var S_data = new Array();
+                    //行项目
+                    for (var i = 0; i < result.Items.length; i++) {
+                        var Model = { CosterCenter: "", ChargeCode: "", BSCHL_Sign: "", Code: "", OriginalName: "", SapName: "", Money: "", CoinType: "", ProfitCenter: "", ReasonCode: "", SubjectType: "", Operation: "", ExchangeRate: "", ProofType: "", FPH: "", HBZ: "", HTBH: "", YCMC: "", ZCBH: "", FPBH: "" };
+
+
+                        if (result.Items[i].CosterCenter) {
+                            if (result.Items[i].OriginalName == "网销运费" && $("#SAP_CompanyCode").val() == "1000") {
+                                Model.CosterCenter = "80000080";
+                            }
+                            else if (result.Items[i].OriginalName == "网销运费" && IsHeadOffice == 0 && $("#SAP_CompanyCode").val() == "2000") {
+                                Model.CosterCenter = "10021700";
+                            }
+                            else {
+                                Model.CosterCenter = result.Items[i].CosterCenter;
+                            }
+                        }
+                        else {
+                            Model.CosterCenter = "";
+                        }
+                        //Model.CosterCenter = result.Items[i].CosterCenter == null ? "" : ((result.Items[i].OriginalName == "网销运费" && IsHeadOffice == 0 && $("#SAP_CompanyCode").val() == "1000") ? "80000080" : result.Items[i].CosterCenter);
+
+                        Model.ChargeCode = result.Items[i].ChargeCode == null ? "" : result.Items[i].ChargeCode;
+                        Model.BSCHL_Sign = result.Items[i].BSCHL_Sign == null ? "" : result.Items[i].BSCHL_Sign;
+                        Model.Code = result.Items[i].Code == null ? "" : result.Items[i].Code;
+                        Model.OriginalName = result.Items[i].OriginalName == null ? "" : result.Items[i].OriginalName;
+                        Model.SapName = result.Items[i].SapName == null ? "" : result.Items[i].SapName;
+                        Model.Money = result.Items[i].Money == null ? "" : result.Items[i].Money;
+                        Model.CoinType = result.Items[i].CoinType == null ? "" : result.Items[i].CoinType;
+                        Model.ProfitCenter = result.Items[i].ProfitCenter == null ? "" : result.Items[i].ProfitCenter;
+                        Model.ReasonCode = result.Items[i].ReasonCode == null ? "" : result.Items[i].ReasonCode;
+                        Model.SubjectType = result.Items[i].SubjectType == null ? "" : result.Items[i].SubjectType;
+                        Model.Operation = result.Items[i].Operation == null ? "" : result.Items[i].Operation;
+                        Model.ExchangeRate = result.Items[i].ExchangeRate == null ? "" : result.Items[i].ExchangeRate;
+                        Model.ProofType = result.Items[i].ProofType == null ? "" : result.Items[i].ProofType;
+
+                        Model.FPH = result.Items[i].ALLOC_NMBR;
+                        Model.HTBH = result.Items[i].PO_NUMBER;
+                        Model.YCMC = result.Items[i].HideName;
+                        Model.ZCBH = result.Items[i].AssetsNum;
+                        Model.FPBH = result.Items[i].InvoiceNum;
+                        S_data.push(Model);
+                    }
+
+
+                    var suitableWidth = window.innerWidth;
+                    var proof = LoadInitialData();
+                    var container1 = document.getElementById('example1'), hot1;
+                    hot1 = new Handsontable(container1, {
+                        data: S_data,
+                        afterChange: function (changes, source) {
+                            if (source.toUpperCase() == "EDIT" && changes[0][1].toUpperCase() == "SAPNAME" && changes[0][3] != "") {
+                                $.ajax({
+                                    url: "@Url.Content("~/SAP/EditSapName/")",
+                                    dataType: 'json',
+                                    data: { name: changes[0][3], companyCode: $("#SAP_CompanyCode").val() },
+                                    success: function (result) {
+                                        if (result.Status == 1) {
+                                            if (result.Code) {
+                                                hot1.setDataAtRowProp(changes[0][0], "Code", result.Code);
+                                            }
+                                            if (result.Profit) {
+                                                hot1.setDataAtRowProp(changes[0][0], "ProfitCenter", result.Profit);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        },
+                        colHeaders: ['成本中心', '记账码', 'SG', '科目', '原始名称', 'SAP名称', '金额', '币种', '汇率', '利润中心', '原因代码', '凭证类型', '科目类型', "分配号", "行备注", "合同编号", "隐藏原始名称", "资产号", "发票编号"],
+                        columns: [
+                          {
+                              data: 'CosterCenter',
+                              editor: 'numeric',
+                              width: 100
+                          },
+                          {
+                              data: 'ChargeCode',
+                              editor: 'numeric',
+                              width: 50
+                          },
+                          {
+                              data: 'BSCHL_Sign',
+                              editor: 'text',
+                              width: 30
+                          }
+                          ,
+                          {
+                              data: 'Code',
+                              editor: 'numeric',
+                              width: 100
+                          }
+                          ,
+                          {
+                              data: 'OriginalName',
+                              editor: 'text',
+                              width: 100
+                          }
+                           ,
+                          {
+                              data: 'SapName',
+                              type: 'autocomplete',
+                              width: 175,
+                              source: function (query, process) {
+                                  $.ajax({
+                                      url: "@Url.Content("~/SAP/GetAllSubject/")",
+                                      dataType: 'json',
+                                      data: { query: $("#SAP_CompanyCode").val() },
+                                      success: function (response) {
+                                          process(response);
+                                      }
+                                  });
+                              },
+                              strict: true
+                          }
+                           ,
+                          {
+                              data: 'Money',
+                              editor: 'numeric',
+                              width: 130
+                          }
+                          ,
+                          {
+                              data: 'CoinType',
+                              type: 'dropdown',
+                              source: ['CNY', 'NZD', 'EUR', 'GBP', 'HKD', 'JPY', 'KRW', 'MOP', 'SGD', 'TWD', 'USD'],
+                              strict: false,
+                              width: 60
+                          },
+                          {
+                              data: 'ExchangeRate',
+                              editor: 'numeric',
+                              width: 50
+                          }
+                           ,
+                          {
+                              data: 'ProfitCenter',
+                              editor: 'numeric',
+                              width: 100
+                          }
+                           ,
+                          {
+                              data: 'ReasonCode',
+                              editor: 'numeric',
+                              width: 70
+                          }
+                          ,
+                          {
+                              data: 'ProofType',
+                              type: 'autocomplete',
+                              source: proof,
+                              strict: false,
+                              width: 70
+                          }
+                           ,
+                          {
+                              data: 'SubjectType',
+                              editor: false,
+                              width: 70
+                          }
+                           ,
+                          {
+                              data: 'FPH',
+                              editor: false
+                          }
+                           ,
+                          {
+                              data: 'HBZ',
+                              editor: false
+                          }
+                              ,
+                          {
+                              data: 'HTBH',
+                              editor: false
+                          }
+                            ,
+                          {
+                              data: 'YCMC',
+                              editor: false
+                          }
+                           ,
+                          {
+                              data: 'ZCBH',
+                              editor: false
+                          }
+                           ,
+                          {
+                              data: 'FPBH',
+                              editor: false
+                          }
+                        ],
+                        width: suitableWidth,
+                        height: 260,
+                        colWidths: 120,
+                        rowHeights: 30,
+                        rowHeaders: true,
+                        hiddenColumns: {
+                            columns: [13, 14, 15, 16, 17, 18]
+                        },
+                        contextMenu: {
+                            items: {
+                                "row_below": {
+                                    name: '添加一行'
+                                },
+                                "remove_row": {
+                                    name: '删除该行'
+                                }
+                            }
+                        }
+                    }
+                       );
+
+                        $("#SAPSummit").unbind("click");
+                        $("#SAPSummit").bind("click", function () {
+                            SAP_CommitSAPData(hot1, false);
+                        })
+                        $("#dialogSAPCommit").show();
+                    }
+            }
+        });
+            $('.wtHolder').click();
+        }
+
+
+        function ShowSAPProof(Proof) {
+            $("#SAP_Proof_P").show();
+            $("#_SAP_Value0").text("SAP上传凭证");
+            $("#_SAP_Value1").text("会计年度：" + Proof.substring(14, 18) + "   公司代码：" + Proof.substring(10, 14));
+            $("#_SAP_Value2").text("凭证号：" + Proof.substring(0, 10));
+            $("#_SAP_Value1").css("color", "black");
+        }
+
+        function ShowError(error) {
+            $("#SAP_Proof_P").show();
+            $("#_SAP_Value0").text("SAP错误信息");
+            $("#_SAP_Value1").text(error);
+            $("#_SAP_Value1").css("color", "indianred");
+            $("#_SAP_Value2").html("</br>")
+        }
+
+        var uiDatas = new Array();
+        //获取数据
+        function GetReportData() {
+            $("#loadingToast").show();
+            var BillType1 = $("#MybillType").val();
+            var CreateTime1 = $("#AccountTime1").val();
+            var CreateTime2 = $("#AccountTime2").val();
+            var OverTime1 = $("#AccountTime3").val();
+            var OverTime2 = $("#AccountTime4").val();
+            var MySpecialProperty = $("#SpecialProperty").val();
+            var BillType = "";
+            var _SpecialProperty = "";
+
+            var sapproof = $("#SapProof").find("option:selected").attr("val");  //凭证类型
+            var saptime1 = $("#SAPTime1").val();
+            var saptime2 = $("#SAPTime2").val();
+
+
+            if (BillType1) {
+                for (var i = 0; i < BillType1.length; i++) {
+                    BillType += BillType1[i] + ",";
+                }
+            }
+            if (MySpecialProperty != null) {
+                for (var i = 0; i < MySpecialProperty.length; i++) {
+                    _SpecialProperty += MySpecialProperty[i] + ",";
+                }
+            }
+
+            $.ajax({
+                url: "@Url.Content("~/SAP/GetSAPInfoList/")",
+                data: { BillType: BillType, CreateTime1: CreateTime1, CreateTime2: CreateTime2, OverTime1: OverTime1, OverTime2: OverTime2, SapProofType: sapproof, SapTime1: saptime1, SapTime2: saptime2, SpecialProperty: _SpecialProperty },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    $("#SAPControl").show();
+                    $("#loadingToast").hide();
+                    if (result) {
+                        $("#table").find("tbody").remove();
+                        result = JSON.parse(result);
+                        var newlist = new Array();
+                        for (var i = 0; i < result.length; i++) {
+                            var model = { BillNo: "", Type: "", Department: "", Brand: "", TotalMoney: "", CreateTime: "", ApprovalTime: "", Remark: "" };
+                            model.BillNo = result[i].BillNo;
+                            model.Type = tagsMean(result[i].BillType);
+                            if (result[i].Brand) {
+                                model.Brand = result[i].Brand;
+                            }
+                            else {
+                                model.Brand = "无记账品牌";
+                            }
+                            model.TotalMoney = result[i].TotalMoney;
+                            model.CreateTime = result[i].CreateTime.split('T')[0];
+                            model.ApprovalTime = result[i].ApprovalTime.split('T')[0];
+                            model.Department = result[i].Department;
+                            model.Remark = result[i].Remark;
+                            var Operation = "";
+
+                            if (result[i].SAPProof) {
+                                Operation += "<a onclick=\"showDialog('" + result[i].BillNo + "','" + result[i].BillType + "')\" style='color:blue;cursor:pointer;'>" + '查看单据' + "</a>&nbsp&nbsp<a onclick=\"ShowSAPProof('" + result[i].SAPProof + "')\" style='color:blue;cursor:pointer;'>" + '查看SAP凭证' + "</a>";
+                            }
+                            else {
+
+                                Operation += "<a onclick=\"showDialog('" + result[i].BillNo + "','" + result[i].BillType + "')\" style='color:blue;cursor:pointer;'>" + '查看单据' + "</a>&nbsp&nbsp<a onclick=\"UploadSAP('" + result[i].BillNo + "','" + result[i].BillType + "')\" style='color:blue;cursor:pointer;'>" + '上传SAP凭证' + "</a>";
+                            }
+
+                            model.Operation = Operation;
+
+                            newlist.push(model);
+
+                        }
+                        uiDatas = newlist;
+                        var $columns = [];
+
+                        $columns.push({
+                            field: "BillNo",
+                            title: "单号",
+                            sortable: true,
+                            width: 100
+                        });
+                        $columns.push({
+                            field: "Type",
+                            title: "单据类型",
+                            sortable: true,
+                            width: 90
+                        });
+                        $columns.push({
+                            field: "Department",
+                            title: "部门",
+                            sortable: true,
+                            width: 100
+                        });
+                        $columns.push({
+                            field: "Brand",
+                            title: "发生品牌",
+                            sortable: true,
+                            width: 120
+                        });
+                        $columns.push({
+                            field: "TotalMoney",
+                            title: "发生金额",
+                            sortable: true,
+                            align: 'right',
+                            width: 75,
+                        });
+                        $columns.push({
+                            field: "CreateTime",
+                            title: "创建日期",
+                            sortable: true,
+                            align: 'center',
+                            width: 100,
+                        });
+                        $columns.push({
+                            field: "ApprovalTime",
+                            title: "办结日期",
+                            sortable: true,
+                            align: 'center',
+                            width: 100,
+                        });
+                        $columns.push({
+                            field: "Remark",
+                            title: "备注",
+                            sortable: true,
+                            width: 250
+                        });
+                        $columns.push({
+                            field: "Operation",
+                            title: "操作",
+                            sortable: true,
+                            width: 150
+                        });
+
+                        $('#table').bootstrapTable({
+                            data: newlist,
+                            columns: $columns
+                        });
+
+                        $('#table').bootstrapTable('refreshOptions', {
+                            data: newlist,
+                            quickConfirm: true,
+                            onQuickConfirm: quickHandleBill
+                        });
+                    }
+                }
+            });
+        }
+
+
+        function quickHandleBill(billNo) {
+            if (billNo) {
+                billNo = billNo.toUpperCase();
+            }
+            var $billNo = null;
+            var $Type;
+            var $Operation;
+            for (var i = 0; i < uiDatas.length; i++) {
+                if (uiDatas[i].BillNo == billNo) {
+                    $billNo = uiDatas[i].BillNo;
+                    $Type = uiDatas[i].Type;
+                    $Operation = uiDatas[i].Operation;
+                    break;
+                }
+            }
+
+            if ($billNo) {
+                if ($Operation.indexOf("上传SAP凭证") >= 1) {
+                    $Type = changeVersion109($Type);
+                    UploadSAP($billNo, $Type);
+                }
+                else {
+                    submitMessageShow("此单据已上传凭证!", "error");
+                }
+                return;
+            }
+            submitMessageShow("此单据不存在!", "error");
+        }
+
+
+        function changeVersion109(tags) {
+            if (tags == "费用报销单") {
+                return "FeeBill";
+            }
+            else if (tags == "付款通知书") {
+                return "NoticeBill";
+            }
+            else if (tags == "借款单") {
+                return "BorrowBill";
+            }
+            else if (tags == "还款单") {
+                return "RefundBill";
+            }
+        }
+
+
+        function SetLoaclTime() {
+            var Cjdate = new Date;
+            var Cjyear = Cjdate.getFullYear();
+            var Cjmonth = Cjdate.getMonth() + 1;
+            var CjDay = Cjdate.getDate();
+            Cjmonth = (Cjmonth < 10 ? "0" + Cjmonth : Cjmonth);
+            var Cjmydate = ("'" + Cjyear.toString() + "-" + Cjmonth.toString() + "-" + CjDay.toString() + "'");
+            alert(Cjmydate);
+            $("#AccountTime4").val(Cjmydate);
+        }
+
+
+        function AjaxGetPersonPermission() {
+            $.ajax({
+                url: "@Url.Content("~/SAP/GetPersonPermission/")",
+                dataType: 'json',
+                data: { No: employeeInfo.EmployeeNo },
+                success: function (result) {
+                    if (result) {
+                        for (var i = 0; i < result.length; i++) {
+                            $("<option value=" + result[i] + ">" + result[i] + "</option>").appendTo("#MySAPPermission");
+                        }
+                        $("#SAPPermission").selectpicker("refresh");
+                    }
+                }
+            });
+        }
+
+        function HideOrShow(ID) {
+            $("#FatherRow").children().each(function () {
+                $(this).hide();
+            });
+            $("#" + ID + "").show();
+        }
+
+
+        function GenerateSap() {
+            var no = $("#SapCommitNo").val();
+            var cm = $("#SapCompanycode").find("option:selected").attr("val");
+            var remark = $("#AppendRemark").val();
+
+            if (no == undefined || no == null || no == "") {
+                submitMessageShow("单号不能为空!", "error");
+                return;
+            }
+            if (cm == undefined || cm == null || cm == "") {
+                submitMessageShow("请选择公司!", "error");
+                return;
+            }
+            if (remark && remark.length > 17) {
+                submitMessageShow("添加备注不能超过17个字符!", "error");
+                return;
+            }
+
+
+            $("#example1").children().remove();
+            $(".htMenu").remove();
+
+            $.ajax({
+                url: "@Url.Content("~/SAP/BatchFillData/")",
+                data: { BillNo: no, companyCode: cm },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                async: false,
+                success: function (result) {
+                    if (result) {
+                        result = JSON.parse(result);
+                        if (result.error == "1") {
+                            submitMessageShow(result.msg, "error");
+                            return;
+                        }
+                        var IsHeadOffice = result.IsHeadOffice
+                        result = result.data;
+
+                        $("#SAP_TransactionDate").val(result.TransactionDate.split('T')[0]);
+                        $("#SAP_ApprovalTime").val(result.ApprovalTime.split('T')[0]);
+                        $("#SAP_CompanyCode").val(result.CompanyCode);
+                        $("#Reference").val(employeeInfo.EmployeeNo + "/" + employeeInfo.EmployeeName.split('-')[0]);
+
+                        if (cm) {
+                            $("#SAP_CompanyCode").val(cm);
+                        }
+
+                        //给隐藏域赋值
+                        $("#SAP_hiddenInput").attr("EmployeeNo", employeeInfo.EmployeeNo);
+                        //$("#SAP_hiddenInput").attr("Remark", result.Remark);
+                        //$("#SAP_hiddenInput").attr("Head_txt", result.Head_txt);
+                        $("#SAPRemark2").val(result.Head_txt);
+                        $("#SAP_hiddenInput").attr("BillNo", result.BillNo);
+                        $("#SAP_hiddenInput").attr("PageName", result.PageName);
+
+                        $("#SAPRemarkFather").hide();
+                         $("#SAPRemarkFather2").show();
+
+                        var S_data = new Array();
+                        //行项目
+                        for (var i = 0; i < result.Items.length; i++) {
+                            var Model = { CosterCenter: "", ChargeCode: "", BSCHL_Sign: "", Code: "", OriginalName: "", SapName: "", Money: "", CoinType: "", ProfitCenter: "", ReasonCode: "", SubjectType: "", Operation: "", ExchangeRate: "", ProofType: "", FPH: "", HBZ: "", HTBH: "", YCMC: "", ZCBH: "", FPBH: "" };
+
+
+                            if (result.Items[i].CosterCenter) {
+                                if (result.Items[i].OriginalName == "网销运费" && $("#SAP_CompanyCode").val() == "1000") {
+                                    Model.CosterCenter = "80000080";
+                                }
+                                else if (result.Items[i].OriginalName == "网销运费" && IsHeadOffice == 0 && $("#SAP_CompanyCode").val() == "2000") {
+                                    Model.CosterCenter = "10021700";
+                                }
+                                else {
+                                    Model.CosterCenter = result.Items[i].CosterCenter;
+                                }
+                            }
+                            else {
+                                Model.CosterCenter = "";
+                            }
+                            //Model.CosterCenter = result.Items[i].CosterCenter == null ? "" : ((result.Items[i].OriginalName == "网销运费" && IsHeadOffice == 0 && $("#SAP_CompanyCode").val() == "1000") ? "80000080" : result.Items[i].CosterCenter);
+
+                            Model.ChargeCode = result.Items[i].ChargeCode == null ? "" : result.Items[i].ChargeCode;
+                            Model.BSCHL_Sign = result.Items[i].BSCHL_Sign == null ? "" : result.Items[i].BSCHL_Sign;
+                            Model.Code = result.Items[i].Code == null ? "" : result.Items[i].Code;
+                            Model.OriginalName = result.Items[i].OriginalName == null ? "" : result.Items[i].OriginalName;
+                            Model.SapName = result.Items[i].SapName == null ? "" : result.Items[i].SapName;
+                            Model.Money = result.Items[i].Money == null ? "" : result.Items[i].Money;
+                            Model.CoinType = result.Items[i].CoinType == null ? "" : result.Items[i].CoinType;
+                            Model.ProfitCenter = result.Items[i].ProfitCenter == null ? "" : result.Items[i].ProfitCenter;
+                            Model.ReasonCode = result.Items[i].ReasonCode == null ? "" : result.Items[i].ReasonCode;
+                            Model.SubjectType = result.Items[i].SubjectType == null ? "" : result.Items[i].SubjectType;
+                            Model.Operation = result.Items[i].Operation == null ? "" : result.Items[i].Operation;
+                            Model.ExchangeRate = result.Items[i].ExchangeRate == null ? "" : result.Items[i].ExchangeRate;
+                            Model.ProofType = result.Items[i].ProofType == null ? "" : result.Items[i].ProofType;
+
+                            Model.FPH = result.Items[i].ALLOC_NMBR;
+
+                            if (remark) {
+                                Model.HBZ = remark + "-" + result.Items[i].SpareRemark;
+                            }
+                            else {
+                                Model.HBZ = result.Items[i].SpareRemark;
+                            }
+
+                            Model.HTBH = result.Items[i].PO_NUMBER;
+                            Model.YCMC = result.Items[i].HideName;
+                            Model.ZCBH = result.Items[i].AssetsNum;
+                            Model.FPBH = result.Items[i].InvoiceNum;
+                            S_data.push(Model);
+
+                        }
+
+
+                        var suitableWidth = window.innerWidth;
+                        var proof = LoadInitialData();
+                        var container1 = document.getElementById('example1'), hot1;
+                        hot1 = new Handsontable(container1, {
+                            data: S_data,
+                            afterChange: function (changes, source) {
+                                if (source.toUpperCase() == "EDIT" && changes[0][1].toUpperCase() == "SAPNAME" && changes[0][3] != "") {
+                                    $.ajax({
+                                        url: "@Url.Content("~/SAP/EditSapName/")",
+                                        dataType: 'json',
+                                        data: { name: changes[0][3], companyCode: $("#SAP_CompanyCode").val() },
+                                        success: function (result) {
+                                            if (result.Status == 1) {
+                                                if (result.Code) {
+                                                    hot1.setDataAtRowProp(changes[0][0], "Code", result.Code);
+                                                }
+                                                if (result.Profit) {
+                                                    hot1.setDataAtRowProp(changes[0][0], "ProfitCenter", result.Profit);
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            },
+                            colHeaders: ['成本中心', '记账码', 'SG', '科目', '原始名称', 'SAP名称', '金额', '币种', '汇率', '利润中心', '原因代码', '凭证类型', '科目类型', "分配号", "行备注", "合同编号", "隐藏原始名称", "资产号", "发票编号"],
+                            columns: [
+                              {
+                                  data: 'CosterCenter',
+                                  editor: 'numeric',
+                                  width: 100
+                              },
+                              {
+                                  data: 'ChargeCode',
+                                  editor: 'numeric',
+                                  width: 50
+                              },
+                              {
+                                  data: 'BSCHL_Sign',
+                                  editor: 'text',
+                                  width: 30
+                              }
+                              ,
+                              {
+                                  data: 'Code',
+                                  editor: 'numeric',
+                                  width: 100
+                              }
+                              ,
+                              {
+                                  data: 'OriginalName',
+                                  editor: 'text',
+                                  width: 100
+                              }
+                               ,
+                              {
+                                  data: 'SapName',
+                                  type: 'autocomplete',
+                                  width: 175,
+                                  source: function (query, process) {
+                                      $.ajax({
+                                          url: "@Url.Content("~/SAP/GetAllSubject/")",
+                                          dataType: 'json',
+                                          data: { query: $("#SAP_CompanyCode").val() },
+                                          success: function (response) {
+                                              process(response);
+                                          }
+                                      });
+                                  },
+                                  strict: true
+                              }
+                           ,
+                          {
+                              data: 'Money',
+                              editor: 'numeric',
+                              width: 130
+                          }
+                          ,
+                          {
+                              data: 'CoinType',
+                              type: 'dropdown',
+                              source: ['CNY', 'NZD', 'EUR', 'GBP', 'HKD', 'JPY', 'KRW', 'MOP', 'SGD', 'TWD', 'USD'],
+                              strict: false,
+                              width: 60
+                          },
+                          {
+                              data: 'ExchangeRate',
+                              editor: 'numeric',
+                              width: 50
+                          }
+                           ,
+                          {
+                              data: 'ProfitCenter',
+                              editor: 'numeric',
+                              width: 100
+                          }
+                           ,
+                          {
+                              data: 'ReasonCode',
+                              editor: 'numeric',
+                              width: 70
+                          }
+                          ,
+                          {
+                              data: 'ProofType',
+                              type: 'autocomplete',
+                              source: proof,
+                              strict: false,
+                              width: 70
+                          }
+                           ,
+                          {
+                              data: 'SubjectType',
+                              editor: false,
+                              width: 70
+                          }
+                           ,
+                          {
+                              data: 'FPH',
+                              editor: false
+                          }
+                           ,
+                          {
+                              data: 'HBZ',
+                              editor: false
+                          }
+                          ,
+                          {
+                              data: 'HTBH',
+                              editor: false
+                          }
+                          ,
+                          {
+                              data: 'YCMC',
+                              editor: false
+                          }
+                           ,
+                          {
+                              data: 'ZCBH',
+                              editor: false
+                          }
+                             ,
+                          {
+                              data: 'FPBH',
+                              editor: false
+                          }
+                            ],
+                            width: suitableWidth,
+                            height: 260,
+                            colWidths: 120,
+                            rowHeights: 30,
+                            rowHeaders: true,
+                            contextMenu: {
+                                items: {
+                                    "row_below": {
+                                        name: '添加一行'
+                                    },
+                                    "remove_row": {
+                                        name: '删除该行'
+                                    }
+                                }
+                            },
+                            hiddenColumns: {
+                                columns: [13, 14, 15, 16, 17, 18]
+
+                            }
+                        }
+                       );
+
+                            $("#SAPSummit").unbind("click");
+                            $("#SAPSummit").bind("click", function () {
+                                SAP_CommitSAPData(hot1, true);
+                            })
+                            $("#dialogSAPCommit").show();
+                        }
+                }
+            });
+                $('.wtHolder').click();
+            }
+</script>

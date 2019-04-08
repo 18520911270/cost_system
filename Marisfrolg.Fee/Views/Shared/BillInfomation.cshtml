@@ -1,0 +1,902 @@
+﻿@*<script type="text/javascript" src="~/Scripts/Jquery.Barcode/jquery.jqprint-0.3.js"></script>*@
+@*<script type="text/javascript" src="~/Scripts/Jquery.Barcode/jquery-barcode.js"></script>*@
+<link rel="stylesheet" href="~/Content/print.css" />
+<link href="~/Scripts/Viewer/viewer.min.css" rel="stylesheet" />
+<script src="~/Scripts/Viewer/viewer.min.js"></script>
+
+<style>
+    .weui_maskNew {
+        position: fixed;
+        z-index: 9998;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.6);
+    }
+</style>
+
+<!--BEGIN 弹出层-->
+<div class="weui_dialog_confirm weui_dialog_ours" id="dialogPrint" style="display: none; overflow-y: auto;">
+    <div class="weui_mask">打印预览</div>
+    <div class="weui_dialog weui_dialog_ours" style="font-family: 'Microsoft YaHei';">
+        <div class="text-right " style="margin-right: 20px;">
+            <i class="icon iconfont btnClose " style="font-size: 25px; position: relative">&#xe600;</i>
+        </div>
+        <!-- 标题 -->
+        <div id="printContainer" style="font-size: 12px; overflow-y: auto; margin-top: -30px;">
+            <!-- A4内容开始 -->
+            <div class="printPage" style="font-family: 'Microsoft YaHei'; overflow-y: auto; font-size: 12px;">
+                <div>
+                    <h4 class="text-center" style="font-weight: bold;" id="billType"></h4>
+                </div>
+                <table class="secionTop">
+                    <tr class="line">
+                        <td colspan="99"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left">
+                            <span id="billNo"></span>
+                        </td>
+                        <td class="tableRow">
+                            <span class="text-right" id="Clerk"></span>
+                        </td>
+                    </tr>
+
+
+                    <tr class="line">
+                        <td colspan="99"></td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left" colspan="99">
+                            <span id="CompanyName"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left" colspan="99">
+                            <span id="Brand"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left" colspan="99">
+                            <span id="DepartmentName1"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left" colspan="99">
+                            <span id="CostCenter1"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left" colspan="99">
+                            <span id="Person"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tableRow text-left" colspan="99">
+                            <span id="DateTime"></span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="secionMiddle">
+                    <table class="tableborder">
+                        <thead>
+                            <tr>
+                                <th>费用项</th>
+                                <th>币种</th>
+                                <th class="money">金额</th>
+                                <th class="money">税额</th>
+                            </tr>
+                        </thead>
+                        <tbody id="Content">
+                        </tbody>
+                    </table>
+                    <table>
+                        <tr>
+                            <td class="tableRow text-left">
+                                <span id="Remark"></span>
+                            </td>
+                        </tr>
+                    </table>
+                    <table id="DetailsRow">
+                        <tr>
+                            <td class="tableRow text-left">
+                                <span id="Details"></span>
+                            </td>
+                        </tr>
+                    </table>
+                    <table id="ProviderRow">
+                        <tr>
+                            <td class="tableRow text-left">
+                                <span id="ProviderName"></span>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <table id="BankNameRow">
+                        <tr>
+                            <td class="tableRow text-left">
+                                <span id="BankName"></span>
+                            </td>
+                        </tr>
+                    </table>
+                    <table id="SettlementTimeRow">
+                        <tr>
+                            <td class="tableRow text-left">
+                                <span id="SettlementTime"></span>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+                </div>
+                <div class="secionBottom">
+                    <div class="text-left"><span>[特殊属性]</span></div>
+                    <table class="table_spacial">
+                        <tr class="line">
+                            <td colspan="99"></td>
+                        </tr>
+                        <tr>
+                            <td class="tableRow text-left">
+                                <span style="" id="Funds"></span>
+                            </td>
+                            <td class="tableRow text-left">
+                                <span style="" id="MarketDebt"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tableRow text-left">
+                                <span style="" id="BankDebt"></span>
+                            </td>
+                            <td class="tableRow text-left">
+                                <span style="" id="Agent"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tableRow text-left">
+                                <span style="" id="deposit"></span>
+                            </td>
+                            <td class="tableRow text-left">
+                                <span style="" id="MissBillPlus"></span>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="text-left" style=""><span>[审批流程]</span></div>
+                    <table class="tableFlow">
+                        <tr id="tbody">
+                        </tr>
+                        <tr id="tfoot">
+                        </tr>
+                        <tr id="ttime">
+                        </tr>
+                        <tr id="tremark" style="display: none">
+                        </tr>
+                    </table>
+
+                    <div class="col-md-12" style="background-color: #F0FFFF;">
+                        <ul id="photos" class="weui_uploader_files" style="margin-top: 5px; margin-left: -15px;">
+                        </ul>
+                    </div>
+                </div>
+
+                @*<div class="col-md-12 weui_dialog_ft" style="margin-top: 3px; background-color: #65c294" >
+                    <a id="btnSubmit1" href="javascript:showPhoto('1');" style="background-color: #02940D; color: white;">通过</a>
+                    <a id="btnSubmit2" href="javascript:showPhoto('0');" style="background-color: #F91961; color: white;">不通过</a>
+                </div>*@
+            </div>
+            <!-- A4内容结束 -->
+        </div>
+        <div class="weui_dialog_ft" style="margin-top: 3px; background-color: #65c294" id="panelButtom">
+            <a href="javascript:showPhoto('1');" style="background-color: #02940D; color: white;">通过</a>
+            <a href="javascript:showPhoto('0');" style="background-color: #F91961; color: white;">不通过</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="weui_dialog_confirm weui_dialog_ours" id="dialogPhoto" style="display: none; z-index: 9999;">
+    <div class="weui_mask">打印预览</div>
+    <div class="weui_dialog weui_dialog_ours">
+        <div class="text-right " style="margin-right: 20px;">
+            <i class="icon iconfont" style="font-size: 25px;" onclick="CloseForm()">&#xe600;</i>
+        </div>
+        <div id="printData" class="printPage" style="font-size: 12px; overflow-y: auto;">
+            <!-- A4内容开始 -->
+            <div style="font-family: 'Microsoft YaHei'; font-size: 12px;">
+
+                <div>
+                    <h4 class="text-center" style="font-weight: bold;">相关单据</h4>
+                </div>
+                @*    <div class="col-md-12">
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="text-center" style="font-weight: bold;">相关单据</h4>
+                    </div>
+                    <div class="col-md-4 text-right ">
+                        <i class="icon iconfont" style="font-size: 25px;" onclick="CloseForm()">&#xe600;</i>
+                    </div>
+                </div>*@
+                <div class="secionBottom">
+                    <table class="tableFlow" id="ShowRelationData">
+                        <tbody>
+                            <tr>
+                                <th>单号</th>
+                                <th>单据类型</th>
+                                <th>业务时间</th>
+                                <th>报销方</th>
+                                <th>金额</th>
+                                <th>状态</th>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center">1111</td>
+                                <td style="text-align: center">1111</td>
+                                <td style="text-align: center">111</td>
+                                <td style="text-align: center">1111</td>
+                                <td style="text-align: center"></td>
+                            </tr>
+                    </table>
+                </div>
+
+            </div>
+            <!-- A4内容结束 -->
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogRemark" style="display: none; background-color: #52a4a4">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 130px;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">填写审批意见</strong></div>
+        <div class="weui_dialog_bd">
+            <input class="weui_input" id="RemarkContent" style="color: red;" />
+        </div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default" onclick="HidePhoto()">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary" onclick="SubmitWorkFlow()">确定</a>
+        </div>
+    </div>
+</div>
+
+
+
+<ul id="photos1" class="weui_uploader_files" style="margin-top: 5px; margin-left: -15px; display: none;">
+</ul>
+
+
+<script type="text/javascript">
+    $(function () {
+    });
+
+    $("#photos").delegate("li", "click", function () {
+        var url = $(this).attr("url");
+        if (url.indexOf("pdf") > -1) {
+            return;
+        }
+        var viewer = new Viewer(document.getElementById('photos1'), {
+            url: 'data-original',
+            zIndex: 9999,
+            hide: function () {
+                viewer.destroy();
+            }
+        });
+        $("#photos1 li ").eq($(this).index()).find("img").click();
+    })
+
+    function HidePhoto() {
+        $("#dialogRemark").hide();
+    }
+
+    function CloseForm() {
+        $("#dialogPhoto").hide();
+    }
+
+
+    function InfomationPDFShow(src, OriginalUrl) {
+        if (src) {
+            if (OriginalUrl) {
+                window.open("../Scripts/PDFJS/build/generic/web/viewer.html?file=" + src + "&download=" + OriginalUrl);
+            }
+            else {
+                window.open("../Scripts/PDFJS/build/generic/web/viewer.html?file=" + src);
+            }
+        }
+    }
+
+    function SkipIntoBill(BillNo, Type) {
+        $("#dialogPhoto").hide();
+        $("#dialogPrint").hide();
+        Type = HometagsMean(Type);
+        showDialog(BillNo, Type, "Show");
+    }
+
+    function HometagsMean(tags) {
+        if (tags == "FeeBill") {
+            return "费用报销单";
+        }
+        else if (tags == "NoticeBill") {
+            return "付款通知书";
+        }
+        else if (tags == "BorrowBill") {
+            return "借款单";
+        }
+        else if (tags == "RefundBill") {
+            return "还款单";
+        }
+    }
+
+
+    function HomeApprovalStatusMean(ApprovalStatus, ApprovalPost) {
+        if (ApprovalStatus == 2) {
+            return "通过";
+        }
+        if (ApprovalStatus == 3) {
+            return "拒绝";
+        }
+        if (ApprovalPost) {
+            return ApprovalPost + "审核中";
+        }
+    }
+
+
+    function FindRelationBill(itemName, DepartmentCode, CreateTime, BillNo) {
+        $("#dialogPhoto").show();
+        $.ajax({
+            url: "@Url.Content("~/FinanceApproval/GetRelationBill/")",
+            data: { itemName: itemName, DepartmentCode: DepartmentCode, CreateTime: CreateTime },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    $("#ShowRelationData").children().remove();
+                    result = JSON.parse(result);
+                    var th = "<tr><th>单号</th><th>单据类型</th><th>业务时间</th><th>报销方</th><th>业务人</th><th>金额</th><th>状态</th></tr>";
+                    $(th).appendTo("#ShowRelationData");
+                    for (var i = 0; i < result.length; i++) {
+
+                        if (result[i].BillNo == BillNo) {
+                            continue;
+                        }
+                        var Brand = "";
+                        if (result[i].PersonInfo.Brand != undefined && result[i].PersonInfo.Brand.length > 0) {
+                            for (var k = 0; k < result[i].PersonInfo.Brand.length; k++) {
+                                if (k < result[i].PersonInfo.Brand.length - 1) {
+                                    Brand += result[i].PersonInfo.Brand[k] + ","
+                                }
+                                else {
+                                    Brand += result[i].PersonInfo.Brand[k];
+                                }
+                            }
+                        }
+                        else {
+                            Brand = "无记账品牌";
+                        }
+
+                        var DepartmentName = "";
+                        if (result[i].PersonInfo.Shop) {
+                            DepartmentName = result[i].PersonInfo.Department + "-" + result[i].PersonInfo.Shop;
+                        }
+                        else {
+                            DepartmentName = result[i].PersonInfo.Department;
+                        }
+
+                        if (result[i].ApprovalPost == undefined) {
+                            result[i].ApprovalPost = "";
+                        }
+
+                        var td = "<tr><td style=\"text-align: center;cursor:pointer;\"><a onclick=\"SkipIntoBill('" + result[i].BillNo + "','" + result[i].BillsType + "')\">" + result[i].BillNo + "</a></td><td style=\"text-align: center\">" + HometagsMean(result[i].BillsType) + "</td> <td style=\"text-align: center\">" + result[i].TransactionDate.split('T')[0] + "</td><td style=\"text-align: center\">" + DepartmentName + "</td><td style=\"text-align: center;\">" + result[i].Owner + "</td><td style=\"text-align: center;\">" + result[i].TotalMoney + "</td><td style=\"text-align: center;\">" + HomeApprovalStatusMean(result[i].ApprovalStatus, result[i].ApprovalPost) + "</td></tr>"
+
+                        $(td).appendTo("#ShowRelationData");
+                    }
+                }
+                else {
+                    submitMessageShow("无相应数据!", "error");
+                }
+            }
+        })
+    }
+
+
+
+    var IsCommit = "";
+    function showPhoto(work) {
+        var remark = "";
+        switch (work) {
+            case "1":
+                remark = "同意";
+                IsCommit = "1";
+                break;
+            case "0":
+                remark = "不同意";
+                IsCommit = "0";
+                break;
+            default:
+        }
+        $("#RemarkContent").val(remark);
+        $("#dialogRemark").show();
+    }
+
+
+    //图片加载错误
+    function ImgError(obj) {
+        $(obj).attr("onerror", null);
+        $(obj).attr("src", "../Images/img_load_error.png");
+    }
+
+    function showDialog(BillNo, Type, IsShow) {
+
+        var model = $("#editValue").attr("code");
+        if (model) {
+            if (IsShow) {
+                $("#panelButtom").hide()
+            }
+            else {
+                $("#panelButtom").show()
+            }
+        }
+        else {
+            $("#panelButtom").hide()
+        }
+        var $dialog = $('#dialogPrint');
+        $dialog.show();
+
+        $("#billType").text(Type);
+        SubmitDataInfo(BillNo, Type);  //将信息填充到打印界面
+        FillBillNo(BillNo);   //填写打印内容
+        GetWorkFlow(BillNo, Type);  //获取流程实例
+        $dialog.find('.weui_btn_dialog').one('click', function () {
+            $dialog.hide();
+            $("body").css("overflow", "auto");
+            jinzhi = 1;
+        });
+        $(".btnClose").one('click', function () {
+            $dialog.hide();
+            $("body").css("overflow", "auto");
+            jinzhi = 1;
+        });
+        $("body").css("overflow", "hidden");
+        jinzhi = 1;
+    }
+
+
+
+    function FillBillNo(BillNo) {
+        //填写打印内容
+        $("#billNo").text("单号：" + BillNo);
+    }
+
+    function GetTypeFromRole(Type) {
+        switch (Type) {
+            case "费用报销单":
+                return "1";
+            case "付款通知书":
+                return "2";
+            case "借款单":
+                return "3";
+            case "还款单":
+                return "4";
+            case "发票缺失":
+                return "2";
+            case "借款未还":
+                return "3";
+            case "现金还款":
+                return "4";
+            case "费用单还款":
+                return "4";
+            default:
+                return Type;
+
+        }
+    }
+
+    //将还款单的显示变动
+    function ChangeVersions1(BillNo, Type) {
+        if (Type != 4) {
+            return "";
+        }
+        if (BillNo.indexOf("FB") >= 0) {
+            return "费用报销单(冲借款)";
+        }
+        if (BillNo.indexOf("HK") >= 0) {
+            return "现金还款单";
+        }
+        return "";
+    }
+
+    //将信息填充到打印界面
+    function SubmitDataInfo(BillNo, Type) {
+        Type = GetTypeFromRole(Type);
+        var Versions1 = ChangeVersions1(BillNo, Type);
+        if (Versions1) {
+            $("#billType").text(Versions1);
+            $("#billType10").text(Versions1);
+        }
+        $("#ProviderRow").hide();
+        $.ajax({
+            url: "@Url.Content("~/Print/GetDataFromBillNo/")",
+            data: { BillNo: BillNo, Type: Type },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    var Brand = "";
+                    if (result.PersonInfo.Brand != undefined && result.PersonInfo.Brand.length > 0) {
+                        for (var k = 0; k < result.PersonInfo.Brand.length; k++) {
+                            if (k < result.PersonInfo.Brand.length - 1) {
+                                Brand += result.PersonInfo.Brand[k] + ","
+                            }
+                            else {
+                                Brand += result.PersonInfo.Brand[k];
+                            }
+                        }
+                    }
+                    else {
+                        Brand = "无记账品牌";
+                    }
+                    AjaxGetName(result.Creator, result.StringTime);
+                    $("#CompanyName").text("公司名称：" + result.PersonInfo.Company + " ");
+                    $("#Brand").text("发生品牌：" + Brand + "");
+                    if (result.PersonInfo.Shop) {
+                        $("#DepartmentName1").text("报销方：" + result.PersonInfo.Department + "-" + result.PersonInfo.Shop + "");
+                    }
+                    else {
+                        $("#DepartmentName1").text("报销方：" + result.PersonInfo.Department + "");
+                    }
+
+                    //$("#DepartmentName1").text("报销方：" + result.PersonInfo.Department + "" + result.PersonInfo.Shop == null ? "" : "-" + result.PersonInfo.Shop + "");
+                    $("#CostCenter1").text("成本中心：" + result.PersonInfo.CostCenter + "");
+                    $("#Person").text("业务人：" + result.Owner + "");
+                    $("#DateTime").text("业务日期：" + result.TransactionDate.split('T')[0] + "");
+                    $("#Remark").text("事由：" + (result.Remark == null ? "" : " " + result.Remark) + "");
+
+                    $("#Content tr").remove();
+                    for (var m = 0; m < result.Items.length; m++) {
+                        if (result.Items[m].reason_code == null) {
+                            result.Items[m].reason_code = "无";
+                        }
+                        var tr_line = "<tr><td>" + result.Items[m].name + "<input type=\"button\" value=\"查看\" style=\"width:20%;height:17px;float:right;color:#1e90ff;line-height:6px; \"onclick=\"FindRelationBill('" + result.Items[m].name + "','" + result.PersonInfo.DepartmentCode + "','" + result.CreateTime + "','" + result.BillNo + "')\"></td><td>" + result.Currency.Code + "</td><td class=\"money\">" + result.Items[m].money.toFixed(2) + "</td><td class=\"money\">" + result.Items[m].taxmoney.toFixed(2) + "</td></tr>";
+                        $(tr_line).appendTo($("#Content"));
+                    }
+                    //加载现金还款项目
+                    if (result.Items.length == 0 && result.RefundType == "Cash") {
+                        var tr_line = "<tr><td>现金还款</td><td>" + result.Currency.Code + "</td> <td class=\"money\">" + result.RealRefundMoney.toFixed(2) + "</td><td class=\"money\">0</td></tr>";
+                        $(tr_line).appendTo($("#Content"));
+                    }
+                    $("<tr class=\"total\"><td colspan='2' class=\"money\">金额大写：" + num2rmb(result.TotalMoney) + "</td><td colspan='2' class=\"money\">" + Currency2Icon(result.Currency.Code) + "" + result.TotalMoney.toFixed(2) + "</td></tr>").appendTo($("#Content"));
+                    if (result.PageName == "Notice") {
+                        $("#Funds").text("是否活动经费：" + RetrunString(result.SpecialAttribute.Funds, "Funds") + "");
+                        $("#Agent").text("是否代理商费用：" + RetrunString(result.SpecialAttribute.Agent, "Agent") + "");
+                        $("#MissBillPlus").text("是否回收发票：" + RetrunString(result.MissBill, "MissBillPlus") + "");
+                        $("#ProviderName").text("供应商：" + result.ProviderInfo.ProviderName + "");
+                        if (result.ProviderInfo != null && result.ProviderInfo.BankName != null) {
+                            $("#BankName").text("供应商银行信息：" + result.ProviderInfo.BankName + "(开户行)、"
+                            + (result.ProviderInfo.BankNo == null ? "" : "" + result.ProviderInfo.BankNo) + "(账号)"
+                            + (result.ProviderInfo.BankCode == null ? "" : "、" + result.ProviderInfo.BankCode + "(SWITF)、")
+                            + (result.ProviderInfo.IBAN == null ? "" : "" + result.ProviderInfo.IBAN + "(IBAN)")
+                            );
+                        }
+                        $("#SettlementTimeRow").hide();
+                        //总部
+                        if (result.PersonInfo.IsHeadOffice == 1) {
+                            $("#Agent").show();
+                        }
+                        else {
+                            $("#Agent").hide();
+                        }
+
+                        $("#ProviderRow").show();
+                        $("#MissBillPlus").parent().show();
+                        $("#printContainer .secionBottom").children().eq(0).show();
+                        $("#printContainer .secionBottom").children().eq(1).show();
+                        $("#MarketDebt").parent().hide();
+                        $("#BankDebt").parent().hide();
+                        $("#Check").parent().hide();
+                        $("#deposit").parent().hide();
+                        $("#DetailsRow").hide();
+                        $("#BankNameRow").show();
+                    }
+                    else if (result.PageName == "FeeBill") {
+                        $("#Funds").text("是否活动经费：" + RetrunString(result.SpecialAttribute.Funds, "Funds") + "");
+                        $("#MarketDebt").text("是否商场账扣：" + RetrunString(result.SpecialAttribute.MarketDebt, "MarketDebt") + "");
+                        $("#BankDebt").text("是否银行账扣：" + RetrunString(result.SpecialAttribute.BankDebt, "BankDebt") + "");
+                        $("#Agent").text("是否代理商费用：" + RetrunString(result.SpecialAttribute.Agent, "Agent") + "");
+                        $("#Check").text("本单是否考核：" + RetrunString(result.SpecialAttribute.Check, "Check") + "");
+                        $("#deposit").text("是否押金账扣：" + RetrunString(result.SpecialAttribute.Cash, "deposit") + "");
+                        if (result.CollectionInfo != null && result.CollectionInfo.Bank != null) {
+                            $("#BankName").text("收款人银行信息：" + result.CollectionInfo.Bank + "(银行)、"
+                              + (result.CollectionInfo.City == null ? "" : "" + result.CollectionInfo.City) + "(城市)、"
+                              + (result.CollectionInfo.CardCode == null ? "" : "" + result.CollectionInfo.CardCode) + "(卡号)、"
+                              + (result.CollectionInfo.Name == null ? "" : "" + result.CollectionInfo.Name) + "(姓名)"
+                              );
+                        }
+                        else {
+                            $("#BankName").text("收款人银行信息：空")
+                        }
+                        //总部
+                        if (result.PersonInfo.IsHeadOffice == 1) {
+                            $("#Agent").show();
+                        }
+                        else {
+                            $("#Agent").hide();
+                        }
+                        if (result.CountTime != null && result.CountTime.CountStartTime.split('T')[0] != "0001-01-01" && result.CountTime.CountEndTime.split('T')[0] != "0001-01-01") {
+                            $("#SettlementTimeRow").show();
+                            $("#SettlementTime").text("对应结算期：" + result.CountTime.CountStartTime.split('T')[0] + "到" + result.CountTime.CountEndTime.split('T')[0]);
+                        }
+                        else {
+                            $("#SettlementTimeRow").hide();
+                        }
+                        $("#printContainer .secionBottom").children().eq(0).show();
+                        $("#printContainer .secionBottom").children().eq(1).show();
+                        $("#MarketDebt").parent().show();
+                        $("#BankDebt").parent().show();
+                        $("#Check").parent().show();
+                        $("#deposit").parent().show();
+                        $("#MissBillPlus").parent().hide();
+                        $("#DetailsRow").hide();
+                        $("#BankNameRow").show();
+                    }
+                    else if (result.PageName == "BorrowBill") {
+                        if (result.CollectionInfo != null && result.CollectionInfo.Bank != null) {
+                            $("#BankName").text("收款人银行信息：" + result.CollectionInfo.Bank + "(银行)、"
+                              + (result.CollectionInfo.City == null ? "" : "" + result.CollectionInfo.City) + "(城市)、"
+                              + (result.CollectionInfo.CardCode == null ? "" : "" + result.CollectionInfo.CardCode) + "(卡号)、"
+                              + (result.CollectionInfo.Name == null ? "" : "" + result.CollectionInfo.Name) + "(姓名)"
+                              );
+                        }
+                        else {
+                            $("#BankName").text("收款人银行信息：空")
+                        }
+
+                        if (result.SpecialAttribute) {
+                            $("#printContainer .secionBottom").children().eq(1).show();
+
+                            $("#Funds").text("是否活动经费：" + RetrunString(result.SpecialAttribute.Funds, "Funds") + "");
+                            $("#MarketDebt").text("是否商场账扣：" + RetrunString(result.SpecialAttribute.MarketDebt, "MarketDebt") + "");
+                            $("#BankDebt").text("是否银行账扣：" + RetrunString(result.SpecialAttribute.BankDebt, "BankDebt") + "");
+                            $("#Agent").text("是否代理商费用：" + RetrunString(result.SpecialAttribute.Agent, "Agent") + "");
+                            $("#Check").text("本单是否考核：" + RetrunString(result.SpecialAttribute.Check, "Check") + "");
+                            $("#deposit").text("是否押金账扣：" + RetrunString(result.SpecialAttribute.Cash, "deposit") + "");
+                            $("#MissBillPlus").parent().hide();
+                            //总部
+                            if (result.PersonInfo.IsHeadOffice == 1) {
+                                $("#Agent").show();
+                            }
+                            else {
+                                $("#Agent").hide();
+                            }
+                        }
+                        else {
+                            $("#printContainer .secionBottom").children().eq(1).hide();
+                        }
+
+                        $("#printContainer .secionBottom").children().eq(0).hide();
+                        //$("#printContainer .secionBottom").children().eq(1).hide();
+                        $("#DetailsRow").hide();
+                        $("#BankNameRow").show();
+                        $("#SettlementTimeRow").hide();
+                    }
+                    else if (result.PageName == "RefundBill" && result.RefundType == "Cash") {
+                        $("#printContainer .secionBottom").children().eq(0).hide();
+                        $("#printContainer .secionBottom").children().eq(1).hide();
+                        $("#BankNameRow").hide();
+                        $("#DetailsRow").show();
+                        $("#Details").text("借款单号为:" + result.BorrowBillNo);
+                        $("#SettlementTimeRow").hide();
+                    }
+                    else if (result.PageName == "RefundBill") {
+                        $("#Funds").text("是否活动经费：" + RetrunString(result.SpecialAttribute.Funds, "Funds") + "");
+                        $("#MarketDebt").text("是否商场账扣：" + RetrunString(result.SpecialAttribute.MarketDebt, "MarketDebt") + "");
+                        $("#BankDebt").text("是否银行账扣：" + RetrunString(result.SpecialAttribute.BankDebt, "BankDebt") + "");
+                        $("#Agent").text("是否代理商费用：" + RetrunString(result.SpecialAttribute.Agent, "Check") + "");
+                        $("#Check").text("本单是否考核：" + RetrunString(result.SpecialAttribute.Check, "deposit") + "");
+                        $("#deposit").text("是否押金账扣：" + RetrunString(result.SpecialAttribute.Cash, "Details") + "");
+                        $("#Details").text("借款单号为:" + result.BorrowBillNo);
+
+                        //总部
+                        if (result.PersonInfo.IsHeadOffice == 1) {
+                            $("#Agent").show();
+                        }
+                        else {
+                            $("#Agent").hide();
+                        }
+                        if (result.CountTime != null && result.CountTime.CountStartTime.split('T')[0] != "0001-01-01" && result.CountTime.CountEndTime.split('T')[0] != "0001-01-01") {
+                            $("#SettlementTimeRow").show();
+                            $("#SettlementTime").text("对应结算期：" + result.CountTime.CountStartTime.split('T')[0] + "到" + result.CountTime.CountEndTime.split('T')[0]);
+                        }
+                        else {
+                            $("#SettlementTimeRow").hide();
+                        }
+                        $("#printContainer .secionBottom").children().eq(0).show();
+                        $("#printContainer .secionBottom").children().eq(1).show();
+                        $("#MarketDebt").parent().show();
+                        $("#BankDebt").parent().show();
+                        $("#Check").parent().show();
+                        $("#deposit").parent().show();
+                        $("#MissBillPlus").parent().hide();
+                        $("#DetailsRow").show();
+                        $("#BankNameRow").hide();
+                    }
+                    if (result.Photos != null && result.Photos.length > 0) {
+                        //加载图片
+                        $("#photos").children().remove();
+                        $("#photos1").children().remove();
+                        for (var j = 0; j < result.Photos.length; j++) {
+                            var newguid = newGuid().toString();
+                            var img;
+                            if (result.Photos[j].url.indexOf("pdf") > -1) {
+                                img = ("<li id=\"" + newguid + "\" " +
+                                " class=\"invoicePhoto\" style=\"background-image:url(../Content/Images/PDF.jpg)\" url=\"" + result.Photos[j].url + "\" filename=\"" + result.Photos[j].filename + "\" onclick=\"InfomationPDFShow('" + result.Photos[j].url + "','" + result.Photos[j].OriginalUrl + "')\" \">"
+                                + "<img width='100%' height='100%' src='../Content/Images/PDF.jpg'  />"
+                                + "</li>");
+                            }
+                            else {
+                                img = ("<li id=\"" + newguid + "\" " +
+                                 " class=\"invoicePhoto\" style=\"background-image:url(" + result.Photos[j].url + ")\" url=\"" + result.Photos[j].url + "\" filename=\"" + result.Photos[j].filename + "  \">"
+                                 + "<img width='100%' height='100%' src='" + result.Photos[j].url + "' onerror='ImgError(this)' data-original=\"" + result.Photos[j].url + "\" />"
+                                 + "</li>");
+
+                            }
+                            $("#photos").append(img);
+                            $("#photos1").append(img);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    function AjaxGetName(Creator, StringTime) {
+        $.ajax({
+            url: "@Url.Content("~/Home/AjaxGetName/")",
+            data: { NO: Creator },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#Clerk").text("制单：" + result.split('-')[0] + " " + StringTime + "");
+            }
+        })
+    }
+
+    function RetrunString(val, model) {
+        if (val == "0") {
+            if (model != undefined && model != "") {
+                $("#" + model).css("color", "black");
+            }
+            return "否";
+        }
+        else if (val == "1") {
+            if (model != undefined && model != "") {
+                $("#" + model).css("color", "#CC3299");
+            }
+            return "是"
+        }
+    }
+
+    function newGuid() {
+        var guid = "";
+        for (var i = 1; i <= 32; i++) {
+            var n = Math.floor(Math.random() * 16.0).toString(16);
+            guid += n;
+            if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+                guid += "-";
+        }
+        return guid;
+    }
+
+
+    //获取流程实例
+    function GetWorkFlow(BillNo, Type) {
+        $("#tremark").hide();
+        Type = GetTypeFromRole(Type);
+        $.ajax({
+            url: "@Url.Content("~/Print/GetWorkFlowList/")",
+            data: { BillNo: BillNo, Type: Type },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#tfoot td").text("");
+                $("#ttime td").text("");
+                $("#tremark td").text("");
+                if (result) {
+                    $("#ttime").children().remove();
+                    $("#tbody").children().remove();
+                    $("#tfoot").children().remove();
+                    $("#tremark").children().remove();
+                    var result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<th>" + result[i].Description + "</th>").appendTo($("#tbody"));
+                        var personName = "";
+                        var mytime = "";
+                        var Remark = "";
+                        for (var j = 0; j < result[i].PersonName.length; j++) {
+                            if (result[i].PersonName[j].indexOf("-") >= 0) {
+                                result[i].PersonName[j] = result[i].PersonName[j].split('-')[0];
+                            }
+
+                            if (j < result[i].PersonName.length - 1) {
+                                personName += result[i].PersonName[j] + "(" + KeyWorkSetCN(result[i].KeyWord[j]) + "),"
+                            }
+                            else {
+                                personName += result[i].PersonName[j] + "(" + KeyWorkSetCN(result[i].KeyWord[j]) + ")"
+                            }
+                            //if (result[i].Description.indexOf("市场发展中心") >= 0) {
+                            //    if (j < result[i].PersonName.length - 1) {
+                            //        personName += "(" + KeyWorkSetCN(result[i].KeyWord[j]) + "),"
+                            //    }
+                            //    else {
+                            //        personName += "(" + KeyWorkSetCN(result[i].KeyWord[j]) + ")"
+                            //    }
+                            //}
+                            //else {
+                            //    if (j < result[i].PersonName.length - 1) {
+                            //        personName += result[i].PersonName[j] + "(" + KeyWorkSetCN(result[i].KeyWord[j]) + "),"
+                            //    }
+                            //    else {
+                            //        personName += result[i].PersonName[j] + "(" + KeyWorkSetCN(result[i].KeyWord[j]) + ")"
+                            //    }
+                            //}
+                            if (j < result[i].StringTime.length - 1) {
+                                mytime += result[i].StringTime[j] + ",";
+                            }
+                            else {
+                                mytime += result[i].StringTime[j];
+                            }
+                            if (result[i].Remark) {
+                                $("#tremark").show();
+                                Remark = result[i].Remark;
+                            }
+                        }
+                        $("<td  style=\"text-align:center\">" + personName + "</td>").appendTo($("#tfoot"));
+                        $("<td  style=\"text-align:center\">" + mytime + "</td>").appendTo($("#ttime"));
+                        $("<td  style=\"text-align:center\">" + Remark + "</td>").appendTo($("#tremark"));
+                    }
+                }
+            }
+        })
+    };
+
+
+    function KeyWorkSetCN(keyword) {
+        if (keyword == "1") {
+            return "通过";
+        }
+        if (keyword == "2") {
+            return "驳回";
+        }
+        if (keyword == "0") {
+            return "拒绝";
+        }
+    }
+
+    //提交审批(跟单据类型无关)
+    function SubmitWorkFlow() {
+        var work = IsCommit;
+        $.ajax({
+            url: "@Url.Content("~/Home/SubmitWorkFlowList/")",
+            data: { AssignmentID: $("#editValue").attr("code"), ActionName: work, Remark: $("#RemarkContent").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    submitMessageShow("审批已完成!");
+                    setTimeout(function () {
+                        gotoPage("li1");;//延迟刷新数据，等WF系统分配
+                    }, 1000);
+
+                }
+                else {
+                    submitMessageShow("失败!", "error");
+                }
+            }
+        })
+    };
+</script>

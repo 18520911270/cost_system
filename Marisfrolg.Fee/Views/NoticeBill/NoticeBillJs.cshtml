@@ -1,0 +1,143 @@
+﻿<link rel="stylesheet" href="~/Scripts/awesomplete/awesomplete.css" />
+<script type="text/javascript" src="~/Scripts/awesomplete/awesomplete.js?v=0.1"></script>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        loadAutoComplete();
+
+
+        OnceProviderloadAutoComplete();
+    });
+
+    function loadAutoComplete() {
+
+        //$("#ProviderBankName").attr("readonly", "readonly");
+        $("#ProviderBankNo").attr("readonly", "readonly");
+        $("#providerFather").children().remove();
+        $("#providerFather").append("<input id=\"providerText\" class=\"weui_input awesomplete\" style=\"min-width: 250px;\" pattern=\"*\" placeholder=\"输入模糊信息\" />")
+        var input = document.getElementById("providerText");
+        var companyCode = $("#CompanyCode").attr("code");
+
+        $.ajax({
+            url: "@Url.Content("~/NoticeBill/GetProviderInfo/")",
+            data: { CompanyCode: companyCode },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    var complete = new Awesomplete(input, {
+                        list: result,
+                        replace: function (text) {
+                            this.input.setAttribute("completeValue", text);
+                            this.input.value = text;
+                            this.input.setAttribute("code", text.value);
+
+                        }
+                    });
+
+                    events(input, 'awesomplete-selectcomplete', function (e) {
+                        var inputcode = input.getAttribute("code");
+                        var completeValue = input.getAttribute("completeValue");
+                        if (completeValue.split('--')[0].indexOf('一次性')>-1) {
+                            $("#ProviderName").removeAttr("readonly");
+                            //$("#ProviderBankName").removeAttr("readonly");
+                            $("#ProviderBankNo").removeAttr("readonly");
+                        }
+                        else {
+                            $("#ProviderName").attr("readonly", "readonly");
+                            //$("#ProviderBankName").attr("readonly", "readonly");
+                            $("#ProviderBankNo").attr("readonly", "readonly");
+                        }
+                        $("#ProviderName").val(completeValue.split('--')[0]);
+                        $("#ProviderName").attr("code", inputcode);
+                        $("#ProviderName").attr("CompanyCode", $("#CompanyCode").attr("code"));
+                        $("#ProviderBankName").val("");
+                        $("#ProviderBankNo").val("");
+                        $("#ProviderIBAN").val("");
+                        $("#ProviderBankCode").val("");
+                        //得到国家名称
+                        $.ajax({
+                            url: "@Url.Content("~/NoticeBill/GetCountryName/")",
+                            data: { CODE: inputcode },
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            type: "GET",
+                            success: function (result) {
+                                $("#IBANNAME").text("IBAN(" + result + ")");
+                                //国外的让其能够编辑
+                                if (result != "" && result != "中国") {
+                                    //$("#ProviderBankName").removeAttr("readonly");
+                                    $("#ProviderBankNo").removeAttr("readonly");
+                                }
+                            }
+                        });
+                        //得到供应商银行信息
+                        $.ajax({
+                            url: "@Url.Content("~/NoticeBill/GetProviderBankInfo/")",
+                            data: { COMPANYCODE: $("#CompanyCode").attr("code"), CODE: inputcode, BANKNAME: completeValue.split('--')[1], BANKNO: completeValue.split('--')[2] },
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            type: "GET",
+                            success: function (result) {
+                                if (result) {
+                                    var result = JSON.parse(result);
+                                    $("#ProviderBankName").val(result.BankName);
+                                    $("#ProviderBankNo").val(result.BankNo);
+                                    if (result.IBAN) { $("#ProviderIBAN").val(result.IBAN) }
+                                    if (result.Swift) { $("#ProviderBankCode").val(result.Swift) }
+                                }
+                            }
+                        });
+                    })
+                }
+            }
+        });
+    }
+
+
+
+    function OnceProviderloadAutoComplete() {
+        var input = document.getElementById("ProviderName");
+        $.ajax({
+            url: "@Url.Content("~/NoticeBill/OnceProviderInfo/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    var complete = new Awesomplete(input, {
+                        list: result,
+                        replace: function (text) {
+                            this.input.setAttribute("completeValue", text);
+                            this.input.value = text;
+                            //this.input.setAttribute("code", text.value);
+                        },
+
+                    });
+                    events(input, 'awesomplete-selectcomplete', function (e) {
+                        var completeValue = input.getAttribute("completeValue");
+                        $("#ProviderName").val(completeValue.split('--')[0]);
+                        $("#ProviderBankName").val(completeValue.split('--')[1]);
+                        $("#ProviderBankNo").val(completeValue.split('--')[2]);
+                        if (completeValue.split('--')[3] != "自建数据" && completeValue.split('--')[3] != "SAP数据" && completeValue.split('--')[3] != undefined) {
+                            $("#ProviderBankCode").val(completeValue.split('--')[3]);
+                        }
+                        if (completeValue.split('--')[4] != "自建数据" && completeValue.split('--')[4] != "SAP数据" && completeValue.split('--')[4] != undefined) {
+                            $("#ProviderIBAN").val(completeValue.split('--')[4]);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+</script>
+
+
+

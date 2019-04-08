@@ -1,0 +1,1661 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:intf="http://webservice.ucstar.qflag" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns1="http://bean.webservice.ucstar.qflag" xmlns:impl="http://webservice.ucstar.qflag" targetNamespace="http://webservice.ucstar.qflag" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://bean.webservice.ucstar.qflag">
+      <xsd:import namespace="http://xml.apache.org/xml-soap" />
+      <xsd:import namespace="http://webservice.ucstar.qflag" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="UcstarUser">
+        <xsd:sequence>
+          <xsd:element name="age" type="xsd:int" />
+          <xsd:element name="deptid" nillable="true" type="xsd:string" />
+          <xsd:element name="email" nillable="true" type="xsd:string" />
+          <xsd:element name="gender" type="xsd:int" />
+          <xsd:element name="mobile" nillable="true" type="xsd:string" />
+          <xsd:element name="name" nillable="true" type="xsd:string" />
+          <xsd:element name="password" nillable="true" type="xsd:string" />
+          <xsd:element name="phone" nillable="true" type="xsd:string" />
+          <xsd:element name="sortid" nillable="true" type="xsd:string" />
+          <xsd:element name="targetDomain" nillable="true" type="xsd:string" />
+          <xsd:element name="type" nillable="true" type="xsd:string" />
+          <xsd:element name="username" nillable="true" type="xsd:string" />
+          <xsd:element name="voipphone" nillable="true" type="xsd:string" />
+          <xsd:element name="voipphonePass" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="UcstarMessage">
+        <xsd:sequence>
+          <xsd:element name="bindGroupIds" nillable="true" type="xsd:string" />
+          <xsd:element name="bindGroupNames" nillable="true" type="xsd:string" />
+          <xsd:element name="deptIds" nillable="true" type="xsd:string" />
+          <xsd:element name="deptNames" nillable="true" type="xsd:string" />
+          <xsd:element name="msgContent" nillable="true" type="xsd:string" />
+          <xsd:element name="msgResource" nillable="true" type="xsd:string" />
+          <xsd:element name="msgScope" nillable="true" type="xsd:string" />
+          <xsd:element name="msgType" nillable="true" type="xsd:string" />
+          <xsd:element name="msgUrl" nillable="true" type="xsd:string" />
+          <xsd:element name="sender" nillable="true" type="xsd:string" />
+          <xsd:element name="statue" type="xsd:int" />
+          <xsd:element name="userIds" nillable="true" type="xsd:string" />
+          <xsd:element name="userNames" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="UcstarSMS">
+        <xsd:sequence>
+          <xsd:element name="content" nillable="true" type="xsd:string" />
+          <xsd:element name="receiver" nillable="true" type="xsd:string" />
+          <xsd:element name="receiverDept" nillable="true" type="xsd:string" />
+          <xsd:element name="receiverNumber" nillable="true" type="xsd:string" />
+          <xsd:element name="sender" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="UcstarDept">
+        <xsd:sequence>
+          <xsd:element name="deptid" nillable="true" type="xsd:string" />
+          <xsd:element name="info" nillable="true" type="xsd:string" />
+          <xsd:element name="name" nillable="true" type="xsd:string" />
+          <xsd:element name="pdeptid" nillable="true" type="xsd:string" />
+          <xsd:element name="sortId" nillable="true" type="xsd:string" />
+          <xsd:element name="targetDomain" nillable="true" type="xsd:string" />
+          <xsd:element name="type" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="UcstarUserState">
+        <xsd:sequence>
+          <xsd:element name="state" nillable="true" type="xsd:string" />
+          <xsd:element name="value" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfUcstarUser">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:UcstarUser[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOfUcstarDept">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:UcstarDept[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="UcstarBindGroup">
+        <xsd:sequence>
+          <xsd:element name="description" nillable="true" type="xsd:string" />
+          <xsd:element name="groupid" nillable="true" type="xsd:string" />
+          <xsd:element name="name" nillable="true" type="xsd:string" />
+          <xsd:element name="parent" nillable="true" type="xsd:string" />
+          <xsd:element name="targetDomain" nillable="true" type="xsd:string" />
+          <xsd:element name="usercount" type="xsd:int" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="UCUserStateExt">
+        <xsd:sequence>
+          <xsd:element name="state" nillable="true" type="xsd:string" />
+          <xsd:element name="username" nillable="true" type="xsd:string" />
+          <xsd:element name="value" nillable="true" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservice.ucstar.qflag">
+      <xsd:import namespace="http://bean.webservice.ucstar.qflag" />
+      <xsd:import namespace="http://xml.apache.org/xml-soap" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="ArrayOf_xsd_string">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="xsd:string[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_UcstarMessage">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:UcstarMessage[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_UcstarBindGroup">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:UcstarBindGroup[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="ArrayOf_tns1_UCUserStateExt">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns1:UCUserStateExt[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+    </xsd:schema>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xml.apache.org/xml-soap">
+      <xsd:import namespace="http://bean.webservice.ucstar.qflag" />
+      <xsd:import namespace="http://webservice.ucstar.qflag" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:complexType name="mapItem">
+        <xsd:sequence>
+          <xsd:element name="key" nillable="true" type="xsd:anyType" />
+          <xsd:element name="value" nillable="true" type="xsd:anyType" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="Map">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="item" type="apachesoap:mapItem" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getBindGroupsRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="updateUserPasswordStrictResponse">
+    <wsdl:part name="updateUserPasswordStrictReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="broadcastWebAppRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+    <wsdl:part name="in3" type="xsd:int" />
+    <wsdl:part name="in4" type="xsd:int" />
+    <wsdl:part name="in5" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="selectExternResponse">
+    <wsdl:part name="selectExternReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="syncAllResponse">
+    <wsdl:part name="syncAllReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="editExternOutBoundResponse1">
+    <wsdl:part name="editExternOutBoundReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getAllOnlineCountResponse">
+    <wsdl:part name="getAllOnlineCountReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="printResponse" />
+  <wsdl:message name="check_IPRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserBindGroupsRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="decryptPasswordResponse">
+    <wsdl:part name="decryptPasswordReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserListDescRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="deleteBindGroupResponse">
+    <wsdl:part name="deleteBindGroupReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="setGroupPropertyResponse">
+    <wsdl:part name="setGroupPropertyReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getUserEncryptMapResponse">
+    <wsdl:part name="getUserEncryptMapReturn" type="apachesoap:Map" />
+  </wsdl:message>
+  <wsdl:message name="getAllOnlineUsersResponse">
+    <wsdl:part name="getAllOnlineUsersReturn" type="tns1:ArrayOfUcstarUser" />
+  </wsdl:message>
+  <wsdl:message name="controlPermissionRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserListRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="addResponse">
+    <wsdl:part name="addReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="deleteUsersFromBindGroupRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserStateByUserIdsRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="broadcastWebAppResponse" />
+  <wsdl:message name="deleteDepartUserResponse" />
+  <wsdl:message name="addDeptRequest">
+    <wsdl:part name="in0" type="tns1:UcstarDept" />
+  </wsdl:message>
+  <wsdl:message name="authUserRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="authUserSessionResponse">
+    <wsdl:part name="authUserSessionReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getBindGroupInfoRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="deleteExternResponse" />
+  <wsdl:message name="updataUserfromBindGroupRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:boolean" />
+  </wsdl:message>
+  <wsdl:message name="syncAllRequest" />
+  <wsdl:message name="importXMLDataRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="sendMsgResponse" />
+  <wsdl:message name="sendMessagesResponse">
+    <wsdl:part name="sendMessagesReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="sendSmsResponse">
+    <wsdl:part name="sendSmsReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="deleteDepartUserRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="impl:ArrayOf_xsd_string" />
+  </wsdl:message>
+  <wsdl:message name="getDeptListResponse">
+    <wsdl:part name="getDeptListReturn" type="tns1:ArrayOfUcstarDept" />
+  </wsdl:message>
+  <wsdl:message name="getUsersByBindGoupResponse">
+    <wsdl:part name="getUsersByBindGoupReturn" type="tns1:ArrayOfUcstarUser" />
+  </wsdl:message>
+  <wsdl:message name="deleteAllOrgRequest" />
+  <wsdl:message name="deleteAllUsersFromBindGroupResponse">
+    <wsdl:part name="deleteAllUsersFromBindGroupReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getExtenTypeResponse">
+    <wsdl:part name="getExtenTypeReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="searchDeptByNameRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="selectExternRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="sendSmsResponse1">
+    <wsdl:part name="sendSmsReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="searchDeptByNameResponse">
+    <wsdl:part name="searchDeptByNameReturn" type="tns1:ArrayOfUcstarDept" />
+  </wsdl:message>
+  <wsdl:message name="getOnLineUsersRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getBindGroupUserNamesRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="BroadcastMsgRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="validateUserPwdResponse">
+    <wsdl:part name="validateUserPwdReturn" type="xsd:boolean" />
+  </wsdl:message>
+  <wsdl:message name="validateUserPwdRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getAllOnlineUsersRequest" />
+  <wsdl:message name="BroadcastMsgResponse">
+    <wsdl:part name="BroadcastMsgReturn" type="xsd:boolean" />
+  </wsdl:message>
+  <wsdl:message name="deleteDeptRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="syncUserResponse">
+    <wsdl:part name="syncUserReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="selectExternOutBoundResponse1">
+    <wsdl:part name="selectExternOutBoundReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getNameResponse">
+    <wsdl:part name="getNameReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserListDescResponse">
+    <wsdl:part name="getUserListDescReturn" type="tns1:ArrayOfUcstarUser" />
+  </wsdl:message>
+  <wsdl:message name="addDepartUserResponse" />
+  <wsdl:message name="decryptPasswordRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserStateByUserIdsResponse">
+    <wsdl:part name="getUserStateByUserIdsReturn" type="impl:ArrayOf_tns1_UCUserStateExt" />
+  </wsdl:message>
+  <wsdl:message name="deleteAllOrgResponse" />
+  <wsdl:message name="refreshOrgRequest" />
+  <wsdl:message name="getAllOnlineCountRequest" />
+  <wsdl:message name="requestXMLDataResponse">
+    <wsdl:part name="requestXMLDataReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="setUserDomainRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserBindGroupsResponse">
+    <wsdl:part name="getUserBindGroupsReturn" type="impl:ArrayOf_xsd_string" />
+  </wsdl:message>
+  <wsdl:message name="broadcastMessageAllRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getClientIPRequest" />
+  <wsdl:message name="broadcastMessageRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+    <wsdl:part name="in3" type="xsd:string" />
+    <wsdl:part name="in4" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="deleteExternRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="addBindGroupResponse">
+    <wsdl:part name="addBindGroupReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="addRequest">
+    <wsdl:part name="in0" type="xsd:int" />
+    <wsdl:part name="in1" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="addDeptResponse">
+    <wsdl:part name="addDeptReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="sendMessageResponse">
+    <wsdl:part name="sendMessageReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="deleteUserRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="selectExternOutBoundRequest1">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="importXMLDataResponse">
+    <wsdl:part name="importXMLDataReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="updateUserPasswordRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="setGroupDomainResponse">
+    <wsdl:part name="setGroupDomainReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getMenuXMLRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:boolean" />
+  </wsdl:message>
+  <wsdl:message name="getClientIPResponse">
+    <wsdl:part name="getClientIPReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="updataUserfromBindGroupResponse">
+    <wsdl:part name="updataUserfromBindGroupReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="createGroupDomainRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="checkPermissionRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+    <wsdl:part name="in3" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="updateBindGroupResponse">
+    <wsdl:part name="updateBindGroupReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="syncUserRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getBindGroupsResponse">
+    <wsdl:part name="getBindGroupsReturn" type="impl:ArrayOf_tns1_UcstarBindGroup" />
+  </wsdl:message>
+  <wsdl:message name="refreshOrgResponse" />
+  <wsdl:message name="addUserToBindGroupResponse">
+    <wsdl:part name="addUserToBindGroupReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="setGroupPropertyRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="updateBindGroupRequest">
+    <wsdl:part name="in0" type="tns1:UcstarBindGroup" />
+  </wsdl:message>
+  <wsdl:message name="deleteBindGroupRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="sendMessageRequest">
+    <wsdl:part name="in0" type="tns1:UcstarMessage" />
+  </wsdl:message>
+  <wsdl:message name="getOnLineUsersResponse">
+    <wsdl:part name="getOnLineUsersReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getNameRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserStateRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="broadcastMessageResponse" />
+  <wsdl:message name="getUsersByBindGoupRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserStateByDeptRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:boolean" />
+  </wsdl:message>
+  <wsdl:message name="deleteUserResponse">
+    <wsdl:part name="deleteUserReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="sendMessageRequest1">
+    <wsdl:part name="in0" type="tns1:UcstarMessage" />
+    <wsdl:part name="in1" type="impl:ArrayOf_xsd_string" />
+  </wsdl:message>
+  <wsdl:message name="getUserStateResponse">
+    <wsdl:part name="getUserStateReturn" type="tns1:UcstarUserState" />
+  </wsdl:message>
+  <wsdl:message name="sendSmsRequest">
+    <wsdl:part name="in0" type="tns1:UcstarSMS" />
+  </wsdl:message>
+  <wsdl:message name="updateDeptRequest">
+    <wsdl:part name="in0" type="tns1:UcstarDept" />
+  </wsdl:message>
+  <wsdl:message name="deleteAllUsersFromBindGroupRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="controlPermissionResponse">
+    <wsdl:part name="controlPermissionReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="editExternOutBoundRequest1">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="updateUserRequest">
+    <wsdl:part name="in0" type="tns1:UcstarUser" />
+  </wsdl:message>
+  <wsdl:message name="broadcastMessageAllResponse" />
+  <wsdl:message name="createGroupDomainResponse">
+    <wsdl:part name="createGroupDomainReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="authUserSessionRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="editExternOutBoundRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getDepartInfoResponse">
+    <wsdl:part name="getDepartInfoReturn" type="tns1:UcstarDept" />
+  </wsdl:message>
+  <wsdl:message name="getDepartInfoRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="sendPluginPacketRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="printRequest" />
+  <wsdl:message name="sendMsgRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getEmailsResponse">
+    <wsdl:part name="getEmailsReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="addDepartUserRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="impl:ArrayOf_xsd_string" />
+  </wsdl:message>
+  <wsdl:message name="sendSmsRequest1">
+    <wsdl:part name="in0" type="tns1:UcstarSMS" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getEmailsRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="setGroupDomainRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="deleteDeptResponse">
+    <wsdl:part name="deleteDeptReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="updateUserResponse">
+    <wsdl:part name="updateUserReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getUserEncryptMapRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="sendMessagesRequest">
+    <wsdl:part name="in0" type="impl:ArrayOf_tns1_UcstarMessage" />
+  </wsdl:message>
+  <wsdl:message name="selectExternOutBoundRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getExtenTypeRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getDeptListRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="updateDeptResponse">
+    <wsdl:part name="updateDeptReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getSessionKeyRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="selectExternOutBoundResponse">
+    <wsdl:part name="selectExternOutBoundReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="addUserResponse">
+    <wsdl:part name="addUserReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getBindGroupInfoResponse">
+    <wsdl:part name="getBindGroupInfoReturn" type="tns1:UcstarBindGroup" />
+  </wsdl:message>
+  <wsdl:message name="checkPermissionResponse">
+    <wsdl:part name="checkPermissionReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="check_IPResponse">
+    <wsdl:part name="check_IPReturn" type="xsd:boolean" />
+  </wsdl:message>
+  <wsdl:message name="editExternOutBoundResponse">
+    <wsdl:part name="editExternOutBoundReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserStateByDeptResponse">
+    <wsdl:part name="getUserStateByDeptReturn" type="impl:ArrayOf_tns1_UCUserStateExt" />
+  </wsdl:message>
+  <wsdl:message name="addUserRequest">
+    <wsdl:part name="in0" type="tns1:UcstarUser" />
+  </wsdl:message>
+  <wsdl:message name="getUserListResponse">
+    <wsdl:part name="getUserListReturn" type="tns1:ArrayOfUcstarUser" />
+  </wsdl:message>
+  <wsdl:message name="authSessionRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getUserResponse">
+    <wsdl:part name="getUserReturn" type="tns1:UcstarUser" />
+  </wsdl:message>
+  <wsdl:message name="getMenuXMLResponse">
+    <wsdl:part name="getMenuXMLReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="authUserResponse">
+    <wsdl:part name="authUserReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="addUserToBindGroupRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:boolean" />
+  </wsdl:message>
+  <wsdl:message name="updateUserPasswordResponse">
+    <wsdl:part name="updateUserPasswordReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="sendMessageResponse1">
+    <wsdl:part name="sendMessageReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="addBindGroupRequest">
+    <wsdl:part name="in0" type="tns1:UcstarBindGroup" />
+  </wsdl:message>
+  <wsdl:message name="updateUserPasswordStrictRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+    <wsdl:part name="in1" type="xsd:string" />
+    <wsdl:part name="in2" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="requestXMLDataRequest">
+    <wsdl:part name="in0" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getSessionKeyResponse">
+    <wsdl:part name="getSessionKeyReturn" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="sendPluginPacketResponse" />
+  <wsdl:message name="deleteUsersFromBindGroupResponse">
+    <wsdl:part name="deleteUsersFromBindGroupReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="authSessionResponse">
+    <wsdl:part name="authSessionReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="getBindGroupUserNamesResponse">
+    <wsdl:part name="getBindGroupUserNamesReturn" type="impl:ArrayOf_xsd_string" />
+  </wsdl:message>
+  <wsdl:message name="setUserDomainResponse">
+    <wsdl:part name="setUserDomainReturn" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:portType name="UcstarWebservice">
+    <wsdl:operation name="add" parameterOrder="in0 in1">
+      <wsdl:input name="addRequest" message="impl:addRequest" />
+      <wsdl:output name="addResponse" message="impl:addResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getName" parameterOrder="in0">
+      <wsdl:input name="getNameRequest" message="impl:getNameRequest" />
+      <wsdl:output name="getNameResponse" message="impl:getNameResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="checkPermission" parameterOrder="in0 in1 in2 in3">
+      <wsdl:input name="checkPermissionRequest" message="impl:checkPermissionRequest" />
+      <wsdl:output name="checkPermissionResponse" message="impl:checkPermissionResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="print">
+      <wsdl:input name="printRequest" message="impl:printRequest" />
+      <wsdl:output name="printResponse" message="impl:printResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getUser" parameterOrder="in0">
+      <wsdl:input name="getUserRequest" message="impl:getUserRequest" />
+      <wsdl:output name="getUserResponse" message="impl:getUserResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="sendMessage" parameterOrder="in0">
+      <wsdl:input name="sendMessageRequest" message="impl:sendMessageRequest" />
+      <wsdl:output name="sendMessageResponse" message="impl:sendMessageResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="sendMessage" parameterOrder="in0 in1">
+      <wsdl:input name="sendMessageRequest1" message="impl:sendMessageRequest1" />
+      <wsdl:output name="sendMessageResponse1" message="impl:sendMessageResponse1" />
+    </wsdl:operation>
+    <wsdl:operation name="getClientIP">
+      <wsdl:input name="getClientIPRequest" message="impl:getClientIPRequest" />
+      <wsdl:output name="getClientIPResponse" message="impl:getClientIPResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="check_IP" parameterOrder="in0">
+      <wsdl:input name="check_IPRequest" message="impl:check_IPRequest" />
+      <wsdl:output name="check_IPResponse" message="impl:check_IPResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="BroadcastMsg" parameterOrder="in0 in1 in2">
+      <wsdl:input name="BroadcastMsgRequest" message="impl:BroadcastMsgRequest" />
+      <wsdl:output name="BroadcastMsgResponse" message="impl:BroadcastMsgResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="sendSms" parameterOrder="in0">
+      <wsdl:input name="sendSmsRequest" message="impl:sendSmsRequest" />
+      <wsdl:output name="sendSmsResponse" message="impl:sendSmsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="sendSms" parameterOrder="in0 in1 in2">
+      <wsdl:input name="sendSmsRequest1" message="impl:sendSmsRequest1" />
+      <wsdl:output name="sendSmsResponse1" message="impl:sendSmsResponse1" />
+    </wsdl:operation>
+    <wsdl:operation name="addUser" parameterOrder="in0">
+      <wsdl:input name="addUserRequest" message="impl:addUserRequest" />
+      <wsdl:output name="addUserResponse" message="impl:addUserResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="updateUser" parameterOrder="in0">
+      <wsdl:input name="updateUserRequest" message="impl:updateUserRequest" />
+      <wsdl:output name="updateUserResponse" message="impl:updateUserResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="updateUserPasswordStrict" parameterOrder="in0 in1 in2">
+      <wsdl:input name="updateUserPasswordStrictRequest" message="impl:updateUserPasswordStrictRequest" />
+      <wsdl:output name="updateUserPasswordStrictResponse" message="impl:updateUserPasswordStrictResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="updateUserPassword" parameterOrder="in0 in1">
+      <wsdl:input name="updateUserPasswordRequest" message="impl:updateUserPasswordRequest" />
+      <wsdl:output name="updateUserPasswordResponse" message="impl:updateUserPasswordResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteUser" parameterOrder="in0">
+      <wsdl:input name="deleteUserRequest" message="impl:deleteUserRequest" />
+      <wsdl:output name="deleteUserResponse" message="impl:deleteUserResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getDepartInfo" parameterOrder="in0">
+      <wsdl:input name="getDepartInfoRequest" message="impl:getDepartInfoRequest" />
+      <wsdl:output name="getDepartInfoResponse" message="impl:getDepartInfoResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="addDept" parameterOrder="in0">
+      <wsdl:input name="addDeptRequest" message="impl:addDeptRequest" />
+      <wsdl:output name="addDeptResponse" message="impl:addDeptResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="updateDept" parameterOrder="in0">
+      <wsdl:input name="updateDeptRequest" message="impl:updateDeptRequest" />
+      <wsdl:output name="updateDeptResponse" message="impl:updateDeptResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteDept" parameterOrder="in0 in1">
+      <wsdl:input name="deleteDeptRequest" message="impl:deleteDeptRequest" />
+      <wsdl:output name="deleteDeptResponse" message="impl:deleteDeptResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getUserState" parameterOrder="in0">
+      <wsdl:input name="getUserStateRequest" message="impl:getUserStateRequest" />
+      <wsdl:output name="getUserStateResponse" message="impl:getUserStateResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getUserList" parameterOrder="in0">
+      <wsdl:input name="getUserListRequest" message="impl:getUserListRequest" />
+      <wsdl:output name="getUserListResponse" message="impl:getUserListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getDeptList" parameterOrder="in0">
+      <wsdl:input name="getDeptListRequest" message="impl:getDeptListRequest" />
+      <wsdl:output name="getDeptListResponse" message="impl:getDeptListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="sendMsg" parameterOrder="in0 in1 in2">
+      <wsdl:input name="sendMsgRequest" message="impl:sendMsgRequest" />
+      <wsdl:output name="sendMsgResponse" message="impl:sendMsgResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getBindGroupInfo" parameterOrder="in0">
+      <wsdl:input name="getBindGroupInfoRequest" message="impl:getBindGroupInfoRequest" />
+      <wsdl:output name="getBindGroupInfoResponse" message="impl:getBindGroupInfoResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getUserBindGroups" parameterOrder="in0">
+      <wsdl:input name="getUserBindGroupsRequest" message="impl:getUserBindGroupsRequest" />
+      <wsdl:output name="getUserBindGroupsResponse" message="impl:getUserBindGroupsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="addBindGroup" parameterOrder="in0">
+      <wsdl:input name="addBindGroupRequest" message="impl:addBindGroupRequest" />
+      <wsdl:output name="addBindGroupResponse" message="impl:addBindGroupResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteBindGroup" parameterOrder="in0">
+      <wsdl:input name="deleteBindGroupRequest" message="impl:deleteBindGroupRequest" />
+      <wsdl:output name="deleteBindGroupResponse" message="impl:deleteBindGroupResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="updateBindGroup" parameterOrder="in0">
+      <wsdl:input name="updateBindGroupRequest" message="impl:updateBindGroupRequest" />
+      <wsdl:output name="updateBindGroupResponse" message="impl:updateBindGroupResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="addUserToBindGroup" parameterOrder="in0 in1 in2">
+      <wsdl:input name="addUserToBindGroupRequest" message="impl:addUserToBindGroupRequest" />
+      <wsdl:output name="addUserToBindGroupResponse" message="impl:addUserToBindGroupResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="updataUserfromBindGroup" parameterOrder="in0 in1 in2">
+      <wsdl:input name="updataUserfromBindGroupRequest" message="impl:updataUserfromBindGroupRequest" />
+      <wsdl:output name="updataUserfromBindGroupResponse" message="impl:updataUserfromBindGroupResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteUsersFromBindGroup" parameterOrder="in0 in1">
+      <wsdl:input name="deleteUsersFromBindGroupRequest" message="impl:deleteUsersFromBindGroupRequest" />
+      <wsdl:output name="deleteUsersFromBindGroupResponse" message="impl:deleteUsersFromBindGroupResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteAllUsersFromBindGroup" parameterOrder="in0">
+      <wsdl:input name="deleteAllUsersFromBindGroupRequest" message="impl:deleteAllUsersFromBindGroupRequest" />
+      <wsdl:output name="deleteAllUsersFromBindGroupResponse" message="impl:deleteAllUsersFromBindGroupResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="broadcastMessageAll" parameterOrder="in0 in1">
+      <wsdl:input name="broadcastMessageAllRequest" message="impl:broadcastMessageAllRequest" />
+      <wsdl:output name="broadcastMessageAllResponse" message="impl:broadcastMessageAllResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="broadcastMessage" parameterOrder="in0 in1 in2 in3 in4">
+      <wsdl:input name="broadcastMessageRequest" message="impl:broadcastMessageRequest" />
+      <wsdl:output name="broadcastMessageResponse" message="impl:broadcastMessageResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="sendMessages" parameterOrder="in0">
+      <wsdl:input name="sendMessagesRequest" message="impl:sendMessagesRequest" />
+      <wsdl:output name="sendMessagesResponse" message="impl:sendMessagesResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="broadcastWebApp" parameterOrder="in0 in1 in2 in3 in4 in5">
+      <wsdl:input name="broadcastWebAppRequest" message="impl:broadcastWebAppRequest" />
+      <wsdl:output name="broadcastWebAppResponse" message="impl:broadcastWebAppResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="sendPluginPacket" parameterOrder="in0 in1 in2">
+      <wsdl:input name="sendPluginPacketRequest" message="impl:sendPluginPacketRequest" />
+      <wsdl:output name="sendPluginPacketResponse" message="impl:sendPluginPacketResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="validateUserPwd" parameterOrder="in0 in1">
+      <wsdl:input name="validateUserPwdRequest" message="impl:validateUserPwdRequest" />
+      <wsdl:output name="validateUserPwdResponse" message="impl:validateUserPwdResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getUsersByBindGoup" parameterOrder="in0">
+      <wsdl:input name="getUsersByBindGoupRequest" message="impl:getUsersByBindGoupRequest" />
+      <wsdl:output name="getUsersByBindGoupResponse" message="impl:getUsersByBindGoupResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getEmails" parameterOrder="in0 in1 in2">
+      <wsdl:input name="getEmailsRequest" message="impl:getEmailsRequest" />
+      <wsdl:output name="getEmailsResponse" message="impl:getEmailsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="decryptPassword" parameterOrder="in0">
+      <wsdl:input name="decryptPasswordRequest" message="impl:decryptPasswordRequest" />
+      <wsdl:output name="decryptPasswordResponse" message="impl:decryptPasswordResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="authUser" parameterOrder="in0 in1">
+      <wsdl:input name="authUserRequest" message="impl:authUserRequest" />
+      <wsdl:output name="authUserResponse" message="impl:authUserResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="authSession" parameterOrder="in0">
+      <wsdl:input name="authSessionRequest" message="impl:authSessionRequest" />
+      <wsdl:output name="authSessionResponse" message="impl:authSessionResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="authUserSession" parameterOrder="in0 in1">
+      <wsdl:input name="authUserSessionRequest" message="impl:authUserSessionRequest" />
+      <wsdl:output name="authUserSessionResponse" message="impl:authUserSessionResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="searchDeptByName" parameterOrder="in0">
+      <wsdl:input name="searchDeptByNameRequest" message="impl:searchDeptByNameRequest" />
+      <wsdl:output name="searchDeptByNameResponse" message="impl:searchDeptByNameResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllOnlineCount">
+      <wsdl:input name="getAllOnlineCountRequest" message="impl:getAllOnlineCountRequest" />
+      <wsdl:output name="getAllOnlineCountResponse" message="impl:getAllOnlineCountResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="selectExtern" parameterOrder="in0">
+      <wsdl:input name="selectExternRequest" message="impl:selectExternRequest" />
+      <wsdl:output name="selectExternResponse" message="impl:selectExternResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="selectExternOutBound" parameterOrder="in0 in1">
+      <wsdl:input name="selectExternOutBoundRequest" message="impl:selectExternOutBoundRequest" />
+      <wsdl:output name="selectExternOutBoundResponse" message="impl:selectExternOutBoundResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="selectExternOutBound" parameterOrder="in0 in1 in2">
+      <wsdl:input name="selectExternOutBoundRequest1" message="impl:selectExternOutBoundRequest1" />
+      <wsdl:output name="selectExternOutBoundResponse1" message="impl:selectExternOutBoundResponse1" />
+    </wsdl:operation>
+    <wsdl:operation name="editExternOutBound" parameterOrder="in0 in1">
+      <wsdl:input name="editExternOutBoundRequest" message="impl:editExternOutBoundRequest" />
+      <wsdl:output name="editExternOutBoundResponse" message="impl:editExternOutBoundResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="editExternOutBound" parameterOrder="in0 in1 in2">
+      <wsdl:input name="editExternOutBoundRequest1" message="impl:editExternOutBoundRequest1" />
+      <wsdl:output name="editExternOutBoundResponse1" message="impl:editExternOutBoundResponse1" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteExtern" parameterOrder="in0">
+      <wsdl:input name="deleteExternRequest" message="impl:deleteExternRequest" />
+      <wsdl:output name="deleteExternResponse" message="impl:deleteExternResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteAllOrg">
+      <wsdl:input name="deleteAllOrgRequest" message="impl:deleteAllOrgRequest" />
+      <wsdl:output name="deleteAllOrgResponse" message="impl:deleteAllOrgResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="refreshOrg">
+      <wsdl:input name="refreshOrgRequest" message="impl:refreshOrgRequest" />
+      <wsdl:output name="refreshOrgResponse" message="impl:refreshOrgResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getUserEncryptMap" parameterOrder="in0 in1">
+      <wsdl:input name="getUserEncryptMapRequest" message="impl:getUserEncryptMapRequest" />
+      <wsdl:output name="getUserEncryptMapResponse" message="impl:getUserEncryptMapResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteDepartUser" parameterOrder="in0 in1">
+      <wsdl:input name="deleteDepartUserRequest" message="impl:deleteDepartUserRequest" />
+      <wsdl:output name="deleteDepartUserResponse" message="impl:deleteDepartUserResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="addDepartUser" parameterOrder="in0 in1">
+      <wsdl:input name="addDepartUserRequest" message="impl:addDepartUserRequest" />
+      <wsdl:output name="addDepartUserResponse" message="impl:addDepartUserResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getBindGroups" parameterOrder="in0">
+      <wsdl:input name="getBindGroupsRequest" message="impl:getBindGroupsRequest" />
+      <wsdl:output name="getBindGroupsResponse" message="impl:getBindGroupsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getBindGroupUserNames" parameterOrder="in0">
+      <wsdl:input name="getBindGroupUserNamesRequest" message="impl:getBindGroupUserNamesRequest" />
+      <wsdl:output name="getBindGroupUserNamesResponse" message="impl:getBindGroupUserNamesResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getUserListDesc" parameterOrder="in0">
+      <wsdl:input name="getUserListDescRequest" message="impl:getUserListDescRequest" />
+      <wsdl:output name="getUserListDescResponse" message="impl:getUserListDescResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getOnLineUsers" parameterOrder="in0">
+      <wsdl:input name="getOnLineUsersRequest" message="impl:getOnLineUsersRequest" />
+      <wsdl:output name="getOnLineUsersResponse" message="impl:getOnLineUsersResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getUserStateByDept" parameterOrder="in0 in1">
+      <wsdl:input name="getUserStateByDeptRequest" message="impl:getUserStateByDeptRequest" />
+      <wsdl:output name="getUserStateByDeptResponse" message="impl:getUserStateByDeptResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getUserStateByUserIds" parameterOrder="in0">
+      <wsdl:input name="getUserStateByUserIdsRequest" message="impl:getUserStateByUserIdsRequest" />
+      <wsdl:output name="getUserStateByUserIdsResponse" message="impl:getUserStateByUserIdsResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="setUserDomain" parameterOrder="in0 in1">
+      <wsdl:input name="setUserDomainRequest" message="impl:setUserDomainRequest" />
+      <wsdl:output name="setUserDomainResponse" message="impl:setUserDomainResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="setGroupDomain" parameterOrder="in0 in1">
+      <wsdl:input name="setGroupDomainRequest" message="impl:setGroupDomainRequest" />
+      <wsdl:output name="setGroupDomainResponse" message="impl:setGroupDomainResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="createGroupDomain" parameterOrder="in0 in1">
+      <wsdl:input name="createGroupDomainRequest" message="impl:createGroupDomainRequest" />
+      <wsdl:output name="createGroupDomainResponse" message="impl:createGroupDomainResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="setGroupProperty" parameterOrder="in0 in1 in2">
+      <wsdl:input name="setGroupPropertyRequest" message="impl:setGroupPropertyRequest" />
+      <wsdl:output name="setGroupPropertyResponse" message="impl:setGroupPropertyResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getExtenType" parameterOrder="in0">
+      <wsdl:input name="getExtenTypeRequest" message="impl:getExtenTypeRequest" />
+      <wsdl:output name="getExtenTypeResponse" message="impl:getExtenTypeResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllOnlineUsers">
+      <wsdl:input name="getAllOnlineUsersRequest" message="impl:getAllOnlineUsersRequest" />
+      <wsdl:output name="getAllOnlineUsersResponse" message="impl:getAllOnlineUsersResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getMenuXML" parameterOrder="in0 in1 in2">
+      <wsdl:input name="getMenuXMLRequest" message="impl:getMenuXMLRequest" />
+      <wsdl:output name="getMenuXMLResponse" message="impl:getMenuXMLResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="controlPermission" parameterOrder="in0">
+      <wsdl:input name="controlPermissionRequest" message="impl:controlPermissionRequest" />
+      <wsdl:output name="controlPermissionResponse" message="impl:controlPermissionResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="importXMLData" parameterOrder="in0">
+      <wsdl:input name="importXMLDataRequest" message="impl:importXMLDataRequest" />
+      <wsdl:output name="importXMLDataResponse" message="impl:importXMLDataResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="requestXMLData" parameterOrder="in0">
+      <wsdl:input name="requestXMLDataRequest" message="impl:requestXMLDataRequest" />
+      <wsdl:output name="requestXMLDataResponse" message="impl:requestXMLDataResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getSessionKey" parameterOrder="in0">
+      <wsdl:input name="getSessionKeyRequest" message="impl:getSessionKeyRequest" />
+      <wsdl:output name="getSessionKeyResponse" message="impl:getSessionKeyResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="syncAll">
+      <wsdl:input name="syncAllRequest" message="impl:syncAllRequest" />
+      <wsdl:output name="syncAllResponse" message="impl:syncAllResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="syncUser" parameterOrder="in0">
+      <wsdl:input name="syncUserRequest" message="impl:syncUserRequest" />
+      <wsdl:output name="syncUserResponse" message="impl:syncUserResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UcstarWebserviceSoapBinding" type="impl:UcstarWebservice">
+    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="add">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="addRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="addResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getName">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getNameRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getNameResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkPermission">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="checkPermissionRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="checkPermissionResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="print">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="printRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="printResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUser">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getUserRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getUserResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendMessage">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="sendMessageRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="sendMessageResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendMessage">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="sendMessageRequest1">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="sendMessageResponse1">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getClientIP">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getClientIPRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getClientIPResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="check_IP">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="check_IPRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="check_IPResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BroadcastMsg">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="BroadcastMsgRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="BroadcastMsgResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendSms">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="sendSmsRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="sendSmsResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendSms">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="sendSmsRequest1">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="sendSmsResponse1">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addUser">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="addUserRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="addUserResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateUser">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updateUserRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="updateUserResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateUserPasswordStrict">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updateUserPasswordStrictRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="updateUserPasswordStrictResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateUserPassword">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updateUserPasswordRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="updateUserPasswordResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteUser">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="deleteUserRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="deleteUserResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartInfo">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getDepartInfoRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getDepartInfoResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addDept">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="addDeptRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="addDeptResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateDept">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updateDeptRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="updateDeptResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteDept">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="deleteDeptRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="deleteDeptResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUserState">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getUserStateRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getUserStateResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUserList">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getUserListRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getUserListResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDeptList">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getDeptListRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getDeptListResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendMsg">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="sendMsgRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="sendMsgResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getBindGroupInfo">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getBindGroupInfoRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getBindGroupInfoResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUserBindGroups">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getUserBindGroupsRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getUserBindGroupsResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addBindGroup">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="addBindGroupRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="addBindGroupResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteBindGroup">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="deleteBindGroupRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="deleteBindGroupResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateBindGroup">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updateBindGroupRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="updateBindGroupResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addUserToBindGroup">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="addUserToBindGroupRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="addUserToBindGroupResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updataUserfromBindGroup">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="updataUserfromBindGroupRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="updataUserfromBindGroupResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteUsersFromBindGroup">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="deleteUsersFromBindGroupRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="deleteUsersFromBindGroupResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAllUsersFromBindGroup">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="deleteAllUsersFromBindGroupRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="deleteAllUsersFromBindGroupResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="broadcastMessageAll">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="broadcastMessageAllRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="broadcastMessageAllResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="broadcastMessage">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="broadcastMessageRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="broadcastMessageResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendMessages">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="sendMessagesRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="sendMessagesResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="broadcastWebApp">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="broadcastWebAppRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="broadcastWebAppResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendPluginPacket">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="sendPluginPacketRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="sendPluginPacketResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validateUserPwd">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="validateUserPwdRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="validateUserPwdResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUsersByBindGoup">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getUsersByBindGoupRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getUsersByBindGoupResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getEmails">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getEmailsRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getEmailsResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="decryptPassword">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="decryptPasswordRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="decryptPasswordResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authUser">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="authUserRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="authUserResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authSession">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="authSessionRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="authSessionResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authUserSession">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="authUserSessionRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="authUserSessionResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="searchDeptByName">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="searchDeptByNameRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="searchDeptByNameResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllOnlineCount">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getAllOnlineCountRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getAllOnlineCountResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="selectExtern">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="selectExternRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="selectExternResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="selectExternOutBound">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="selectExternOutBoundRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="selectExternOutBoundResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="selectExternOutBound">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="selectExternOutBoundRequest1">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="selectExternOutBoundResponse1">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="editExternOutBound">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="editExternOutBoundRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="editExternOutBoundResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="editExternOutBound">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="editExternOutBoundRequest1">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="editExternOutBoundResponse1">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteExtern">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="deleteExternRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="deleteExternResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteAllOrg">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="deleteAllOrgRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="deleteAllOrgResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="refreshOrg">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="refreshOrgRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="refreshOrgResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUserEncryptMap">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getUserEncryptMapRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getUserEncryptMapResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="deleteDepartUser">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="deleteDepartUserRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="deleteDepartUserResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="addDepartUser">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="addDepartUserRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="addDepartUserResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getBindGroups">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getBindGroupsRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getBindGroupsResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getBindGroupUserNames">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getBindGroupUserNamesRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getBindGroupUserNamesResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUserListDesc">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getUserListDescRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getUserListDescResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getOnLineUsers">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getOnLineUsersRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getOnLineUsersResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUserStateByDept">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getUserStateByDeptRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getUserStateByDeptResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getUserStateByUserIds">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getUserStateByUserIdsRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getUserStateByUserIdsResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setUserDomain">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="setUserDomainRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="setUserDomainResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setGroupDomain">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="setGroupDomainRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="setGroupDomainResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createGroupDomain">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="createGroupDomainRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="createGroupDomainResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setGroupProperty">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="setGroupPropertyRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="setGroupPropertyResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getExtenType">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getExtenTypeRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getExtenTypeResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllOnlineUsers">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getAllOnlineUsersRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getAllOnlineUsersResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMenuXML">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getMenuXMLRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getMenuXMLResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="controlPermission">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="controlPermissionRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="controlPermissionResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="importXMLData">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="importXMLDataRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="importXMLDataResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="requestXMLData">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="requestXMLDataRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="requestXMLDataResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSessionKey">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="getSessionKeyRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="getSessionKeyResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="syncAll">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="syncAllRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="syncAllResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="syncUser">
+      <wsdlsoap:operation soapAction="" />
+      <wsdl:input name="syncUserRequest">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="syncUserResponse">
+        <wsdlsoap:body use="encoded" namespace="http://webservice.ucstar.qflag" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UcstarWebserviceService">
+    <wsdl:port name="UcstarWebservice" binding="impl:UcstarWebserviceSoapBinding">
+      <wsdlsoap:address location="http://uc.marisfrolg.com:9090/services/UcstarWebservice" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

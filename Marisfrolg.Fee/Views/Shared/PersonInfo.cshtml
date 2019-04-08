@@ -1,0 +1,641 @@
+﻿<style type="text/css">
+    .NormalBrand {
+        font-family: 'Microsoft YaHei';
+        font-size: 11px;
+        vertical-align: bottom;
+        cursor: pointer;
+        margin-bottom: 15px;
+        background-color: #CCCCCC;
+        float: left;
+        width: 80px;
+        height: 40px;
+    }
+
+    .SelectBrand {
+        font-family: 'Microsoft YaHei';
+        font-size: 11px;
+        vertical-align: bottom;
+        cursor: pointer;
+        margin-bottom: 15px;
+        /*background-color: #5CB85C;*/
+        background-color: #1e90ff;
+        float: left;
+        width: 80px;
+        height: 40px;
+    }
+
+    .NoShow {
+        display: none;
+    }
+
+    @@media screen and (max-width: 800px) {
+        #parameter1 {
+            display: none;
+        }
+
+        #parameter2 {
+            float: left !important;
+        }
+
+        #CostCenter {
+            position: relative !important;
+            margin-left: -1px !important;
+        }
+
+        #Mytips {
+            display: none;
+        }
+    }
+
+    .Mytips {
+        position: fixed;
+        bottom: -5%;
+        right: 50px;
+        border-radius: 5px;
+        width: 300px;
+        height: 300px;
+        color: red;
+        font-size: 16px;
+    }
+</style>
+<!-- 第1大块 -->
+<div class="col-md-8">
+    <!-- 第2大块 -->
+    <div class="weui_cells_title" style="color: black">组织架构信息</div>
+    <div class="weui_panel weui_panel_access">
+        <div class="weui_panel_bd" style="display: inline-block">
+            <div class="weui_media_box weui_media_text">
+                <h4 id="IsBackOffice" class="weui_media_title">所在组织</h4>
+
+                <table>
+                    <tr>
+                        <td style="width: auto;">
+                            <select class="weui_select" name="select2" id="DepartmentName" onchange="SelectValChange('Department')"></select>
+                        </td>
+                        <td style="width: auto;">
+                            <select class="weui_select" name="select3" id="ChangeShop" onchange="SelectValChange('Shop')" style="display: none; margin-left: 10px;">
+                                <option value="">请选择门店</option>
+                            </select>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+        </div>
+        <div class="weui_panel_bd" style="display: inline-block; float: right; margin-top: 6px; margin-right: 100px;" id="parameter2">
+            <div class="weui_media_box weui_media_text">
+                <h4 class="weui_media_title" id="parameter1">成本中心</h4>
+                <select style="border: 0; position: absolute; margin-top: 6px; margin-left: -9px;" id="CostCenter"></select>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-md-8" id="BillBrand">
+    <!-- 第4大块 -->
+    <div class="weui_cells_title" style="color: black">
+        记账品牌<span style="color: #4E82D0; font-size: 12px;">（报销非集团费用选择对应品牌的成本中心！）</span>
+    </div>
+    <div class="weui_panel weui_panel_access">
+        <div class="weui_panel_bd">
+            <div style="margin-top: 15px;">
+                @*
+                    <p id="EditBrand" class="weui_media_desc" onclick="GetBrandList()" style="color: #337ab7">MA,SU,ZH</p>*@
+                <div class="SearchKeywords" style="margin-left: -10px;" id="EditBrand">
+                    @*
+                        <div val="s1" class="SelectTabItem label label-success" onclick="tagClick(this)">ZH</div>
+                    *@
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="col-md-8" id="SpecialAttributeList">
+    <!-- 第4大块 -->
+    <div class="weui_cells_title" style="color: black">特殊选项</div>
+    <div class="weui_panel weui_panel_access">
+        <div class="weui_panel_bd">
+            <div style="margin-top: 15px;">
+
+                <div class="SearchKeywords" style="margin-left: -10px;" id="SpecialAttribute">
+
+                    @*  <div val="s0" class="NormalBrand label-default label" onclick="InputControl(this)" id="FundMoney" style="margin-left: 15px; font-size: 14px; line-height: 30px;">活动经费</div>*@
+                    <div val="s0" class="NormalBrand label-default label" onclick="InputControl(this)" id="AgentMoney" style="margin-left: 15px; font-size: 14px; line-height: 30px;">代理商费用</div>
+                    <div val="s1" class="NormalBrand label-default label" onclick="InputControl(this)" id="MarketMoney" style="margin-left: 15px; font-size: 14px; line-height: 30px;">商场账扣</div>
+                    <div val="s1" class="NormalBrand label-default label" onclick="InputControl(this)" id="BankMoney" style="margin-left: 15px; font-size: 14px; line-height: 30px;">银行账扣</div>
+                    <div val="s1" class="NormalBrand label-default label" onclick="InputControl(this)" id="DepositMoney" style="margin-left: 15px; font-size: 14px; line-height: 30px;">押金账扣</div>
+                    <div val="s2" class="NormalBrand label-default label" onclick="InputControl(this)" id="CheckMoney" style="margin-left: 15px; font-size: 14px; line-height: 30px; display: none;">考核</div>
+                    <div val="s3" class="NormalBrand label-default label" onclick="InputControl(this)" id="BillMoney" style="margin-left: 15px; font-size: 14px; line-height: 30px;">发票已回收</div>
+                    <div val="s4" class="NormalBrand label-default label" onclick="InputControl(this)" id="Urgent" style="margin-left: 15px; font-size: 14px; line-height: 30px;">单据加急</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 弹出层 -->
+<div class="weui_dialog_confirm" id="UrgentBill" style="display: none">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog" style="height: 130px;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">最迟付款日</strong></div>
+        <div class="weui_dialog_bd" style="color: black">
+            &nbsp
+            <input class="weui_input" type="date" style="display: block; width: auto; float: left;">
+        </div>
+        <div class="weui_dialog_ft">
+            <a class="weui_btn_dialog default" onclick="HideUrgentBill()">取消</a>
+            <a class="weui_btn_dialog primary" onclick="SureUrgentBill()">确定</a>
+        </div>
+    </div>
+</div>
+
+<div class="Mytips" id="Mytips">
+    <p>1、活动经费的公司抬头统一录“玛丝菲尔”，成本中心统一录“0008-办事处”；</p>
+    <p>2、办事处不能区分品牌的录成本中心“0008-办事处”；</p>
+    <p>3、020的快递费录“网销-网销运费”；</p>
+    <p>4、试衣到家产生的交通费，片区记帐员请勿制单，凭证请快递总部MF销售会计，由总部制单。</p>
+</div>
+
+@{
+    Marisfrolg.Fee.Models.FeeBillModelRef FeeModel = ViewData["FeeBillModelRef"] as Marisfrolg.Fee.Models.FeeBillModelRef;
+    if (FeeModel == null)
+    {
+        FeeModel = new Marisfrolg.Fee.Models.FeeBillModelRef();
+    }
+    if (FeeModel.PersonInfo == null)
+    {
+        FeeModel.PersonInfo = new Marisfrolg.Fee.Models.PersonInfo();
+    }
+    string Type = FeeModel.BillNo == null ? "FeeBill" : "Draft";
+}
+<input type="hidden" id="dddd" value="@Newtonsoft.Json.JsonConvert.SerializeObject(FeeModel.ModelString)" />
+<script type="text/javascript">
+    var BillTypeRecord = "";
+    var ModelString;
+
+    var PersonModelOnly = { PageName: "", Type: "", RefundType: "", DepartmentCode: "", ShopCode: "", IsHeadOffice: "", Company: "", CompanyCode: "", CostCenter: "" };
+    PersonModelOnly.PageName = "@FeeModel.PageName";
+    PersonModelOnly.Type = "@Type";
+    PersonModelOnly.RefundType = "@FeeModel.RefundType";
+    PersonModelOnly.DepartmentCode = "@FeeModel.PersonInfo.DepartmentCode";
+    PersonModelOnly.ShopCode = "@FeeModel.PersonInfo.ShopCode";
+    PersonModelOnly.IsHeadOffice = "@FeeModel.PersonInfo.IsHeadOffice";
+    PersonModelOnly.Company = "@FeeModel.PersonInfo.Company";
+    PersonModelOnly.CompanyCode = "@FeeModel.PersonInfo.CompanyCode";
+    PersonModelOnly.CostCenter = "@FeeModel.PersonInfo.CostCenter";
+    PersonModelOnly.Department = "@FeeModel.PersonInfo.Department";
+    PersonModelOnly.Shop = "@FeeModel.PersonInfo.Shop";
+
+    $(document).ready(function () {
+
+        $("#CostCenter").bind("change", function () {
+            CosterCenterOnchange();
+        });
+        GetBrandList();//记账品牌列表(总列表)
+
+        if (PersonModelOnly.Type == "Draft" || PersonModelOnly.PageName == "Refund") {
+            ModelString = JSON.parse($("#dddd").val());
+            ModelString = JSON.parse(ModelString);
+        }
+        else {
+            $("#IsBackOffice").text("");
+            var temp = "所在组织[" + (employeeInfo.IsHeadOffice == 1 ? "总部" : "片区") + "]" + "&nbsp;&nbsp;&nbsp;&nbsp;<small id='CompanyCode' code=" + employeeInfo.CompanyCode + ">" + employeeInfo.CompanyName + "</small>";
+            $("#IsBackOffice").html(temp);
+            GetDefaultBrand(employeeInfo.CompanyCode);
+        }
+
+        if (PersonModelOnly.PageName == "FeeBill" || PersonModelOnly.PageName == "Refund") {
+            $("#AccountTimeList").show();
+        }
+        //首页待办和借款单
+        if (PersonModelOnly.PageName == "" || PersonModelOnly.RefundType == "Cash") {
+            $("#BillBrand").hide();
+            $("#SpecialAttributeList").hide();
+        }
+        if (PersonModelOnly.PageName == "Borrow") {
+            $("#SpecialAttributeList").show();
+            $("#BillMoney").addClass("NoShow");
+        }
+        //片区不显示代理商费用，总部不显示活动经费
+        if (employeeInfo.IsHeadOffice == "0") {
+            $("#AgentMoney").addClass("NoShow");
+        }
+        else {
+            $("#Mytips").hide();
+        }
+
+        $("#FundMoney").addClass("NoShow");
+
+        $("#Urgent").addClass("NoShow");
+
+        if (PersonModelOnly.PageName == "FeeBill" || PersonModelOnly.PageName == "Refund") {
+            $("#BillMoney").addClass("NoShow");
+
+        }
+        if (PersonModelOnly.PageName == "Notice" || PersonModelOnly.PageName == "Borrow" || PersonModelOnly.PageName == "Refund") {
+            $("#MarketMoney").addClass("NoShow");
+            $("#BankMoney").addClass("NoShow");
+            $("#DepositMoney").addClass("NoShow");
+        }
+        //控制首页待办和还款单不能点击
+        if (PersonModelOnly.PageName == "" || PersonModelOnly.PageName == "Refund") {
+            $("#DepartmentName").css("color", "#AAAAAA");
+            $("#ChangeShop").css("color", "#AAAAAA");
+            $("#CostCenter").css("color", "#AAAAAA");
+            $("#DepartmentName").attr("disabled", true);
+            $("#ChangeShop").attr("disabled", true);
+            $("#CostCenter").attr("disabled", true);
+        }
+        //（处理多身份的人）
+        $.ajax({
+            url: "@Url.Content("~/Home/GetMyArea/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice, EmployeeNo: employeeInfo.EmployeeNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                var data = "";
+                if (employeeInfo.IsHeadOffice == 1) {
+                    $("#ChangeShop").hide();
+                }
+                else {
+                    $("#ChangeShop").show();
+                }
+                if (PersonModelOnly.Type == 'Draft') {
+                    if (result) {
+                        var result = JSON.parse(result);
+                        for (var i = 0; i < result.length; i++) {
+                            if (PersonModelOnly.DepartmentCode == result[i].CODE) {
+                                data += "<option  value=\"" + result[i].CODE + "\" selected=\"selected\" >" + result[i].NAME + "</option>";
+                                GetCostCenter(result[i].CODE, PersonModelOnly.ShopCode, employeeInfo.IsHeadOffice);
+                                GetShopdata(result[i].CODE);
+                            }
+                            else {
+                                data += "<option  value=\"" + result[i].CODE + "\">" + result[i].NAME + "</option>";
+                            }
+                        }
+                        $(data).appendTo("#DepartmentName");
+                    }
+                    else {
+                        if (employeeInfo.IsHeadOffice == 1) {
+                            var data = "<option  value=\"" + employeeInfo.RootDepartmentID + "\">" + employeeInfo.RootDepartmentName + "</option>";
+                            $(data).appendTo("#DepartmentName");
+                            GetCostCenter(employeeInfo.RootDepartmentID, "", employeeInfo.IsHeadOffice);
+                        }
+                    }
+                }
+                else if (PersonModelOnly.PageName == "Refund") {
+                    //1.0赋值
+                    var temp = "所在组织[" + (PersonModelOnly.IsHeadOffice == "1" ? "总部" : "片区") + "]" + "&nbsp;&nbsp;&nbsp;&nbsp;<small id='CompanyCode' code=" + PersonModelOnly.CompanyCode + ">" + PersonModelOnly.Company + "</small>";
+                    $("#IsBackOffice").html(temp);
+                    $("<option  value=\"" + PersonModelOnly.DepartmentCode + "\" selected=\"selected\" >" + PersonModelOnly.Department + "</option>").appendTo("#DepartmentName");
+                    $("<option  value=\"" + PersonModelOnly.CostCenter + "\" selected=\"selected\" >" + PersonModelOnly.CostCenter + "</option>").appendTo($("#CostCenter"));
+                    if (PersonModelOnly.ShopCode) {
+                        $("<option  value=\"" + PersonModelOnly.ShopCode + "\" selected=\"selected\" >" + PersonModelOnly.Shop + "</option>").appendTo($("#ChangeShop"));
+                    }
+                }
+                else {
+                    if (employeeInfo.IsHeadOffice == 1) {
+                        if (result) {
+                            var result = JSON.parse(result);
+                            for (var i = 0; i < result.length; i++) {
+                                if (i == 0) {
+                                    data += "<option  value=\"" + result[i].CODE + "\" selected=\"selected\" >" + result[i].NAME + "</option>";
+                                }
+                                else {
+                                    data += "<option  value=\"" + result[i].CODE + "\">" + result[i].NAME + "</option>";
+                                }
+                            }
+                            $(data).appendTo("#DepartmentName");
+                            GetCostCenter(result[0].CODE, "", employeeInfo.IsHeadOffice);
+                        }
+                        else {
+                            var data = "<option  value=\"" + employeeInfo.RootDepartmentID + "\">" + employeeInfo.RootDepartmentName + "</option>";
+                            $(data).appendTo("#DepartmentName");
+                            GetCostCenter(employeeInfo.RootDepartmentID, "", employeeInfo.IsHeadOffice);
+                        }
+                    }
+                    else {
+                        if (result) {
+                            var result = JSON.parse(result);
+                            var data = "";
+                            var count = 0;
+                            for (var i = 0; i < result.length; i++) {
+                                if (result[i].NAME.indexOf("总部片区仓") != -1) {
+
+                                    data += "<option  value=\"" + result[i].CODE + "\" selected=\"selected\" >" + result[i].NAME + "</option>";
+                                    GetCostCenter(result[i].CODE, "", employeeInfo.IsHeadOffice);
+                                    GetShopdata(result[i].CODE);
+                                    count++;
+                                }
+                                else if ((result[i].NAME.indexOf("片区") != -1 || result[i].NAME.indexOf("会所") != -1) && count < 1 && result[i].NAME.indexOf("澳门片区") == -1 && result[i].NAME.indexOf("SU") == -1) {
+                                    data += "<option  value=\"" + result[i].CODE + "\" selected=\"selected\" >" + result[i].NAME + "</option>";
+                                    GetCostCenter(result[i].CODE, "", employeeInfo.IsHeadOffice);
+                                    GetShopdata(result[i].CODE);
+                                    count++;
+                                }
+                                else {
+                                    data += "<option  value=\"" + result[i].CODE + "\">" + result[i].NAME + "</option>";
+                                }
+                            }
+                            $(data).appendTo("#DepartmentName");
+                        }
+                        else {
+                            submitMessageShow("获取组织架构信息失败，请联系数控中心!", "error");
+                        }
+                    }
+                }
+            }
+        });
+        //取默认品牌
+        if (PersonModelOnly.Type == 'Draft' || PersonModelOnly.PageName == 'Refund') {
+            if (PersonModelOnly.ShopCode) {
+                GetDefaultBrand(PersonModelOnly.CompanyCode, PersonModelOnly.ShopCode);
+            }
+            else {
+                GetDefaultBrand(PersonModelOnly.CompanyCode);
+            }
+        }
+    });
+
+    //获取默认品牌
+    function GetDefaultBrand(CompanyCode, ShopCode) {
+        $.ajax({
+            url: "@Url.Content("~/Home/GetDefaultBrand/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice, CompanyCode: CompanyCode, ShopCode: ShopCode },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                var result = JSON.parse(result);
+                if (result) {
+                    $("#EditBrand").children().each(function () {
+                        $(this).removeClass("SelectBrand label-success");
+                    }).hide();
+                    for (var i = 0; i < result.length; i++) {
+                        $("#" + result[i] + "").addClass("NormalBrand label-success").show();
+                    }
+                    if (PersonModelOnly.Type == "Draft" && BillTypeRecord == "") {
+                        $("#EditBrand").children().each(function () {
+                            $(this).removeClass("SelectBrand label-success");
+                        });
+                        var person = ModelString.PersonInfo;
+                        if (person.Brand != null && person.Brand.length > 0) {
+                            for (var i = 0; i < person.Brand.length; i++) {
+                                $("#" + person.Brand[i] + "").addClass("SelectBrand label-success");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    //获取品牌列表(可以初始化的时候调用，也可以点击的时候调用)
+    function GetBrandList() {
+        var BrandListInfo = new Array();
+        BrandListInfo.push({ CODE: "MA", NAME: "Marisfrolg" }, { CODE: "SU", NAME: "Masfer.Su" }, { CODE: "ZH", NAME: "CHONGYUNZHU" }, { CODE: "MD", NAME: "MDC" }, { CODE: "MT", NAME: "Men's" }, { CODE: "KA", NAME: "Krizia" }, { CODE: "AM", NAME: "AUM" });
+        $("#EditBrand").children().remove();
+        for (var i = 0; i < BrandListInfo.length; i++) {
+            $("<div val=\"s" + i + "\" class=\"NormalBrand label-default label\""
+                + " onclick=\"BrandClick(this)\" id=\"" + BrandListInfo[i].CODE + "\" style=\"background-image:url('../Images/BrandImage/" + BrandListInfo[i].CODE + ".png');background-position: center;display: none; margin-left:15px;\" >&nbsp;</div>").appendTo($("#EditBrand"));
+        }
+    }
+
+    //获取公司名称
+    function GetCompanyName(code, CompanyCode) {
+        //获取公司名称
+        $.ajax({
+            url: "@Url.Content("~/Home/GetCompanyName/")",
+            data: { Info: code, CompanyCode: CompanyCode },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            cache: false,
+            success: function (result) {
+                if (result) {
+                    $("#IsBackOffice").text("");
+                    var result = JSON.parse(result);
+                    var temp = "所在组织[" + (employeeInfo.IsHeadOffice == 1 ? "总部" : "片区") + "]" + "&nbsp;&nbsp;&nbsp;&nbsp;<small id='CompanyCode' code=" + result.CODE + ">" + result.NAME + "</small>";
+                    $("#IsBackOffice").html(temp);
+                    GetDefaultBrand(result.CODE);  //更改默认记账品牌
+
+                    //刷新供应商范围
+                    if (PersonModelOnly.PageName == "Notice") {
+                        loadAutoComplete();
+                    }
+                }
+            }
+        });
+    }
+
+    function InputControl(em) {
+        var flag = $(em).attr("val");
+        if ($(em).hasClass("SelectBrand label-success")) {
+            $(em).removeClass("SelectBrand label-success");
+        }
+        else {
+            $("#SpecialAttribute").children().each(function () {
+                var temp = $(this).attr("val");
+                if (flag == temp) {
+                    $(this).removeClass("SelectBrand label-success");
+                }
+            });
+            $(em).addClass("SelectBrand label-success");
+        }
+        if (flag == "s1" && (PersonModelOnly.PageName == "FeeBill" || PersonModelOnly.PageName == "Borrow")) {
+            if ($("#MarketMoney").hasClass("SelectBrand label-success") || $("#BankMoney ").hasClass("SelectBrand label-success") || $("#DepositMoney").hasClass("SelectBrand label-success")) {
+                $("#CollectionInfoList").hide();
+                $("#BillInfoList").addClass("col-md-8").removeClass("col-md-4");
+            }
+            else {
+                $("#CollectionInfoList").show();
+                $("#BillInfoList").addClass("col-md-4").removeClass("col-md-8");
+            }
+        }
+        if (flag == "s4") {
+            if ($("#Urgent").hasClass("SelectBrand label-success")) {
+                $("#UrgentBill").show();
+            }
+            else {
+                $("#UrgentBill").hide();
+            }
+        }
+    }
+
+    //品牌全选和全不选控制
+    function BrandControl(em) {
+        var flag = $(em).attr("flag");
+        if (flag == 0) {
+            $("#checkoneflag").checked = false;
+            $("#checktwoflag").checked = false;
+            $(em).checked = true;
+            $(em).attr("flag", "1");
+        }
+        else {
+            $(em).checked = false;
+            $(em).attr("flag", "0");
+        }
+    }
+
+
+    function BrandClick(e) {
+        if ($(e).hasClass("SelectBrand")) {
+            $(e).removeClass("SelectBrand").removeClass("NormalBrand");
+            $(e).addClass("NormalBrand");
+        }
+        else {
+            $(e).removeClass("SelectBrand").removeClass("NormalBrand");
+            $(e).addClass("SelectBrand");
+        }
+    }
+
+    //下拉框change事件
+    function SelectValChange(type) {
+        var departmentName = $('#DepartmentName option:selected').text();
+        var departmentCode = $('#DepartmentName option:selected').val();
+        var shopName = $('#ChangeShop option:selected').text();
+        var shopCode = $('#ChangeShop option:selected').val();
+        //部门发生改变
+        if (type == "Department") {
+            GetCompanyName(departmentCode);
+            GetCostCenter(departmentCode, "", employeeInfo.IsHeadOffice);
+            GetShopdata(departmentCode);
+            ReplaceDepartment(departmentCode);
+        }
+            //店柜发生改变
+        else {
+            GetCostCenter(departmentCode, shopCode, employeeInfo.IsHeadOffice);
+            GetDefaultBrand($("#CompanyCode").attr("code"), shopCode);
+        }
+    }
+
+    function GetShopdata(departmentId) {
+        //删除数据
+        $("#ChangeShop").children().each(function () {
+            var name = $(this).text();
+            if (name != "请选择门店") {
+                $(this).remove();
+            }
+        });
+        $.ajax({
+            url: "@Url.Content("~/Home/GetShopList/")",
+            data: { employeeNo: employeeInfo.EmployeeNo, departmentId: departmentId },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    result = JSON.parse(result);
+                    var data = "";
+                    for (var i = 0; i < result.length; i++) {
+                        data += "<option  value=\"" + result[i].CODE + "\">" + result[i].NAME + "</option>";
+                    }
+                    $(data).appendTo("#ChangeShop");
+                    if ((PersonModelOnly.Type == "Draft" || PersonModelOnly.PageName == 'Refund') && BillTypeRecord == "") {
+                        $("#ChangeShop").show();
+                        if (PersonModelOnly.ShopCode) {
+                            $('#ChangeShop option').each(function () {
+                                $(this).removeAttr("selected");
+                                if ($(this).val() == PersonModelOnly.ShopCode) {
+                                    $(this).attr("selected", "selected");
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    //更改成本中心
+    function CosterCenterOnchange() {
+        var companycode = $("#CostCenter").find("option:selected").attr("companycode");
+        GetCompanyName("", companycode);
+    }
+
+
+    //获取成本中心值
+    function GetCostCenter(department, shop, IsHeadOffice) {
+        $("#CostCenter").children().remove();
+        $.ajax({
+            url: "@Url.Content("~/Home/GetCostCenter/")",
+            data: { departmentId: department, ShopId: shop, IsHeadOffice: IsHeadOffice },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                var data = "";
+                if (result) {
+                    $("#CostCenter").show();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        if (i == 0) {
+                            data += "<option  value=\"" + result[i].CosterCenter + "\" selected=\"selected\" companycode=\"" + result[i].CompanyCode + "\" >" + result[i].Description + "</option>";
+                        }
+                        else {
+                            data += "<option  value=\"" + result[i].CosterCenter + "\" companycode=\"" + result[i].CompanyCode + "\">" + result[i].Description + "</option>";
+                        }
+                    }
+                    $(data).appendTo($("#CostCenter"));
+
+                    if ((PersonModelOnly.Type == "Draft" || PersonModelOnly.PageName == 'Refund') && BillTypeRecord == "") {
+                        if (PersonModelOnly.CostCenter) {
+                            $('#CostCenter option').each(function () {
+                                $(this).removeAttr("selected");
+                                if ($(this).attr("value") == PersonModelOnly.CostCenter) {
+                                    $(this).attr("selected", "selected");
+                                }
+                            });
+                        }
+                    }
+                }
+                else {
+                    $("#CostCenter").hide();
+                }
+            }
+        });
+    }
+
+    function HideUrgentBill() {
+        $("#UrgentBill").hide();
+        $("#Urgent").removeClass("SelectBrand label-success")
+    }
+
+    function SureUrgentBill() {
+
+        var lastPayTime = $("#UrgentBill").children().eq(1).children().find("input").eq(0).val();
+        if (lastPayTime) {
+            $("#UrgentBill").hide();
+        }
+        else {
+            submitMessageShow("选择最后付款日", "error");
+        }
+    }
+
+
+    function ReplaceDepartment(departmentCode) {
+        $.ajax({
+            url: "@Url.Content("~/Home/ToggleUserIdentity/")",
+            data: { RootDepartmentCode: employeeInfo.RootDepartmentID, SelectDepartmentCode: departmentCode, EmployeeNo: employeeInfo.EmployeeNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    location.reload();
+                }
+            }
+        });
+    }
+</script>

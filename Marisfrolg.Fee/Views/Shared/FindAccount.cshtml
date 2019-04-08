@@ -1,0 +1,655 @@
+﻿<link rel="stylesheet" href="~/Scripts/awesomplete/awesomplete.css" />
+<script type="text/javascript" src="~/Scripts/awesomplete/awesomplete.js"></script>
+
+<style type="text/css">
+    .search_show {
+        display: block;
+        margin-top: 0;
+        font-size: 13px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+        .search_show .weui_cell_bd {
+            padding: 2px 0 2px 20px;
+            color: #666;
+        }
+
+    .js_container {
+        width: 100%;
+    }
+
+    .NormalTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 11px;
+        vertical-align: bottom;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-left: 5px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 3px;
+        background-color: #CCCCCC;
+        float: left;
+        width: 60px;
+    }
+
+    .SelectTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 11px;
+        vertical-align: bottom;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 3px;
+        background-color: #1e90ff;
+        float: left;
+        width: 60px;
+    }
+
+    .SpecialColor {
+        color: #f00;
+    }
+
+    .SpecialFontSize {
+        font-size: 14px;
+    }
+</style>
+
+<div class="row ">
+    <div class="col-md-4">
+        <!-- 第4大块 -->
+        <div class="weui_cells_title" style="color: black">事由</div>
+        <div class="weui_cell_bd weui_cell_primary">
+            <textarea id="leftPanel" class="weui_textarea" rows="3" style="font-size: 15px; padding-left: 10px;"></textarea>
+            <div class="weui_textarea_counter"></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <!-- 第4大块 -->
+        <div class="weui_cells_title" style="color: black">费用项信息</div>
+        <div id="listAccount" class="weui_cells weui_cells_checkbox">
+            <div id="btnAdd" class="weui_cell">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="width: 120px;">
+                            <select class="weui_select" name="select2" id="FeeCategory" onchange="FeeCategoryChange()" style="padding-right: 10px;">
+                            </select>
+                        </td>
+                        <td>
+                            <select class="weui_select" name="select2" id="FeeDetailCategory">
+                            </select>
+                        </td>
+
+                        <td class="text-right">
+                            <a class="weui_btn weui_btn_mini weui_btn_default " onclick="AddInvoiceNum()">添加</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="number" placeholder="输入金额" class="weui_input" style="width: 5em;" id="inputmoney" />
+                        </td>
+                        <td>
+                            <input type="number" placeholder="输入税额" class="weui_input" style="width: 5em;" id="inputtaxmoney" />
+                        </td>
+                        <td class="text-right">
+                            <p style="color: black; font-weight: 700; font-size: 14px;" id="CountSumMoney">总计:</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogInvoice" style="display: none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 135px; width: 40%; background-color: antiquewhite">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="DI1">其他信息填写</strong></div>
+
+        <div class="row" id="NBZZ" style="display: none">
+            <div class="col-md-6">
+                <input type="text" class="form-control awesomplete" autocomplete="off" placeholder="转出银行" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DI2">
+            </div>
+
+            <div class="col-md-6">
+                <input type="text" class="form-control awesomplete" autocomplete="off" placeholder="转入银行" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DI3">
+            </div>
+        </div>
+
+        <div class="row" id="NBZZ2" style="display: none">
+            <div class="col-md-6" id="DI4F" style="display: none">
+                发票编号：
+                <input type="text" class="form-control" autocomplete="off" placeholder="发票编号" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DI4">
+            </div>
+            <div class="col-md-6" id="DI5F" style="display: none">
+                资产编号：
+            <input type="text" class="form-control" autocomplete="off" placeholder="资产编号" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DI5">
+            </div>
+            <div class="col-md-6" id="DI6F" style="display: none">
+                合同编号：
+            <input type="text" class="form-control" autocomplete="off" placeholder="合同编号" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DI6">
+            </div>
+
+            <div class="col-md-6" id="DI7F" style="display: none">
+                发文号：
+            <input type="text" class="form-control" autocomplete="off" placeholder="发文号" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DI7">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="row">
+                <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="AddFeeRefundTerm()">提交</a>
+                <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="HideBanners('dialogInvoice')">取消</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*单据信息*@
+<div class="row ">
+
+    @Html.Partial("~/Views/Shared/BillInfo.cshtml", ViewData["FeeBillModelRef"] = Model)
+</div>
+
+<div class="row " val="1">
+    <div class="col-md-8">
+        <!-- 第5大块 -->
+        <div id="choosePhotoMessage" class="weui_cells_title" style="color: black">发票与附件</div>
+
+        <!-- 微信拍照实现，但是不便于上传 -->
+        <div id="listInvoice" class="weui_cells weui_cells_checkbox">
+            <div class="weui_cell">
+                <ul id="photos" class="weui_uploader_files" style="margin-top: 10px; margin-left: 0px;">
+                    <li id="btnPhotoAdd" class="weui_uploader_input_wrp">
+                        <input class="weui_uploader_input" type="file" multiple="multiple" capture="camera" id="invoiceSelect" name="invoiceSelect" />
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        modifySameHeight();
+
+        ManageFeeCategory();
+
+        $("#inputmoney").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                AddInvoiceNum();
+            }
+        });
+        $("#inputtaxmoney").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                AddInvoiceNum();
+            }
+        });
+
+        AutoCompleteBankData("DI2");
+        AutoCompleteBankData("DI3");
+    });
+
+
+    function modifySameHeight() {
+        $("#leftPanel").css("height", $("#listAccount").css("height"));
+
+    }
+
+    //获取报销项大类
+    function ManageFeeCategory() {
+        $("#FeeCategory").children().remove();
+        $.ajax({
+            url: "@Url.Content("~/FeeBill/GetCostManage/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice, EmployeeNo: employeeInfo.EmployeeNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    $("#CostManage").children().remove();
+                    var result = JSON.parse(result);
+                    var data = "";
+                    data += "<option value=''>费用大类</option>";
+                    for (var i = 0; i < result.length; i++) {
+                        data += "<option  value=\"" + result[i].No + "\">" + result[i].Name.replace("类", "") + "</option>";
+                    }
+                    $(data).appendTo("#FeeCategory");
+                    //清空每个选项
+                    //ManageFeeDetail(result[0].No);
+                    $("<option value=''>费用小类</option>").appendTo("#FeeDetailCategory");
+
+                    if (employeeInfo.IsHeadOffice == 0) {
+                        $("#FeeCategory,#FeeDetailCategory").addClass("SpecialFontSize");
+                    }
+                }
+            }
+        });
+    }
+
+    //获取费用小项
+    function ManageFeeDetail(inputstr) {
+        $("#FeeDetailCategory").children().remove();
+        $.ajax({
+            url: "@Url.Content("~/FeeBill/GetAccountInfo/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice, Code: inputstr, EmployeeNo: employeeInfo.EmployeeNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    result = JSON.parse(result);
+                    var data = "";
+                    data += "<option value=''>费用小类</option>";
+                    for (var i = 0; i < result.length; i++) {
+                        if (employeeInfo.IsHeadOffice == 1) {
+                            data += "<option  value=\"" + result[i].No + "\" approvaltype=\"" + result[i].ApprovalType + "\" ReasonCode=\"" + result[i].ReasonCode + "\">" + result[i].Name + "</option>";
+                        }
+                        else {
+                            data += "<option  value=\"" + result[i].No + "\" approvaltype=\"" + result[i].ApprovalType + "\" ReasonCode=\"" + result[i].ReasonCode + "\" style=\"color:" + (result[i].Market == 1 ? "black" : "rgba(51, 51, 51, 0.35)") + "\">" + result[i].Name + "</option>";
+                        }
+                    }
+                    $(data).appendTo("#FeeDetailCategory");
+                }
+            }
+        });
+    }
+
+    //费用大项改动
+    function FeeCategoryChange() {
+        var code = $('#FeeCategory option:selected').val();
+        if (code) {
+            ManageFeeDetail(code);
+        }
+        else {
+            $("#FeeDetailCategory").children().remove();
+            $("<option value=''>费用小类</option>").appendTo("#FeeDetailCategory");
+        }
+    }
+
+
+
+    function AddInvoiceNum() {
+        if (ExamineData()) {
+
+            $("#dialogInvoice").attr("role", "");
+            $("#DI2,#DI3,#DI5,#DI6,#DI7").val("");  //#DI4,
+            $("#NBZZ,#NBZZ2,#DI4F,#DI5F,#DI6F,#DI7F").hide();
+
+            var name = $('#FeeDetailCategory option:selected').text();
+            var taxmoney = $("#inputtaxmoney").val();
+
+            if (name == "费用小类") {
+                submitMessageShow("请选择费用具体费用项目", "error");
+                return;
+            }
+
+            var _IsNotice = window.location.href.indexOf("NoticeBill") > -1;
+            if (_IsNotice) {
+                var _Is = $("#BillMoney").hasClass("SelectBrand label-success");
+                if (_Is == false && taxmoney > 0) {
+                    submitMessageShow("付款通知书需发票已回收才能填写税额", "error");
+                    return;
+                }
+            }
+
+            var response = "";
+
+            $.ajax({
+                url: "@Url.Content("~/Items/GetNamesLevel/")",
+                data: { name: name },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                async: false,
+                success: function (result) {
+                    response = result;
+                }
+            });
+            if (response == "" && taxmoney == "") {
+                AddFeeRefundTerm();
+            }
+            else {
+                if (taxmoney > 0) {
+                    $("#NBZZ2").show();
+                    $("#DI4F").show();
+                }
+                if (response == "内部转账") {
+                    $("#NBZZ").show();
+                }
+                else if (response == "固定资产") {
+                    $("#NBZZ2").show();
+                    $("#DI5F").show();
+                }
+                else if (response == "预付原料") {
+                    $("#NBZZ2").show();
+                    $("#DI6F").show();
+                }
+                else if (response == "赔款") {
+                    $("#NBZZ2").show();
+                    $("#DI7F").show();
+                }
+
+                $("#dialogInvoice").attr("role", response);
+
+                $("#dialogInvoice").show();
+            }
+        }
+    }
+
+    var Fee_Item_count = 0;
+    //添加报销项进入首页
+    function AddFeeRefundTerm() {
+        var shopCode = $('#ChangeShop option:selected').val();
+        //var index = $("#listAccount").find("label").length + 1;
+        Fee_Item_count++;
+        var money = $("#inputmoney").val();
+        var taxmoney = $("#inputtaxmoney").val();
+        var code = $('#FeeDetailCategory option:selected').val();
+        var name = $('#FeeDetailCategory option:selected').text();
+        var approvaltype = $('#FeeDetailCategory option:selected').attr("ApprovalType");
+        var reason_code = $('#FeeDetailCategory option:selected').attr("ReasonCode");
+
+        //获取进项税数据
+        $.ajax({
+            url: "@Url.Content("~/Home/GetTaxInfo/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice, CompanyCode: $("#CompanyCode").attr("code"), ShopCode: shopCode },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                TaxOperate();  //锁定区选择和门店选择
+                if (result) {
+                    var result = JSON.parse(result);
+                    //初始金额不能为空
+                    if (money && money != "0") {
+                        var total = 0;
+                        if (parseFloat(money)) {
+                            money = toDecimal2(money);
+                            total += parseFloat(money);
+                        }
+                        else {
+                            money = 0;
+                        }
+                        if (parseFloat(taxmoney)) {
+                            taxmoney = toDecimal2(taxmoney);
+                            total += parseFloat(taxmoney);
+                        }
+                        else {
+                            taxmoney = 0;
+                        }
+
+                        var zryh = "";  //转入银行
+                        var zcyh = "";  //转出银行
+                        var fpbh = "";  //发票编号
+                        var htbh = "";  //合同编号
+                        var zcbh = "";  //资产编号
+                        var fwbh = "";  //发文编号
+                        var text = "";  //显示文本
+                        debugger;
+                        var role = $("#dialogInvoice").attr("role");
+                        if (role) {
+                            if (role == "内部转账") {
+                                zcyh = $("#DI2").val();
+                                zryh = $("#DI3").val();
+
+                                if (zcyh == "" || zryh == "") {
+                                    submitMessageShow("银行不予许为空", "error");
+                                    return;
+                                }
+
+                                var IsCanDo = true;
+
+                                //检查转入行转出行数据是否准确
+                                $.ajax({
+                                    url: "@Url.Content("~/Items/CheckBankData/")",
+                                    data: { b1: zcyh, b2: zryh },
+                                    contentType: "application/json; charset=utf-8",
+                                    datatype: "json",
+                                    async: false,
+                                    type: "GET",
+                                    success: function (result1) {
+                                        result1 = JSON.parse(result1);
+                                        if (result1.error == "1") {
+                                            submitMessageShow(result1.msg, "error");
+                                            IsCanDo = false;
+                                        }
+                                    }
+                                });
+                                if (IsCanDo == false) {
+                                    return;
+                                }
+                                text = "转出行：" + zcyh + ",转入行：" + zryh;
+                            }
+                            else if (role == "固定资产") {
+                                zcbh = $("#DI5").val();
+
+                                if (zcbh == "") {
+                                    submitMessageShow("请填写资产编号", "error");
+                                    return;
+                                }
+                                text = "资产编号：" + zcbh;
+                            }
+                            else if (role == "预付原料") {
+                                htbh = $("#DI6").val();
+                                if (htbh == "") {
+                                    submitMessageShow("请填写合同编号", "error");
+                                    return;
+                                }
+                                if (htbh.length < 10) {
+                                    submitMessageShow("合同编号有误", "error");
+                                    return;
+                                }
+                                text = "合同号：" + htbh;
+                            }
+                            else if (role == "赔款") {
+                                fwbh = $("#DI7").val();
+                                if (fwbh == "") {
+                                    submitMessageShow("请填写发文号", "error");
+                                    return;
+                                }
+                                if (fwbh.length < 10) {
+                                    submitMessageShow("发文号有误", "error");
+                                    return;
+                                }
+                                text = "发文号：" + fwbh;
+                            }
+                        }
+                        if (taxmoney > 0) {
+                            fpbh = $("#DI4").val();
+                            if (fpbh == "") {
+                                submitMessageShow("请填写发票编号", "error");
+                                return;
+                            }
+                            if (fpbh.length < 8) {
+                                submitMessageShow("发票编号有误", "error");
+                                return;
+                            }
+                            text = "发票编号：" + fpbh;
+                        }
+
+                        text = text.substring(0, 30);
+
+                        total = toDecimal2(total);
+                        var str = ("<label id=\"edit" + Fee_Item_count + "\" approvaltype=\"" + approvaltype + "\" class=\"weui_cell weui_check_label\" >"
+                       + "<div class=\"weui_cell_hd\">"
+                           + "<div onclick=\"deleteAccount('edit" + Fee_Item_count + "')\" class=\"btnDelete\" style=\"float:right;width:30px;height:30px;background-color:#FEFEFE;\"><span  class=\"glyphicon glyphicon-minus-sign btnDelete\" aria-hidden=\"true\" style=\"color:red;\"></span></div>"
+                       + "</div>"
+                       + "<div class=\"weui_cell_bd weui_cell_primary\">"
+                           + "<h4 code=\"" + code + "\" taxcode=\"" + result.CODE + "\"money=\"" + money + "\" taxmoeny=\"" + taxmoney + "\" pname=\"" + name + "\" style=\"color:#888;font-size:14px\">" + name + "(税额:" + taxmoney + ")</h4>");
+                        if (text) {
+                            str += ("<h4 style=\"color:#888;font-size:14px\" zryh=\"" + zryh + "\" zcyh=\"" + zcyh + "\" fpbh=\"" + fpbh + "\" htbh=\"" + htbh + "\" zcbh=\"" + zcbh + "\"  fwbh=\"" + fwbh + "\">" + text + "</h4>");
+                        }
+
+                        str += ("</div>"
+                     + "<div class=\"weui_cell_ft\"></div><div id=\"money" + Fee_Item_count + "\" class=\"weui_cell_ft\" code=\"" + reason_code + "\">" + total + "</div>"
+                 + "</label>");
+
+                        $(str).insertBefore($("#btnAdd"));
+                        //index++;
+                    }
+                };
+                CountSumMoney();
+                modifySameHeight();
+                $("#inputmoney").val("");
+                $("#inputtaxmoney").val("");
+                HideBanners('dialogInvoice');
+            }
+        });
+    }
+
+    //检验数据的准确性
+    function ExamineData() {
+        var money = $("#inputmoney").val();
+        if (money) {
+            var CanDo = true;
+            if (employeeInfo.IsHeadOffice == "1") {
+                return CanDo;
+            }
+            //得到之前填写的单据类型
+            var value;
+            $("#listAccount").find("label").each(function () {
+                var temp = $(this).attr("approvaltype");
+                if (temp != "null") {
+                    value = temp;
+                }
+            });
+            //之前就存在了数据
+            if (value) {
+                var ApprovalType = $('#FeeDetailCategory option:selected').attr("ApprovalType");
+                if (value != ApprovalType) {
+                    submitMessageShow("跨多业务部门", "error");
+                    CanDo = false;
+                }
+            }
+            return CanDo;
+        }
+        else {
+            submitMessageShow("金额不能为空", "error");
+            return false;
+        }
+    }
+
+
+    function deleteAccount(account_label_id) {
+        $('#' + account_label_id).remove();
+        var index = $("#listAccount").find("label").length;
+        if (index == 0) {
+            TaxOperateTwo();
+        }
+        CountSumMoney();
+        modifySameHeight();
+        BillTypeRecord = "Edit";
+    }
+
+    //统计界面总金额
+    function CountSumMoney() {
+        var totalmoney = 0;
+        $("#listAccount").find("label").each(function () {
+            //totalmoney += parseFloat($(this).find("div").eq(2).text());
+            var b = $(this).children().eq(3).text()
+            totalmoney = parseFloat(totalmoney) + parseFloat(b);
+        });
+        totalmoney = toDecimal2(totalmoney);
+        var MoneyName = $("#MoneyName").text();
+        $("#CountSumMoney").text("总计：" + totalmoney + " " + MoneyName);
+    }
+
+
+    function MoneyKeepNotNull() {
+        var IsTrueMoney = true;
+        $("#search_show .weui_cell").each(function () {
+            var obj = $(this).find(".weui_input");
+            //初始金额不能为空
+            if (obj.eq(0).val() || obj.eq(1).val()) {
+                //发生额不为空
+                if (obj.eq(0).val()) {
+
+                }
+                    //发生额为空
+                else {
+                    obj.eq(1).addClass("SpecialColor");
+                    IsTrueMoney = false;
+                }
+            }
+        });
+        return IsTrueMoney;
+    }
+
+
+    function GetTaxInfoOn() {
+        $.ajax({
+            url: "@Url.Content("~/Home/GetTaxInfo/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice, CompanyCode: $("#CompanyCode").attr("code"), ShopCode: $("#ChangeShop").attr("WorkNumber") },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    //TaxOperate();  //让修改片区不能够再次点击
+                    var result = JSON.parse(result);
+                    return result;
+                }
+                else {
+                    return "";
+                }
+            }
+        });
+    }
+
+
+    function AutoCompleteBankData(ID) {
+        var input = document.getElementById(ID);
+
+        $.ajax({
+            url: "@Url.Content("~/Items/GetBankData/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    var complete = new Awesomplete(input, {
+                        list: result,
+                        replace: function (text) {
+                            this.input.setAttribute("completeValue", text);
+                            this.input.value = text;
+                            this.input.setAttribute("code", text.value);
+                        },
+
+                    });
+
+                    events(input, 'awesomplete-selectcomplete', function (e) {
+                        var completeValue = input.getAttribute("completeValue");
+                        $("#" + ID + "").val(completeValue);
+                    });
+                }
+            }
+        });
+    }
+
+
+    //进项税填写之后不能再更改片区和门店
+    function TaxOperate() {
+        $("#DepartmentName").css("color", "#AAAAAA");
+        $("#ChangeShop").css("color", "#AAAAAA");
+        $("#CostCenter").css("color", "#AAAAAA");
+        $("#DepartmentName").attr("disabled", true);
+        $("#ChangeShop").attr("disabled", true);
+        $("#CostCenter").attr("disabled", true);
+    }
+
+    function TaxOperateTwo() {
+        $("#DepartmentName").css("color", "black");
+        $("#ChangeShop").css("color", "black");
+        $("#CostCenter").css("color", "black");
+        $("#DepartmentName").attr("disabled", false);
+        $("#ChangeShop").attr("disabled", false);
+        $("#CostCenter").attr("disabled", false);
+    }
+</script>

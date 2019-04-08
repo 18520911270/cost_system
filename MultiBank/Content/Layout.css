@@ -1,0 +1,352 @@
+﻿/*菜单响应布局*/
+@media (min-width: 420px) {
+    .mobile {
+        display: none;
+        z-index: 11;
+    }
+}
+
+@media (max-width: 419px) {
+    .mobile {
+        display: block;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 420px) {
+    .desktop {
+        display: block;
+        z-index: 10;
+    }
+}
+
+@media (max-width: 419px) {
+    .desktop {
+        display: none;
+        z-index: 10;
+    }
+}
+
+
+
+@media (min-width: 320px) {
+    .screen {
+        width: 320px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 330px) {
+    .screen {
+        width: 330px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 340px) {
+    .screen {
+        width: 340px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 350px) {
+    .screen {
+        width: 350px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 360px) {
+    .screen {
+        width: 360px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 370px) {
+    .screen {
+        width: 370px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 380px) {
+    .screen {
+        width: 380px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 390px) {
+    .screen {
+        width: 390px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 400px) {
+    .screen {
+        width: 400px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 410px) {
+    .screen {
+        width: 410px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+@media (min-width: 420px) {
+    .screen {
+        width: 420px;
+        height: 1600px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        z-index: 11;
+    }
+}
+
+.weui_dialog_ours {
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+}
+
+
+
+@media screen and (min-width: 800px) {
+    .weui_dialog_editBill {
+        width: 41%;
+        height: 75%;
+        text-align: left;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 1050;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .weui_dialog_ours {
+        width: 41%;
+        height: 75%;
+        z-index: 9998;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .weui_dialog_editBill {
+        width: 34%;
+        height: 75%;
+        text-align: left;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 1050;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .weui_dialog_ours {
+        width: 33%;
+        height: 75%;
+        z-index: 9998;
+    }
+}
+
+
+@media screen and (min-width: 1320px) {
+    .weui_dialog_editBill {
+        width: 37%;
+        height: 95%;
+        text-align: left;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 1050;
+    }
+}
+
+@media screen and (min-width: 1320px) {
+    .weui_dialog_ours {
+        width: 37%;
+        height: 95%;
+        z-index: 9998;
+    }
+}
+
+
+
+@media screen and (min-width: 1600px) {
+    .weui_dialog_editBill {
+        width: 32%;
+        height: 85%;
+        text-align: left;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 1050;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .weui_dialog_ours {
+        width: 32%;
+        height: 85%;
+        z-index: 9998;
+    }
+}
+
+
+@media screen and (min-width: 1700px) {
+    .weui_dialog_editBill {
+        width: 28%;
+        height: 83%;
+        text-align: left;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 1050;
+    }
+}
+
+@media screen and (min-width: 1700px) {
+    .weui_dialog_ours {
+        width: 28%;
+        height: 83%;
+        z-index: 9998;
+    }
+}
+
+@media screen and (min-width: 2000px) {
+    .weui_dialog_editBill {
+        width: 25%;
+        height: 71%;
+        text-align: left;
+        overflow-y: auto;
+        overflow-x: hidden;
+        z-index: 1050;
+    }
+}
+
+@media screen and (min-width: 2000px) {
+    .weui_dialog_ours {
+        width: 25%;
+        height: 71%;
+        z-index: 9998;
+    }
+}
+
+
+/*微信UI加强*/
+.weui_toast_error {
+    position: fixed;
+    z-index: 3;
+    width: 7.6em;
+    min-height: 7.6em;
+    top: 180px;
+    left: 50%;
+    margin-left: -3.8em;
+    background: rgba(40, 40, 40, 0.75);
+    text-align: center;
+    border-radius: 5px;
+    color: #FFFFFF;
+}
+
+.weui_toast_show {
+    display: block;
+}
+
+.weui_toast_hide {
+    display: none;
+}
+
+/*缩放测试*/
+.scaleTest {
+    -moz-transform: scale(1.5,1.5);
+    -webkit-transform: scale(1.5,1.5);
+    -o-transform: scale(1.5,1.5);
+    margin-left: 0mm;
+    margin-top: 0mm;
+}
+
+.btnClose {
+    font-size: 25px;
+    color: #999;
+}
+
+    .btnClose:hover {
+        font-size: 25px;
+        color: #666;
+        cursor: pointer;
+    }
+
+.btnDelete:hover {
+    text-align: center;
+    font-size: 25px;
+    color: #999;
+    cursor: pointer;
+    filter: alpha(opacity=90); /*支持 IE 浏览器*/
+    -moz-opacity: 0.9; /*支持 FireFox 浏览器*/
+    opacity: 0.9; /*支持 Chrome, Opera, Safari 等浏览器*/
+}
+
+.btnDelete {
+    text-align: center;
+    font-size: 25px;
+    color: #999;
+    cursor: pointer;
+    filter: alpha(opacity=100); /*支持 IE 浏览器*/
+    -moz-opacity: 1; /*支持 FireFox 浏览器*/
+    opacity: 1; /*支持 Chrome, Opera, Safari 等浏览器*/
+}

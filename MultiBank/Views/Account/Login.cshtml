@@ -1,0 +1,88 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <link href="~/Scripts/Bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="~/Scripts/Bootstrap/bootstrapValidator.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/Login.css" />
+
+</head>
+
+<body class="bigBackground">
+    <div class="container-fluid ">
+        <div class="row">
+            <div class="div-center blur"></div>
+            @*        <img class="blur col-lg-6" src="~/Images/LoginBack.jpg" />*@
+        </div>
+        <div class="row">
+            <div class="box">
+                <div class="login-box">
+                    <div class="login-title text-center">Marisfrolg &nbsp;&nbsp;<span style="font-family: 微软雅黑; font-size: 20px;">银企直联</span></div>
+                    <div class="login-content">
+                        <div class="form">
+                            <form id="form" name="form" action="~/Account/Login/" method="post">
+                                <div class="form-group">
+                                    <div class="col-xs-12  ">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                            <input type="text" id="username" name="username" class="form-control" placeholder="请输入工号">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                            <input type="password" id="password" name="password" class="form-control" placeholder="请输入密码">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-actions">
+                                    <div class="col-xs-4 col-xs-offset-4 ">
+                                        <button id="btnSubmit" type="submit" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-off"></span>登录</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- FULL WIDTH -->
+            <div id="content">
+                <span class="expand col-md-12"></span>
+            </div>
+            <!-- END FULL WIDTH -->
+        </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="Alert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">提示</h4>
+                </div>
+                <div id="MsgContext" class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/Account/Js.cshtml")
+
+</html>

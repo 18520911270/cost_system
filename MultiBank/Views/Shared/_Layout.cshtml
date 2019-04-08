@@ -1,0 +1,378 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=0">
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+        .screenlittle {
+            height: 100px;
+            z-index: 1;
+        }
+
+        .screenlarge {
+            height: 1000px;
+            z-index: 11;
+        }
+
+        div.burger {
+            height: 30px;
+            width: 40px;
+            position: absolute;
+            top: 10px;
+            right: 0px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        div.x,
+        div.y,
+        div.z {
+            position: absolute;
+            margin: auto;
+            top: 0px;
+            bottom: 0px;
+            background: #1673C3;
+            border-radius: 2px;
+            -webkit-transition: all 200ms ease-out;
+            -moz-transition: all 200ms ease-out;
+            -ms-transition: all 200ms ease-out;
+            -o-transition: all 200ms ease-out;
+            transition: all 200ms ease-out;
+        }
+
+        div.x, div.y, div.z {
+            height: 3px;
+            width: 26px;
+        }
+
+        div.y {
+            top: 18px;
+        }
+
+        div.z {
+            top: 37px;
+        }
+
+        div.collapse-circle {
+            top: 20px;
+            /*background:#4a89dc;*/
+            -webkit-transition: all 70ms ease-out;
+            -moz-transition: all 70ms ease-out;
+            -ms-transition: all 70ms ease-out;
+            -o-transition: all 70ms ease-out;
+            transition: all 70ms ease-out;
+        }
+
+
+        div.rotate30 {
+            -ms-transform: rotate(30deg);
+            -webkit-transform: rotate(30deg);
+            transform: rotate(30deg);
+            -webkit-transition: all 50ms ease-out;
+            -moz-transition: all 50ms ease-out;
+            -ms-transition: all 50ms ease-out;
+            -o-transition: all 50ms ease-out;
+            transition: all 50ms ease-out;
+        }
+
+        div.rotate150 {
+            -ms-transform: rotate(150deg);
+            -webkit-transform: rotate(150deg);
+            transform: rotate(150deg);
+            -webkit-transition: all 50ms ease-out;
+            -moz-transition: all 50ms ease-out;
+            -ms-transition: all 50ms ease-out;
+            -o-transition: all 50ms ease-out;
+            transition: all 50ms ease-out;
+        }
+
+        div.rotate45 {
+            -ms-transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+            -webkit-transition: all 100ms ease-out;
+            -moz-transition: all 100ms ease-out;
+            -ms-transition: all 100ms ease-out;
+            -o-transition: all 100ms ease-out;
+            transition: all 100ms ease-out;
+        }
+
+        div.rotate135 {
+            -ms-transform: rotate(135deg);
+            -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+            -webkit-transition: all 100ms ease-out;
+            -moz-transition: all 100ms ease-out;
+            -ms-transition: all 100ms ease-out;
+            -o-transition: all 100ms ease-out;
+            transition: all 100ms ease-out;
+        }
+
+        /*div.navbar{height:73px;background:#385e97;}*/
+
+        div.circle {
+            border-radius: 50%;
+            width: 0px;
+            height: 0px;
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: #fff;
+            opacity: 1;
+            -webkit-transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+            -moz-transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+            -ms-transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+            -o-transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+            transition: all 300ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+        }
+
+            div.circle.expand {
+                width: 1600px;
+                height: 1600px;
+                top: -450px;
+                right: -450px;
+                -webkit-transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                -moz-transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                -ms-transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                -o-transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                transition: all 400ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+            }
+
+        div.menu {
+            height: 568px;
+            width: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+            div.menu ul li {
+                /*list-style: none;*/
+                /*position:absolute;*/
+                top: 50px;
+                left: 0;
+                opacity: 0;
+                width: 50%;
+                /*text-align:center;*/
+                font-size: 0px;
+                -webkit-transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                -moz-transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                -ms-transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                -o-transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                transition: all 70ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+            }
+
+                div.menu ul li a {
+                    color: #4a89dc;
+                    text-transform: uppercase;
+                    text-decoration: none;
+                    letter-spacing: 3px;
+                }
+
+            div.menu li.animate {
+                font-size: 21px;
+                opacity: 1;
+                -webkit-transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                -moz-transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                -ms-transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                -o-transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+                transition: all 150ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
+            }
+
+                div.menu li.animate:nth-of-type(1) {
+                    top: 120px;
+                    transition-delay: 0.0s;
+                }
+
+                div.menu li.animate:nth-of-type(2) {
+                    top: 190px;
+                    transition-delay: 0.03s;
+                }
+
+                div.menu li.animate:nth-of-type(3) {
+                    top: 260px;
+                    transition-delay: 0.06s;
+                }
+
+                div.menu li.animate:nth-of-type(4) {
+                    top: 330px;
+                    transition-delay: 0.09s;
+                }
+
+                div.menu li.animate:nth-of-type(5) {
+                    top: 400px;
+                    transition-delay: 0.12s;
+                }
+
+                div.menu li.animate:nth-of-type(6) {
+                    top: 470px;
+                    transition-delay: 0.15s;
+                }
+
+        .NavFont {
+            /*font-size:15px;
+            font-family:'Microsoft YaHei';*/
+            color: #666;
+            font: 12px/1.5 tahoma,"microsoft yahei","\5FAE\8F6F\96C5\9ED1";
+            padding-top: 8px;
+        }
+
+        .weui_grid_icon i {
+            font-size: 30px;
+        }
+
+        li {
+            font-size: 15px;
+            color: black;
+        }
+    </style>
+
+    @Html.Partial("_LayoutJs")
+
+</head>
+<body style="background-color: #F5F5F5; overflow-x: hidden; overflow-y: auto;">
+
+
+    <section id="desktopNav" class="desktop">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="border: 0px; border-radius: 0px; background-color: #363F50; margin: 0px; padding: 0px;">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#" style="font-family: 'Microsoft YaHei'; font-size: 24px; color: white;">银企直连</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul id="navbar" class="nav navbar-nav">
+                        <li id="li1"><a href="~/Home/Index">首页</a></li>
+                        <li id="li2"><a href="~/PayFee/Index">费用</a></li>
+                        <li id="li3" style="display: none"><a href="~/System/Index">系统管理</a></li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right nav_ul" style="font-size: 16px; font-weight: bold;">
+                        <li id="li5" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">个人信息<b class="caret"></b></a>
+                            <ul class="dropdown-menu navbar_second">
+                                <li><a href="#" onclick="logout()">安全退出</a></li>
+                                <li><a href="#" onclick="EditPassword()">修改密码</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </section>
+
+    <section>
+        <div class="container-fluid" style="margin-bottom: 20px;">
+            @RenderBody()
+        </div>
+    </section>
+    <section>
+        <div>
+            <div id="mobileNav" class="mobile">
+                <div class="screen screenlittle">
+                    <div class="circle "></div>
+
+                    <div class="weui_grids" style="margin-top: 100px; font-family: 'Microsoft YaHei UI';">
+                        <a href="~/Home/Index" class="weui_grid js_grid" data-id="button">
+
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont">&#xe60a;</i>
+                            </div>
+                            <p class="weui_grid_label NavFont">
+                                首页待办
+                            </p>
+                        </a>
+                        <a href="~/FeeBill/FeeBill" class="weui_grid js_grid" data-id="cell">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #F91961;">&#xe608;</i>
+                            </div>
+                            <p class="weui_grid_label NavFont">
+                                费用报销
+                            </p>
+                        </a>
+                        <a href="~/NoticeBill/NoticeBill" class="weui_grid js_grid" data-id="toast">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #F91961;">&#xe602;</i>
+                            </div>
+                            <p class="weui_grid_label NavFont">
+                                付款通知
+                            </p>
+                        </a>
+                        <a href="~/BorrowBill/BorrowBill" class="weui_grid js_grid" data-id="dialog">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #ff6a00;">&#xe601;</i>
+                            </div>
+                            <p class="weui_grid_label NavFont">
+                                借款单
+                            </p>
+                        </a>
+                        <a href="~/RefundBill/RefundBill" class="weui_grid js_grid" data-id="progress">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #ff6a00;">&#xe60c;</i>
+                            </div>
+                            <p class="weui_grid_label NavFont">
+                                还款单
+                            </p>
+                        </a>
+                        <a href="~/DraftBox/Index" class="weui_grid js_grid" data-id="dialog">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #777;">&#xe609;</i>
+                            </div>
+                            <p class=" weui_grid_label NavFont">
+                                &nbsp 草稿箱
+                            </p>
+                        </a>
+                        <a href="~/MyBill/MyBill" class="weui_grid js_grid" data-id="dialog">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #777;">&#xe60e;</i>
+                            </div>
+                            <p class=" weui_grid_label NavFont">
+                                &nbsp 我的单据
+                            </p>
+                        </a>
+                        <a href="~/FinanceApproval/Index" class="weui_grid js_grid" data-id="dialog">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #777;">&#xe60e;</i>
+                            </div>
+                            <p class=" weui_grid_label NavFont">
+                                &nbsp 我的审批
+                            </p>
+                        </a>
+                        <a href="~/CheckAccounting/Index" class="weui_grid js_grid" data-id="dialog">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #777;">&#xe60e;</i>
+                            </div>
+                            <p class=" weui_grid_label NavFont">
+                                &nbsp 审批历史
+                            </p>
+                        </a>
+                        <a href="~/RecoverBill/InvoiceInfo" class="weui_grid js_grid" data-id="dialog">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #777;">&#xe60e;</i>
+                            </div>
+                            <p class=" weui_grid_label NavFont">
+                                &nbsp 开票资料
+                            </p>
+                        </a>
+                        <a href="~/RecoverBill/TaxInfo" class="weui_grid js_grid" data-id="dialog">
+                            <div class="weui_grid_icon">
+                                <i class="icon iconfont" style="color: #777;">&#xe60e;</i>
+                            </div>
+                            <p class=" weui_grid_label NavFont">
+                                &nbsp 个税指南
+                            </p>
+                        </a>
+                    </div>
+
+                    <div class="burger">
+                        <div class="x"></div>
+                        <div class="y"></div>
+                        <div class="z"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

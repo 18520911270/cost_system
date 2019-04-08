@@ -1,0 +1,340 @@
+﻿<link href="~/Content/weui.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content/iconfont/iconfont.css" />
+<link rel="stylesheet" href="~/Content/Layout.css" />
+<link href="~/Scripts/Bootstrap/bootstrap.css" rel="stylesheet" />
+<link href="~/Scripts/Bootstrap/bootstrap-theme.min.css" rel="stylesheet" />
+<link href="~/Scripts/Bootstrap/bootstrap-paginator.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-2.0.0.js"></script>
+<script src="~/Scripts/Bootstrap/bootstrap.js"></script>
+<script src="~/Scripts/layer/layer.js"></script>
+
+<script type="text/javascript">
+    //全屏弹出层针对移动应用时，需要控制背景层的滚动
+    var jinzhi = 1; //1表示允许滚动
+    document.addEventListener("touchmove", function (e) {
+        if (jinzhi == 0) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, false);
+
+    function openMenu() {
+        //$(".weui_grids").show();
+        $(".screen").removeClass("screenlittle").addClass("screenlarge");
+
+
+        $('div.circle').addClass('expand');
+        $('div.burger').addClass('open');
+        $('div.x, div.y, div.z').addClass('collapse-circle');
+        $('.menu li').addClass('animate');
+        setTimeout(function () {
+            $('div.y').hide();
+            $('div.x').addClass('rotate30');
+            $('div.z').addClass('rotate150');
+        }, 70);
+        setTimeout(function () {
+            $('div.x').addClass('rotate45');
+            $('div.z').addClass('rotate135');
+        }, 120);
+
+        //禁止滚动
+        jinzhi = 0;
+
+    }
+
+    function closeMenu() {
+        $('div.burger').removeClass('open');
+        $('div.x').removeClass('rotate45').addClass('rotate30');
+        $('div.z').removeClass('rotate135').addClass('rotate150');
+        $('div.circle').removeClass('expand');
+        $('.menu li').removeClass('animate');
+        setTimeout(function () {
+            $('div.x').removeClass('rotate30');
+            $('div.z').removeClass('rotate150');
+        }, 50);
+        setTimeout(function () {
+            $('div.y').show();
+            $('div.x, div.y, div.z').removeClass('collapse-circle');
+        }, 70);
+
+
+        $(".screen").removeClass("screenlarge").addClass("screenlittle");
+
+        //允许滚动
+        jinzhi = 1;
+    }
+
+
+    //页面加载
+    $(function () {
+        //document.oncontextmenu = function (e) { return false; }
+        initMobileNav();
+        intDesktopNav();
+
+        sessionStorage.removeItem("perList");
+        GetPermission();
+    });
+
+
+    function initMobileNav() {
+
+        //初始手机导航
+        if ('ontouchstart' in window) {
+            var click = 'click';
+        } else {
+            var click = 'click';
+        }
+        $('div.burger').on(click, function () {
+            if (!$(this).hasClass('open')) {
+                openMenu();
+            } else {
+                closeMenu();
+            }
+        });
+
+        $('div.menu ul li a').on(click, function (e) {
+            //e.preventDefault();
+            closeMenu();
+        });
+    }
+
+    function intDesktopNav() {
+
+        //处理导航点击背景样式
+        //单项控制事件注册
+        $("#desktopNav").find("li").each(function () {
+            $(this).click(function () {
+                var operationObject = this;
+                sessionStorage.setItem("lastClick", $(this).attr("id"));
+            });
+        });
+        $("#navbar_second").find("li").each(function () {
+            $(this).click(function () {
+                var operationObject = this;
+                sessionStorage.setItem("lastClick", $(this).attr("id"));
+
+            });
+        });
+
+
+        if (sessionStorage.getItem("lastClick") == null) {
+            $("#navbar").find("li").first().removeClass().addClass("active");
+        }
+        else {
+            $('#' + sessionStorage.getItem("lastClick")).removeClass().addClass("active");
+        }
+    }
+
+    function gotoPage(li) {
+        var gotoUrl = $("#navbar").find("[id='" + li + "']").find("a").first().attr("href");
+        sessionStorage.setItem("lastClick", $("#navbar").find("[id='" + li + "']").attr("id"));
+        this.window.location.href = gotoUrl;
+    }
+
+    /** 数字金额大写转换(可以处理整数,小数,负数) */
+    var num2rmb = function (n) {
+        var fraction = ['角', '分'];
+        var digit = [
+            '零', '壹', '贰', '叁', '肆',
+            '伍', '陆', '柒', '捌', '玖'
+        ];
+        var unit = [
+            ['元', '万', '亿'],
+            ['', '拾', '佰', '仟']
+        ];
+        var head = n < 0 ? '欠' : '';
+        n = Math.abs(n);
+        var s = '';
+        for (var i = 0; i < fraction.length; i++) {
+            s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+        }
+        s = s || '整';
+        n = Math.floor(n);
+        for (var i = 0; i < unit[0].length && n > 0; i++) {
+            var p = '';
+            for (var j = 0; j < unit[1].length && n > 0; j++) {
+                p = digit[n % 10] + unit[1][j] + p;
+                n = Math.floor(n / 10);
+            }
+            s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+        }
+        return head + s.replace(/(零.)*零元/, '元')
+            .replace(/(零.)+/g, '零')
+            .replace(/^整$/, '零元整');
+    };
+
+    /** 根据货币简写得到货币图标 */
+    function Currency2Icon(Currency) {
+        switch (Currency) {
+            case "CNY":
+                return "CNY ";
+            case "EUR":
+                return "EUR ";
+            case "GBP":
+                return "GBP ";
+            case "HKD":
+                return "HKD ";
+            case "JPY":
+                return "JPY ";
+            case "KRW":
+                return "KRW ";
+            case "MOP":
+                return "MOP ";
+            case "SGD":
+                return "SGD ";
+            case "TWD":
+                return "TWD ";
+            case "USD":
+                return "USD ";
+            case "NZD":
+                return "NZD ";
+            default:
+        }
+    }
+
+    function toDecimal2(x) {
+        var f = parseFloat(x);
+        if (isNaN(f)) {
+            return false;
+        }
+        //2.445是js内部一个bug
+        if (f == 2.445) {
+            return 2.45;
+        }
+        var f = Math.round(x * 100) / 100;
+        var s = f.toString();
+        var rs = s.indexOf('.');
+        if (rs < 0) {
+            rs = s.length;
+            s += '.';
+        }
+        while (s.length <= rs + 2) {
+            s += '0';
+        }
+        return s;
+    }
+
+
+    function GetPermission() {
+        var savePer = sessionStorage.getItem("perList");
+
+        if (savePer == null || savePer == "") {
+            //重新获取一次权限
+            $.ajaxSetup({
+                async: false
+            });
+            $.ajax({
+                url: '@Url.Content("~/Account/GetPermissionJson/")',
+                data: {},
+                datatype: "json",
+                async: false,
+                type: "GET",
+                success: function (result) {
+                    try {
+                        if (result) {
+                            sessionStorage.setItem("perList", result);
+
+                        }
+
+                    } catch (ex) {
+
+                    }
+                }
+            });
+            $.ajaxSetup({
+                async: true
+            });
+            savePer = sessionStorage.getItem("perList");
+        }
+
+        if (savePer) {
+            var list = JSON.parse(sessionStorage.getItem("perList"));
+
+            if (list.Data.IsAdmin) {
+                $("#li3").show();
+            }
+        }
+    }
+
+
+    function events(el, type, fn) {
+        if (el.addEventListener) {
+            el.addEventListener(type, fn);
+        } else if (el.attachEvent) {
+            el.attachEvent('on' + type, wrap(fn));
+        } else {
+            el['on' + type] = wrap(fn);
+        }
+        function wrap(originalEvent) {
+            var e = originalEvent || global.event;
+            e.target = e.target || e.srcElement;
+            e.preventDefault = e.preventDefault || function preventDefault() { e.returnValue = false; };
+            e.stopPropagation = e.stopPropagation || function stopPropagation() { e.cancelBubble = true; };
+            fn.call(el, e);
+        }
+    }
+
+    function logout() {
+        $.ajax({
+            url: "@Url.Content("~/Home/LogOut/")",
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                window.location.href = "@Url.Content("~/Account/Login")";
+            }
+        });
+        }
+
+
+        function EditPassword() {
+            //页面层
+            layer.open({
+                type: 1 //Page层类型
+              , area: ['350px', '300px']
+              , title: '修改密码'
+              , btn: ['取消', '确定']
+              , btn2: function (index, layero) {
+                  //按钮【按钮二】的回调
+                  var password1 = $("#_OriginalPassword").val();
+                  var password2 = $("#_NewPassWord").val();
+                  var password3 = $("#_ConfirmNewPassword").val();
+                  if (password1 && password2 && password3) {
+                      //调用同步方法
+                      if (password2 != password3) {
+                          layer.msg('两次密码不一致。。', { icon: 7 });
+                          return false;
+                      }
+
+                      $.ajax({
+                          url: "@Url.Content("~/Home/EditPassword/")",
+                          data: { oldPassword: password1, newPassword: password2 },
+                          contentType: "application/json; charset=utf-8",
+                          datatype: "json",
+                          async: false,
+                          type: "GET",
+                          success: function (result) {
+                              result = JSON.parse(result);
+                              if (result.Status == "100") {
+                                  layer.msg(result.Msg, { icon: 1 });
+                              }
+                              else {
+                                  layer.msg(result.Msg, { icon: 7 });
+                                  return false;
+                              }
+                          }
+                      })
+                  }
+                  else {
+                      layer.msg('密码不能为空。。', { icon: 7 });
+                      return false;
+                  }
+              }
+              , shade: 0.6 //遮罩透明度
+              , maxmin: true //允许全屏最小化
+              , anim: -1 //0-6的动画形式，-1不开启
+              , content: '<div style="margin-top:20px;"><div class="col-md-12"><div class="col-md-4" style="line-height:33px;" >原始密码</div><div class="col-md-6"><input class="form-control" placeholder="输入原始密码" id="_OriginalPassword"></div></div><div class="col-md-12" style="margin-top:15px;"><div class="col-md-4" style="line-height:33px;" >新密码</div><div class="col-md-6"><input class="form-control" placeholder="输入新密码" id="_NewPassWord"></div></div><div class="col-md-12" style="margin-top:15px;"><div class="col-md-4" style="line-height:33px;" >确认新密码</div><div class="col-md-6"><input class="form-control" placeholder="输入新密码" id="_ConfirmNewPassword"></div></div></div>'
+            });
+      }
+
+</script>

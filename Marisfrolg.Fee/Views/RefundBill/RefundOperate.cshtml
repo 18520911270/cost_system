@@ -1,0 +1,150 @@
+﻿@{
+    ViewBag.Title = "我的还款";
+}
+@*<link href="~/Scripts/webUploader/webuploader.css" rel="stylesheet" />
+<link href="~/Images/webUploader_style.css" rel="stylesheet" />*@
+<style type="text/css">
+    .showBrand {
+        display: block;
+    }
+@model Marisfrolg.Fee.Models.FeeBillModelRef
+</style>
+
+<script>
+    $(function () {
+        var defaultDate = new Date().Format("yyyy-MM-dd");
+        $("#busDateOther").val(defaultDate);
+        $("#Cash").hide();
+        if ('@Model.RefundType' == "Cash") {
+            $(".row").each(function () {
+                if ($(this).attr("val")) {
+                    $(this).show();
+                }
+                else {
+                    $(this).hide();
+                }
+            })
+            $("#SurplusMoney").attr("placeholder", "应还金额:" +@Model.SurplusMoney +"")
+            $("#FeeBillNameOther").text('@Model.Owner'); 
+            $("#FeeBillNameOther").attr("WorkNumber", '@Model.WorkNumber'); 
+            $("#BillBrand").hide();
+            $("#MoneyNameNew").text('@Model.Currency.Name');
+            $("#MoneyNameNew").attr("moneytype", '@Model.Currency.Code');
+        }
+            //费用还款
+      
+        else {
+            $("#FeeBillName").val('@Model.Owner');
+            $("#FeeBillName").attr("WorkNumber", '@Model.WorkNumber'); 
+            $("#MoneyModel").hide();
+            $("#MoneyName").text('@Model.Currency.Name');
+            $("#MoneyName").attr("moneytype", '@Model.Currency.Code');
+        }
+    })
+
+</script>
+
+<div class="page">
+
+    <div class="hd">
+        <h2 class="page_title">还款单</h2>
+    </div>
+    <div class="row " val="1">
+        @Html.Partial("~/Views/Shared/PersonInfo.cshtml", ViewData["FeeBillModelRef"] = Model)
+    </div> 
+    @*货币类型*@
+    <div class="row" id="MoneyModel" val="1">
+        <div class="col-md-8">
+            <!-- 第3大块 -->
+            <div class="weui_cells_title" style="color: black">货币类型</div>
+            <div class="weui_cells">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label for="" class="weui_label" style="width: 5em;">货币类型</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p id="MoneyNameNew" style="color: #999999; font-size: 15px;" moneytype="CNY">元</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- 加载页面脚本 -->
+    @Html.Partial("~/Views/Shared/FindAccount.cshtml")
+    @*现金报销*@
+    <div class="row" id="Cash" val="1">
+        <div class="col-md-8">
+            <!-- 第3大块 -->
+            <div class="weui_cells_title" style="color: black">现金还款</div>
+            <div class="weui_cells">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label for="" class="weui_label" style="width: 5em;" id="bxrOther">申请人</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p id="FeeBillNameOther" style="color: #999999; font-size: 15px;"></p>
+                    </div>
+                    <div class="weui_cell_ft"></div>
+
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label for="" class="weui_label" style="width: 5em;">还款日期</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input id="busDateOther" class="weui_input" type="date" value="" />
+                    </div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label for="" class="weui_label" style="width: 5em;">事由</label>
+                    </div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <textarea class="weui_textarea" placeholder="" rows="3"></textarea>
+                        <div class="weui_textarea_counter"><span>0</span>/200</div>
+                    </div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto;">还款金额</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary" style="padding-left: 10px; padding-bottom: 4px;">
+                        <input class="weui_input" type="number" placeholder="请输入金额" id="SurplusMoney">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row " val="1">
+    <div class="col-md-4">
+        <div class="bd">
+            <div class="weui_cells">
+                <a href="javascript:history.go(-1);" class="weui_btn weui_btn_warn">返回</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-4">
+        <div class="bd">
+            <div class="weui_cells">
+                <a href="javascript:;" class="weui_btn weui_btn_primary" id="btnSubmitFeeBill">提交还款</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/FeeBill/Js.cshtml", ViewData["FeeBillModelRef"] = Model)
+
+@*引用脚本文件*@
+@Html.Partial("~/Views/Shared/MyBillList.cshtml")

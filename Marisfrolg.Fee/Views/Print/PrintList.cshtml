@@ -1,0 +1,1018 @@
+﻿@{
+    ViewBag.Title = "我的单据";
+}
+@*<script src="~/Scripts/Bootstrap/js/bootstrap-table-export.js"></script>*@
+<style type="text/css">
+    html {
+        -webkit-text-size-adjust: none;
+    }
+
+    .NormalTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #CCCCCC;
+        float: left;
+    }
+
+    .SelectTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #5CB85C;
+        float: left;
+    }
+
+    .input_date {
+        width: 100%;
+        border: 0;
+        outline: 0;
+        -webkit-appearance: none;
+        background-color: transparent;
+        font-size: inherit;
+        color: inherit;
+        height: 14px;
+        line-height: 14px;
+    }
+
+    @@media screen and (max-width: 1300px) {
+        #CopyBillNo {
+            width: 78% !important;
+        }
+
+        #LookdataForPrint {
+            margin-left: 5px !important;
+            margin-top: 27px !important;
+        }
+
+        #CSS1ForPrint {
+            margin-top: 25px;
+        }
+
+        #CSS2ForPrint {
+            margin-top: 25px;
+        }
+    }
+</style>
+
+<script>
+    $(function () {
+        //绑定记账员功能
+        ShowBillBelongGetPermission();
+
+        //绑定部门
+        GetMyDepartmentLists();
+
+        //费用项值匹配
+        GetAllFeeSmallSort();
+
+        GetMyBillList('');  //获取打印数据(加载费用报销单，所以给5)
+        $("#CopyBillNo").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                CopyBillNo();
+            }
+        });
+
+        $("#InDepartment").bind("change", function () {
+            GetShopListFromPrint();
+        })
+
+        InitPageData();
+    })
+
+
+    function GetAllFeeSmallSort() {
+        $.ajax({
+            url: "@Url.Content("~/Print/GetSmallSort/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<option value=\"" + result[i].CODE + "\">" + result[i].NAME + "</option>").appendTo("#FeeItemsSon");
+                    }
+                    $("#FeeItems").selectpicker("refresh");
+                }
+            }
+        })
+    }
+
+
+    function GetMyDepartmentLists() {
+        $.ajax({
+            url: "@Url.Content("~/Home/GetMyArea/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice, EmployeeNo: employeeInfo.EmployeeNo, IsShowClub: true },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                var ListResult = new Array();
+                if (result) {
+                    var result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var ListOne = { label: "", value: "" }
+                        ListOne.label = result[i].NAME;
+                        ListOne.value = result[i].CODE;
+                        ListResult.push(ListOne);
+                    }
+                }
+                else {
+                    var ListOne = { label: "", value: "" }
+                    ListOne.label = employeeInfo.RootDepartmentName;
+                    ListOne.value = employeeInfo.RootDepartmentID;
+                    ListResult.push(ListOne);
+                }
+
+                for (var i = 0; i < ListResult.length; i++) {
+                    $("<option value=\"" + ListResult[i].value + "\">" + ListResult[i].label + "</option>").appendTo("#KpiArea");
+                }
+                $("#InDepartment").selectpicker("refresh");
+                //绑定查询店柜方法
+            }
+        })
+    }
+
+
+
+    function GetShopListFromPrint() {
+        var code = $("#InDepartment").val();
+        var StringCode = "";
+        if (code) {
+            for (var i = 0; i < code.length; i++) {
+                if (i < code.length - 1) {
+                    StringCode += code[i] + ",";
+                }
+                else {
+                    StringCode += code[i];
+                }
+            }
+        }
+        $.ajax({
+            url: "@Url.Content("~/MyBill/GetShopDataList/")",
+            data: { Department: StringCode },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#ShopCodeSon").children().remove();
+                if (result) {
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<option value=" + result[i].CODE + ">" + result[i].NAME + "</option>").appendTo("#ShopCodeSon");
+                    }
+                    $("#ShopCode").selectpicker("refresh");
+                }
+            }
+        })
+    }
+
+    ///根据权限控制记账员功能是否显示
+    function ShowBillBelongGetPermission() {
+        var flagPermission1 = 0;
+        var savePer = sessionStorage.getItem("perList");
+        if (savePer) {
+            var list = JSON.parse(sessionStorage.getItem("perList"));
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].ACTION == "FEE" && list[i].NAME == "记账员") {
+                    flagPermission1 = 1;
+                }
+
+            }
+        }
+        if (flagPermission1 == 1) {
+            $("<option value=\"1\">我的单据</option>").appendTo("#lunchBegins");
+            $("<option value=\"2\">查看部门单据</option>").appendTo("#lunchBegins");
+            $("<option value=\"3\">回收站</option>").appendTo("#lunchBegins");
+        }
+        else {
+            $("<option value=\"1\">我的单据</option>").appendTo("#lunchBegins");
+            $("<option value=\"3\">回收站</option>").appendTo("#lunchBegins");
+        }
+    }
+
+
+    function GetMyBillList(IsExport) {
+        var belong = $("#lunchBegins").find("option:selected").attr("value");
+        if (belong == "") {
+            belong = 1;
+        }
+        var departments = $("#InDepartment").val();
+        var Newdepartments = "";
+        if (departments) {
+            for (var i = 0; i < departments.length; i++) {
+                Newdepartments += departments[i] + ",";
+            }
+        }
+
+        var shops = $("#ShopCode").val();
+        var NewShops = "";
+        if (shops) {
+            for (var i = 0; i < shops.length; i++) {
+                NewShops += shops[i] + ",";
+            }
+        }
+
+        var CheckStatus = $("#Check").find("option:selected").attr("value");
+        var PrintStatus = $("#Print").find("option:selected").attr("value");
+
+        var BillType = $("#BillTypes").find("option:selected").attr("value");
+        if (BillType == "") {
+            BillType = 0;
+        }
+        if (belong == 2 && departments == null) {
+            submitMessageShow("查看部门单据请选择具体部门!", "error");
+            return;
+        }
+
+        var FeeList = $("#FeeItems").val();
+        var NewFeeList = "";
+        if (FeeList) {
+            for (var i = 0; i < FeeList.length; i++) {
+                NewFeeList += FeeList[i] + ",";
+            }
+        }
+        $("#loadingToast").show();
+        $.ajax({
+            url: "@Url.Content("~/MyBill/GetMyBillList/")",
+            data: { Type: BillType, BillBelong: belong, CreateTimeParameters1: $("#UserDefinedOne").val(), CreateTimeParameters2: $("#UserDefinedTwo").val(), DepartmentCode: Newdepartments, CheckStatus: CheckStatus, PrintStatus: PrintStatus, IsExport: IsExport, FeeSortList: NewFeeList, OverTimeParameters1: $("#UserDefinedoverTime1").val(), OverTimeParameters2: $("#UserDefinedoverTime2").val(), ShopCodeList: NewShops, BillStatus: $("#BillStatus").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#PrintList1").show();
+                $("#loadingToast").hide();
+                if (result) {
+                    if (IsExport == "1") {
+                        var src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/ExcelDownLoad/" + result;
+                        window.location.href = src_remoute;
+                        return;
+                    }
+                    $("#table").find("tbody").remove();
+                    result = JSON.parse(result);
+                    var newlist = new Array();
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { CheckStatus: "", BillNo: "", Type: "", Brand: "", Owner: "", TotalMoney: "", CreateTime: "", ApprovalTime: "", Remark: "", ApprovalStatus: "", ProviderName: "", PrintedCount: "", CopyCount: "" };
+                        var Brand = "";
+                        if (result[i].PersonInfo != undefined && result[i].PersonInfo.Brand != undefined && result[i].PersonInfo.Brand.length > 0) {
+                            for (var k = 0; k < result[i].PersonInfo.Brand.length; k++) {
+                                if (k < result[i].PersonInfo.Brand.length - 1) {
+                                    Brand += result[i].PersonInfo.Brand[k] + ","
+                                }
+                                else {
+                                    Brand += result[i].PersonInfo.Brand[k];
+                                }
+                            }
+                        }
+                        else {
+                            Brand = "无记账品牌";
+                        }
+                        model.BillNo = result[i].BillNo;
+                        model.Type = tagsMean(result[i].PageName);
+                        model.Brand = Brand;
+                        model.Owner = result[i].Owner;
+                        model.TotalMoney = result[i].TotalMoney;
+                        model.CreateTime = result[i].StringTime;
+                        model.ApprovalTime = result[i].ApprovalTime;
+                        model.Remark = result[i].Remark;
+                        model.PrintedCount = result[i].PrintedCount;
+                        model.ApprovalStatus = ApprovalStatusMean(result[i].ApprovalStatus, result[i].ApprovalPost);
+                        model.ProviderName = result[i].ProviderName;
+                        model.CopyCount = result[i].CopyCount;
+
+                        var Operation = "";
+                        Operation += "<a onclick=\"showDialog('" + result[i].BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '查看' + "</a>";
+
+                        //总部人员或者到片区到财务会计那一步就能打印
+                        if (result[i].PersonInfo.IsHeadOffice == 1 || result[i].ApprovalStatus == 2 || (result[i].ApprovalPost != null && (result[i].ApprovalPost.indexOf('财务会计') > -1 || result[i].ApprovalPost.indexOf('总经办') > -1 || result[i].ApprovalPost.indexOf('出纳') > -1))) {
+                            Operation += "&nbsp;&nbsp;<a onclick=\"PrintOneBill('" + result[i].BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a>";
+                        }
+                        //针对那种出错的单
+                        if (result[i].ApprovalPost == null && result[i].ApprovalStatus == 0) {
+                            Operation += "<br><a onclick=\"EditBiiContent('" + result[i].BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '编辑' + "</a>";
+                        }
+                        if (result[i].ApprovalPost != null && (result[i].ApprovalPost.indexOf("中心负责") > -1 || result[i].ApprovalPost.indexOf("片区负责") > -1) && result[i].BillNo.indexOf('HK') == -1 && belong == 1) {
+                            Operation += "<br><a onclick=\"EditBiiContent('" + result[i].BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '编辑' + "</a>";
+                        }
+                        if (result[i].ApprovalPost != null && (result[i].ApprovalPost.indexOf("中心负责") > -1 || result[i].ApprovalPost.indexOf("片区负责") > -1) && belong == 1) {
+                            Operation += "&nbsp;&nbsp;<a onclick=\"DeleteMyBill('" + result[i].BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '删除' + "</a></a>&nbsp;&nbsp;";
+                        }
+                        if (result[i].RecycleBin == 0 && result[i].ApprovalStatus == 3 && belong == 1) {
+                            Operation += "&nbsp;&nbsp<a onclick=\"MoveRecycleBin('" + result[i].BillNo + "','" + result[i].PageName + "','1')\" style='color:blue;cursor:pointer;'>回收站</a>";
+                        }
+                        if (result[i].ApprovalStatus == 2 && result[i].BillNo.indexOf('FT') > -1) {
+                            Operation += "<br><a onclick=\"LoadBillPhoto('" + result[i].BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '添加附件' + "</a>";
+                        }
+
+
+                        model.Operation = Operation;
+
+                        newlist.push(model);
+
+                    }
+                    var $columns = [];
+
+                    $columns.push({
+                        field: "CheckStatus",
+                        sortable: false,
+                        width: 50,
+                        checkbox: true,
+                        formatter: "stateFormatter"
+                    });
+
+                    $columns.push({
+                        field: "BillNo",
+                        title: "单号",
+                        sortable: true,
+                        width: 100
+                    });
+                    $columns.push({
+                        field: "Type",
+                        title: "单据类型",
+                        sortable: true,
+                        width: 90
+                    });
+                    $columns.push({
+                        field: "Brand",
+                        title: "发生品牌",
+                        sortable: true,
+                        width: 120
+                    });
+                    $columns.push({
+                        field: "Owner",
+                        title: "业务人",
+                        sortable: true,
+                        align: 'center',
+                        width: 80,
+                    });
+                    $columns.push({
+                        field: "TotalMoney",
+                        title: "发生金额",
+                        sortable: true,
+                        align: 'right',
+                        width: 75,
+                    });
+                    $columns.push({
+                        field: "CreateTime",
+                        title: "创建日期",
+                        sortable: true,
+                        align: 'center',
+                        width: 100,
+                    });
+                    $columns.push({
+                        field: "ApprovalTime",
+                        title: "办结日期",
+                        sortable: true,
+                        align: 'center',
+                        width: 100,
+                    });
+                    $columns.push({
+                        field: "PrintedCount",
+                        title: "打印",
+                        sortable: true,
+                        width: 50,
+                        align: 'center'
+                    });
+                    $columns.push({
+                        field: "CopyCount",
+                        title: "复制",
+                        sortable: true,
+                        width: 50,
+                        align: 'center'
+                    });
+                    $columns.push({
+                        field: "ApprovalStatus",
+                        title: "审核状态",
+                        sortable: true,
+                        width: 140
+                    });
+                    $columns.push({
+                        field: "ProviderName",
+                        title: "供应商名称",
+                        sortable: true,
+                        width: 150
+                    });
+                    $columns.push({
+                        field: "Remark",
+                        title: "备注",
+                        sortable: true,
+                        width: 200
+                    });
+                    $columns.push({
+                        field: "Operation",
+                        title: "操作",
+                        sortable: true,
+                        width: 200
+                    });
+
+                    $('#table').bootstrapTable({
+                        data: newlist,
+                        columns: $columns
+                    });
+
+                    $('#table').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+
+    function CopyBillNo() {
+        var BillNo = $("#CopyBillNo").val();
+        $.ajax({
+            url: "@Url.Content("~/MyBill/ExistBillNo/")",
+            data: { BillNo: BillNo, No: employeeInfo.EmployeeNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    EditBiiContentPlus(BillNo, result);
+                }
+                else {
+                    submitMessageShow("此单不存在!", "error");
+                }
+            }
+        })
+    }
+
+
+    function MoveRecycleBin(BillNo, Type, Status) {
+        $.ajax({
+            url: "@Url.Content("~/MyBill/MoveRecycleBin/")",
+            data: { BillNo: BillNo, Type: Type, Status: Status },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    submitMessageShow("迁入成功!");
+                    GetMyBillList();
+                }
+                else {
+                    submitMessageShow("迁入失败!", "error");
+                }
+            }
+        });
+    }
+
+
+    //编辑功能
+    function EditBiiContent(BillNo, PageName) {
+        switch (PageName) {
+            case "FeeBill":
+                window.location.href = "@Url.Content("~/FeeBill/FeeBill")?BillNo=" + BillNo + "&Mode=Draft";
+                break;
+            case "NoticeBill":
+                window.location.href = "@Url.Content("~/NoticeBill/NoticeBill")?BillNo=" + BillNo + "&Mode=Draft";
+                break;
+            case "BorrowBill":
+                window.location.href = "@Url.Content("~/BorrowBill/BorrowBill")?BillNo=" + BillNo + "&Mode=Draft";
+                break;
+            case "RefundBill":
+                window.location.href = "@Url.Content("~/RefundBill/RefundOperate")?BillNo=" + BillNo + "&Mode=Draft";
+                break;
+        }
+    }
+
+
+    //编辑功能
+    function EditBiiContentPlus(BillNo, PageName) {
+        switch (PageName) {
+            case "FeeBill":
+                window.location.href = "@Url.Content("~/FeeBill/FeeBill")?BillNo=" + BillNo + "&Mode=Draft&IsCopy=Copy";
+                break;
+            case "NoticeBill":
+                window.location.href = "@Url.Content("~/NoticeBill/NoticeBill")?BillNo=" + BillNo + "&Mode=Draft&IsCopy=Copy";
+                break;
+            case "BorrowBill":
+                window.location.href = "@Url.Content("~/BorrowBill/BorrowBill")?BillNo=" + BillNo + "&Mode=Draft&IsCopy=Copy";
+                break;
+            case "RefundBill":
+                window.location.href = "@Url.Content("~/RefundBill/RefundOperate")?BillNo=" + BillNo + "&Mode=Draft&IsCopy=Copy";
+                break;
+        }
+    }
+
+
+    function deletePhoto(guid, e) {
+        $("#invoiceSelect_Mybil").val("");
+        $('#' + guid).remove();
+
+        if (e && e.stopPropagation) {
+            e.stopPropagation();
+        }
+        else {
+            window.event.cancelBubble = true;
+            return false;
+        }
+
+    }
+
+    function louisUpload(option) {
+        var xhr = new XMLHttpRequest();
+
+        //构造模式
+        var uploadUrl, callback, uploading, beforeSend, guid;
+        guid = option.guid;
+        uploadUrl = option.uploadUrl;//上传地址
+        callback = option.callback;//上传完成回调
+        uploading = option.uploading;//上传进度回调
+        beforeSend = option.beforeSend;//上传开始检查
+        this.file = option.file;
+
+
+        //开始上传命令
+        this.start = function () {
+
+            if (beforeSend instanceof Function) {
+                if (beforeSend(this.file, guid) === false) {
+                    return false;
+                }
+            }
+            var fd = new FormData();
+            fd.append("files", this.file);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    if (callback instanceof Function) {
+                        callback(xhr.responseText, guid);
+                    }
+                }
+            }
+
+
+            xhr.upload.onprogress = function (evt) {
+                //侦查附件上传情况
+                //通过事件对象侦查
+                //该匿名函数表达式大概0.05-0.1秒执行一次
+                //console.log(evt);
+                //console.log(evt.loaded);  //已经上传大小情况
+                //evt.total; 附件总大小
+                var loaded = evt.loaded;
+                var tot = evt.total;
+                var per = Math.floor(100 * loaded / tot);  //已经上传的百分比
+
+                if (uploading instanceof Function) {
+                    uploading(per, guid);
+                }
+
+            };
+
+            xhr.open("post", uploadUrl);
+            xhr.send(fd);
+        };
+
+    }
+
+
+    function InitPageData() {
+        $("#invoiceSelect_Mybil").change(function (e) {
+            var file = e.target.files || e.dataTransfer.files;
+            if (file) {
+                for (var i = 0; i < file.length; i++) {
+                    var temps = file[i].name.split('.');
+                    var extendName = temps[temps.length - 1].toLowerCase();
+                    var src = window.URL.createObjectURL(file[i]);
+                    //本地图像id,与服务器文件名无关，处理图片的属性
+                    var newguid = newGuid().toString();
+
+                    if (!(extendName == "jpg" || extendName == "jpeg" || extendName == "bmp" || extendName == "png" || extendName == "gif")) {
+                        var insertObj = $("<li id=\"" + newguid + "\" class=\"weui_uploader_file weui_uploader_status\" style=\"background-image:url(../Content/Images/PDF.jpg)\">"
+    + "<div class=\"weui_uploader_status_content\">50%</div>"
+    + "<div onclick=\"deletePhoto('" + newguid + "',this)\" class=\"btnDelete\" style=\"float:right;width:30px;height:30px;background-color:#FEFEFE;\"><span  class=\"glyphicon glyphicon-minus btnDelete\" aria-hidden=\"true\" style=\"color:red;\"></span></div>"
+    + "</li>")
+.insertBefore($("#btnPhotoAdd_Mybil"));
+                    }
+                    else {
+                        var insertObj = $("<li id=\"" + newguid + "\" class=\"weui_uploader_file weui_uploader_status\" style=\"background-image:url(" + src + ")\">"
+                            + "<div class=\"weui_uploader_status_content\">50%</div>"
+                            + "<div onclick=\"deletePhoto('" + newguid + "',this)\" class=\"btnDelete\" style=\"float:right;width:30px;height:30px;background-color:#FEFEFE;\"><span  class=\"glyphicon glyphicon-minus btnDelete\" aria-hidden=\"true\" style=\"color:red;\"></span></div>"
+                            + "</li>")
+                        .insertBefore($("#btnPhotoAdd_Mybil"));
+                    }
+                    var Cjdate = new Date;
+                    var Cjyear = Cjdate.getFullYear();
+                    var Cjmonth = Cjdate.getMonth() + 1;
+                    var CjDay = Cjdate.getDate();
+                    Cjmonth = (Cjmonth < 10 ? "0" + Cjmonth : Cjmonth);
+                    var Cjmydate = (Cjyear.toString() + Cjmonth.toString() + CjDay.toString());
+
+                    //构造上传器
+                    var louis = new louisUpload(
+                    {
+                        uploadUrl: "@Url.Content("~/FeeBill/FileUpload/")?time=" + Cjmydate + "",
+                        beforeSend: function (file, guid) {
+
+                        },
+                        callback: function (filename, guid) {
+                            var Newfilename = filename.split(',');
+                            $('#' + guid).removeClass().addClass("weui_uploader_file");
+                            $('#' + guid).find(".weui_uploader_status_content").remove();
+                            $('#' + guid).attr("filename", Newfilename[0]);
+
+
+
+                            var src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/" + Cjmydate + "/" + Newfilename[0];
+                            $('#' + guid).attr("url", src_remoute);
+
+                            if (Newfilename[0].indexOf("pdf") > -1) {
+                                $('#' + guid).bind("click", function () {
+                                    SkipUrl(src_remoute, this);
+                                });
+                            }
+
+                            //word或者excle
+                            if (Newfilename[1]) {
+                                var OriginalUrl = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/" + Cjmydate + "/" + Newfilename[1];
+                                $('#' + guid).attr("OriginalUrl", OriginalUrl);
+
+
+                            }
+
+                            //微信中可预览，电脑中不可以
+
+                            $('#' + guid).click(function () {
+                                wx.previewImage({
+                                    current: src_remoute,
+                                    urls: [
+                                      src_remoute,
+                                    ]
+                                });
+                            });
+                        },
+                        uploading: function (percentage, guid) {
+                            $('#' + guid).find(".weui_uploader_status_content").text(percentage + "%");
+                        },
+                        file: file[i],
+                        guid: newguid
+                    }
+                    );
+                    //开始上传
+                    try {
+                        louis.start();
+                    } catch (e) {
+                        $("<i class=\"weui_icon_warn\"></i>")
+                        .appendTo($('#' + guid).find(".weui_uploader_status_content"));
+                        $('#' + guid).find(".weui_uploader_status_content").text("上传错误");
+                    }
+                }
+            }
+        });
+    }
+
+    function LoadBillPhoto(BillNo, Type) {
+        Type = ChangeVersions2(Type);
+        $("#editDialog10").show();
+        $("#EditViewPageTitle").text(BillNo);
+        $("#EditViewPageTitle").attr("code", Type);
+
+        $.ajax({
+            url: "@Url.Content("~/Print/GetDataFromBillNo/")",
+            data: { BillNo: BillNo, Type: Type },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    if (result.Photos != null && result.Photos.length > 0) {
+
+                        $("#photos_Mybil li").each(function () {
+                            var id = $(this).attr("id");
+                            if (id != "btnPhotoAdd_Mybil") {
+                                $(this).remove();
+                            }
+                            else {
+                            }
+                        })
+                        //加载图片
+                        var Photos = result.Photos;
+                        if (Photos != "") {
+                            for (var j = 0; j < Photos.length; j++) {
+                                var newguid = newGuid().toString();
+                                if (Photos[j].url.indexOf("pdf") > -1) {
+                                    $("<li    id=\"" + newguid + "\" class=\"weui_uploader_file\" style=\"background-image:url(../Content/Images/PDF.jpg)\" url=\"" + Photos[j].url + "\"  OriginalUrl=\"" + Photos[j].OriginalUrl + "\"  filename=\"" + Photos[j].filename + "\"></li>").insertBefore($("#btnPhotoAdd_Mybil"));
+                                }
+                                else {
+                                    $("<li  id=\"" + newguid + "\" class=\"weui_uploader_file\" style=\"background-image:url(" + Photos[j].url + ")\" url=\"" + Photos[j].url + "\" filename=\"" + Photos[j].filename + "\"></li>").insertBefore($("#btnPhotoAdd_Mybil"));
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        })
+    }
+
+
+    function CommitAddPhoto() {
+
+        var Photos = new Array();
+        $("#photos_Mybil li").each(function () {
+            var rowValue = { filename: "", url: "", OriginalUrl: "" };
+            if ($(this).attr("id") != "btnPhotoAdd_Mybil") {
+                rowValue.filename = $(this).attr("filename");
+                rowValue.url = $(this).attr("url");
+                rowValue.OriginalUrl = $(this).attr("OriginalUrl");
+                Photos.push(rowValue);
+            }
+        });
+        var postData = { Photos: Photos, BillNo: $("#EditViewPageTitle").text(), Type: $("#EditViewPageTitle").attr("code") };
+
+        $.ajax({
+            url: "@Url.Content("~/MyBill/AddPhoto/")",
+            data: JSON.stringify(postData),
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "POST",
+            success: function (result) {
+                if (result == "Success") {
+                    submitMessageShow("保存成功！");
+                }
+                else {
+                    submitMessageShow("编辑失败!", "error");
+                }
+                $("#editDialog10").hide();
+            }
+        })
+    }
+</script>
+
+@*报销类型和费用所处片区*@
+<div class="row" style="margin-top: 70px;">
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">单据所属:</div>
+        <div class="form-group">
+            <select id="lunchBegins" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="Please select a lunch ...">
+                <option class="bs-title-option" value="">请选择</option>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">所在部门:</div>
+
+        <div class="form-group" style="float: left; display: block;">
+
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="InDepartment">
+                <optgroup label="" id="KpiArea"></optgroup>
+            </select>
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">所在店柜:</div>
+
+        <div class="form-group" style="float: left; display: block;">
+
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="ShopCode">
+                <optgroup label="" id="ShopCodeSon"></optgroup>
+            </select>
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+
+    <div class="col-md-3" id="CSS1ForPrint">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">创建时间:</div>
+
+
+        <input id="UserDefinedOne" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+        <input id="UserDefinedTwo" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">单据类型:</div>
+        <div class="form-group">
+            <select id="BillTypes" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="Please select a lunch ...">
+                <option class="bs-title-option" value="">请选择</option>
+                <option value="0">全部</option>
+                <option value="1">费用报销单</option>
+                <option value="2">付款通知书</option>
+                <option value="3">借款单</option>
+                <option value="4">还款单</option>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">审核状态:</div>
+        <div class="form-group">
+            <select id="Check" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="Please select a lunch ...">
+                <option class="bs-title-option" value="">请选择</option>
+                <option value="">全部</option>
+                <option value="0,中心负责人">中心负责人审核中</option>
+                <option value="0,片区负责人">片区负责人审核中</option>
+                <option value="4,岗">业务岗审批中</option>
+                <option value="4,市场发展中心">市场发展中心审核中</option>
+                <option value="4,财务会计">财务会计审核中</option>
+                <option value="4,总经办">总经办审核中</option>
+                <option value="4,出纳">出纳审核中</option>
+                <option value="2,通过">已通过</option>
+                <option value="3,拒绝">已拒绝</option>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">费用项:</div>
+
+        <div class="form-group" style="float: left; display: block;">
+
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="FeeItems">
+                <optgroup label="" id="FeeItemsSon"></optgroup>
+            </select>
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+    <div class="col-md-3" id="CSS2ForPrint">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">办结时间:</div>
+
+
+        <input id="UserDefinedoverTime1" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+        <input id="UserDefinedoverTime2" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">打印状态:</div>
+
+        <div class="form-group">
+            <select id="Print" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="Please select a lunch ...">
+                <option class="bs-title-option" value="">请选择</option>
+                <option value="1">已打印</option>
+                <option value="0">未打印</option>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 8px;">复制单据:</div>
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入单号回车复制单据" style="width: 68%" id="CopyBillNo">
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">发票状态:</div>
+
+        <div class="form-group">
+            <select id="BillStatus" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="Please select a lunch ...">
+                <option class="bs-title-option" value="">请选择</option>
+                <option value="">全部</option>
+                <option value="1">已回收</option>
+                <option value="0">未回收</option>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3" id="ButtonSearch">
+        <a href="javascript:GetMyBillList('');" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-left: 22px; margin-top: 6px;" id="LookdataForPrint">查询</a>
+        <a href="javascript:GetMyBillList('1');" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-left: 10px; margin-top: 6px;">导出Excel</a>
+        <a href="javascript:BulkPrint();" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-left: 10px; margin-top: 6px;">批量打印</a>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+
+</div>
+
+<div class="row" id="PrintList1" style="display: none">
+    <div style="margin: 15px;">
+        <table id="table"
+               data-pagination="true"
+               data-search="true"
+               data-mobile-responsive="true"
+               data-check-on-init="true" data-show-columns="true" style="overflow: auto">
+            <thead>
+                <tr>
+                    <th data-field="CheckStatus" data-formatter="stateFormatter"></th>
+                    <th data-field="BillNo" data-sortable="true">单号</th>
+                    <th data-field="Type" data-sortable="true">单据类型</th>
+                    <th data-field="Brand" data-sortable="true">发生品牌</th>
+                    <th data-field="Owner" data-sortable="true" data-visible="false">业务人</th>
+                    <th data-field="TotalMoney" data-sortable="true">发生金额</th>
+                    <th data-field="CreateTime" data-sortable="true" data-visible="false">创建日期</th>
+                    <th data-field="ApprovalTime" data-sortable="true">办结日期</th>
+                    <th data-field="PrintedCount" data-sortable="true">打印</th>
+                    <th data-field="CopyCount" data-sortable="true">复制</th>
+                    <th data-field="ApprovalStatus" data-sortable="true">审核状态</th>
+                    <th data-field="Remark" data-sortable="true">备注</th>
+                    <th data-field="Operation" data-sortable="true">操作</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+
+</div>
+
+<div class="weui_dialog_confirm js_container weui_dialog_editBill" id="editDialog10" style="display: none;">
+    <div class="weui_mask">添加附件</div>
+
+    <div class="weui_dialog weui_dialog_editBill" style="overflow-y: hidden;">
+        <div>
+            <div class="text-right " style="margin-right: 15px;">
+                <i class="icon iconfont btnClose " style="font-size: 25px;" onclick="HideBanners('editDialog10')">&#xe600;</i>
+            </div>
+        </div>
+        <div class="page" style="overflow-y: auto; max-height: 550px;">
+
+            <div class="hd">
+                <h2 class="page_title" id="EditViewPageTitle" style="margin-left: 10px;">FB012345678</h2>
+            </div>
+
+            <div class="col-md-12">
+                <!-- 第5大块 -->
+                <div class="weui_cells_title" style="color: black">发票与附件</div>
+
+                <!-- 微信拍照实现，但是不便于上传 -->
+                <div id="listInvoice_Mybil" class="weui_cells weui_cells_checkbox">
+                    <div class="weui_cell">
+                        <ul id="photos_Mybil" class="weui_uploader_files" style="margin-top: 10px; margin-left: 0px;">
+                            <li id="btnPhotoAdd_Mybil" class="weui_uploader_input_wrp">
+                                <input class="weui_uploader_input" type="file" multiple="multiple" capture="camera" id="invoiceSelect_Mybil" name="invoiceSelect_Mybil" />
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-12" id="DraftSub" style="margin-bottom: 20px;">
+            <div class="bd">
+                <div class="weui_cells">
+                    <a href="javascript:CommitAddPhoto();" class="weui_btn weui_btn_primary">保存</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/Print/Js.cshtml")
+
+@*<script src="~/Scripts/Bootstrap/js/bootstrap.min.js"></script>*@
+<link href="~/Scripts/Bootstrap/css/bootstrap-table.css" rel="stylesheet" />
+<script src="~/Scripts/Bootstrap/js/bootstrap-table.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-table-mobile.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link href="~/Scripts/Bootstrap/css/bootstrap-select.css" rel="stylesheet" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-select.js"></script>
+
+@Html.Partial("~/Views/Shared/PublicPrint.cshtml")
+
+
+

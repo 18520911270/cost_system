@@ -1,0 +1,169 @@
+﻿<script type="text/javascript" src="~/Scripts/jquery.cookies.2.2.0.min.js"></script>
+@*<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>*@
+@*<script type="text/javascript" src="~/Scripts/ajaxfileupload.js"></script>*@
+
+
+<script type="text/javascript">
+    $(function () {
+        InitPageData();
+        $("#MyFill").find(".showList").each(function () {
+            GetBillCount($(this).attr("role"));
+        });
+        $("#MyApproval").find(".showList").each(function () {
+            GetMyProcessCount($(this).attr("role"));
+        });
+        NoticeInfo();
+    });
+
+
+    function NoticeScroll() {
+        var _wrap = $('ul.mulitline');
+        var _interval = 3000;
+        var _moving;
+        _wrap.hover(function () {
+            clearInterval(_moving);
+        }, function () {
+            if (_wrap.height() > 120) {
+                _moving = setInterval(function () {
+                    var _field = _wrap.find('li:first');
+                    var _h = _field.height();
+                    _field.animate({ marginTop: -_h + 'px' }, 600, function () {
+                        _field.css('marginTop', 0).appendTo(_wrap);
+                    })
+                }, _interval)
+            }
+        }).trigger('mouseleave');
+    }
+
+
+    function NoticeInfo() {
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/GetNoticeList/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var htm = "";
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        htm += "<li>";
+                        var src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/Notice/" + result[i];
+                        htm += '<a href="' + src_remoute + '" >' + result[i] + '</a>&nbsp;&nbsp;';
+                        htm += "</li>";
+                    }
+                    $(".mulitline").html("").append(htm);
+                    NoticeScroll();
+                }
+            }
+        });
+    }
+
+
+    function InitPageData() {
+        $('.showList').click(function (e) {
+            $("#big_title").text($(this).attr("role"));
+            $('#showList').trigger("click");
+        });
+        var temp = "所在组织[" + (employeeInfo.IsHeadOffice == 1 ? "总部" : "片区") + "]" + "&nbsp;&nbsp;&nbsp;&nbsp;<small id='CompanyCode' code=" + employeeInfo.CompanyCode + ">" + employeeInfo.CompanyName + "</small>";
+        $("#IsBackOffice").html(temp);
+        $("#DepartmentName").text(employeeInfo.RootDepartmentName);
+
+        $("#employeeName").text(employeeInfo.EmployeeName);
+        $("#BankCardNo").text(employeeInfo.BankCardNo);
+        $("#CostCenter").text(employeeInfo.COST_ACCOUNT)
+        //获取头像
+        $.ajax({
+            url: "@Url.Content("~/Home/GetPersonInfomation/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result == "Fail") {
+                    submitMessageShow("提交失败!", "error");
+                } else {
+                    var result = JSON.parse(result);
+                    if (result.avatar) {
+                        $("#employeePhoto").attr("src", result.avatar);
+                    }
+                    else
+                        $("#employeePhoto").attr("src", "@Url.Content("~/Images/somebody.png")");
+
+                if (result.weixinid) {
+                    $("#employeeWeixin").text("微信号：" + result.weixinid);
+                }
+                else if (result.mobile) {
+                    $("#employeeWeixin").text("手机号：" + result.mobile);
+                }
+                else {
+                    var url = "http://wx.marisfrolg.com/WeChatEnterpriseAdmin/Home/Index?userid=" + employeeInfo.UPCODE;
+                    $("#employeeWeixin").html("手机号：" + "<a target='_blank' href='" + url + "'>去绑定</a>");
+                }
+            }
+            }
+        });
+}
+
+//获取我审批的单数个数
+function GetMyProcessCount(Role) {
+    $.ajax({
+        url: "@Url.Content("~/Home/GetMyProcessCount/")",
+        data: { Type: Role },
+        contentType: "application/json; charset=utf-8",
+        datatype: "json",
+        type: "GET",
+        success: function (result) {
+            if (result) {
+                var result = JSON.parse(result);
+                if (result) {
+                    if (Role == "费用报销单") {
+                        //为1的时候统计单数                          
+                        $("#FillBill h1").eq(0).text(result + "单");
+                    }
+                    else if (Role == "付款通知书") {
+                        $("#Notice h1").eq(0).text(result + "单");
+                    }
+                    else if (Role == "借款单") {
+                        $("#BorrowItem h1").eq(0).text(result + "单");
+                    }
+                    else if (Role == "还款单") {
+                        $("#RefundItem h1").eq(0).text(result + "单");
+                    }
+                }
+            }
+        }
+    })
+};
+
+//获取我填写的单据信息总数
+function GetBillCount(Type) {
+    $.ajax({
+        url: "@Url.Content("~/Home/GetMyFilledBillCount/")",
+        data: { Type: Type },
+        contentType: "application/json; charset=utf-8",
+        datatype: "json",
+        type: "GET",
+        success: function (result) {
+            if (result) {
+                if (Type == "未办结的单据") {
+                    $("#NotDoBill h1").eq(0).text(result + " 单");
+                }
+                else if (Type == "发票缺失") {
+                    $("#MissBillHome h1").eq(0).text(result + " 单");
+                }
+                else if (Type == "借款未还") {
+                    $("#BorrowBill h1").eq(0).text(result);
+                }
+                else if (Type == "押金") {
+                    $("#Deposit h1").eq(0).text(result);
+                }
+            }
+        }
+    })
+};
+</script>
+
+
+

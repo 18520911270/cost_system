@@ -1,0 +1,605 @@
+﻿@{
+    ViewBag.Title = "报表";
+}
+<style type="text/css">
+    html {
+        -webkit-text-size-adjust: none;
+    }
+
+    .NormalTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #CCCCCC;
+        float: left;
+    }
+
+    .SelectTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #5CB85C;
+        float: left;
+    }
+
+    /*李经理*/
+    @@media screen and (min-width: 800px) {
+        #InputBillNo, #InputProviderName, #InputRemark {
+            width: 76% !important;
+        }
+
+        #ButtonSearch1 {
+            margin-left: 2px !important;
+        }
+
+        #ButtonSearch {
+            margin-top: 27px !important;
+        }
+
+        #BillNo {
+            margin-top: 25px;
+        }
+
+        #OverTimeCssForPrint {
+            margin-top: 25px;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 28% !important;
+        }
+
+        #MoenyCountReport {
+            float: none !important;
+        }
+    }
+    /*我的电脑和丹丹的*/
+    @@media screen and (min-width: 1320px) {
+        #InputBillNo, #InputProviderName, #InputRemark {
+            width: 67% !important;
+        }
+
+        #ButtonSearch1 {
+            margin-left: 21px !important;
+        }
+
+        #ButtonSearch {
+            margin-top: 0px !important;
+        }
+
+        #BillNo {
+            margin-top: 0px;
+        }
+
+        #OverTimeCssForPrint {
+            margin-top: 0px;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 25% !important;
+        }
+
+        #MoenyCountReport {
+            float: left !important;
+        }
+    }
+    /*公司同事*/
+    @@media screen and (min-width: 1600px) {
+        #InputBillNo, #InputProviderName, #InputRemark {
+            width: 56% !important;
+        }
+
+        #ButtonSearch1 {
+            margin-left: 21px !important;
+        }
+
+        #ButtonSearch {
+            margin-top: 0px !important;
+        }
+
+        #BillNo {
+            margin-top: 3px;
+        }
+
+        #AccountTime1 {
+            margin-top: 5px;
+        }
+
+        #AccountTime2 {
+            margin-top: 5px;
+        }
+
+        #AccountTime3 {
+            margin-top: 5px;
+        }
+
+        #AccountTime4 {
+            margin-top: 5px;
+        }
+
+        #OverTimeCssForPrint {
+            margin-top: 3px;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 21% !important;
+        }
+
+        #MoenyCountReport {
+            float: left !important;
+        }
+    }
+    /*陆哥电脑*/
+    @@media screen and (min-width: 1700px) {
+        #InputBillNo, #InputProviderName, #InputRemark {
+            width: 49% !important;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 18% !important;
+        }
+
+        #MoenyCountReport {
+            float: left !important;
+        }
+    }
+    /*何奕电脑*/
+    @@media screen and (min-width: 2000px) {
+        #InputBillNo, #InputProviderName, #InputRemark {
+            width: 43% !important;
+        }
+
+        #MinMoney, #MaxMoney {
+            width: 16% !important;
+        }
+
+        #MoenyCountReport {
+            float: left !important;
+        }
+    }
+</style>
+
+<script>
+    $(function () {
+        LoadFeeBigSortList();
+        $("#lunchBegins").bind("change", function () {
+            var tags = $("#lunchBegins").find("option:selected").attr("val");
+            if (tags == 3 || tags == 4 || tags == 5 || tags == 6 || tags == 7 || tags == 8 || tags == 9 || tags == 10) {
+                LoadAreaListPlus();
+            }
+            else {
+                LoadAreaList();
+            }
+            $("#InDepartment").selectpicker("refresh");
+        })
+
+        $("#SelectBigSort").bind("change", function () {
+            LoadSmallSortList();
+            $("#SelectSmallSort").selectpicker("refresh");
+        });
+
+        $("#InputBillNo").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                GetReportData()
+            }
+        });
+    })
+
+
+    function LoadAreaListPlus() {
+        var Permisson = ReportGetPermission();  //查找权限 2片区管理员  3报表管理员
+        $.ajax({
+            url: "@Url.Content("~/Home/GetMyArea/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice, EmployeeNo: employeeInfo.EmployeeNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                var ListResult = new Array();
+                $("#KpiArea").children().remove();
+                if (result) {
+                    if (Permisson == 3) {
+                        $("<option value=\"XXX1\">所有片区和部门</option>").appendTo("#KpiArea");
+                        $("<option value=\"XXX2\">所有部门</option>").appendTo("#KpiArea");
+                        $("<option value=\"XXX3\">所有片区</option>").appendTo("#KpiArea");
+                        GetALLAreaList();
+                    }
+                    else if (Permisson == 2) {
+                        $("<option value=\"XXX3\">所有片区</option>").appendTo("#KpiArea");
+                        GetALLAreaList();
+                    }
+                    var result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<option value=" + result[i].CODE + ">" + result[i].NAME + "</option>").appendTo("#KpiArea");
+                    }
+                }
+                else {
+                    if (Permisson == 3) {
+                        $("<option value=\"XXX1\">所有片区和部门</option>").appendTo("#KpiArea");
+                        $("<option value=\"XXX2\">所有部门</option>").appendTo("#KpiArea");
+                        $("<option value=\"XXX3\">所有片区</option>").appendTo("#KpiArea");
+                        GetALLAreaList();
+                    }
+                    else if (Permisson == 2) {
+                        $("<option value=\"XXX3\">所有片区</option>").appendTo("#KpiArea");
+                        GetALLAreaList();
+                    }
+                    $("<option value=" + employeeInfo.RootDepartmentID + ">" + employeeInfo.RootDepartmentName + "</option>").appendTo("#KpiArea");
+                }
+            }
+        })
+    }
+
+
+    function GetALLAreaList() {
+        $.ajax({
+            url: "@Url.Content("~/Report/GetALLAreaList/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result) {
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<option value=\"" + result[i].CODE + "\">" + result[i].NAME + "</option>").appendTo("#KpiArea");
+                    }
+                    $("#InDepartment").selectpicker("refresh");
+                }
+            }
+        })
+    }
+
+
+    function LoadAreaList() {
+        $.ajax({
+            url: "@Url.Content("~/Report/GetKpiAreaList/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result) {
+                    $("#KpiArea").children().remove();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<option value=" + result[i].CODE + ">" + result[i].NAME + "</option>").appendTo("#KpiArea");
+                    }
+                }
+            }
+        })
+    }
+
+    function LoadFeeBigSortList() {
+        $.ajax({
+            url: "@Url.Content("~/Report/GetCostManage/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result) {
+                    $("#BigSort").children().remove();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<option value=" + result[i].No + ">" + result[i].Name.replace('类', "") + "</option>").appendTo("#BigSort");
+                    }
+                }
+            }
+        })
+    }
+
+    function LoadSmallSortList() {
+        var StringCode = "";
+        var code = $("#SelectBigSort").val();
+        if (code) {
+            for (var i = 0; i < code.length; i++) {
+                if (i < code.length - 1) {
+                    StringCode += code[i] + ",";
+                }
+                else {
+                    StringCode += code[i];
+                }
+            }
+        }
+
+        $.ajax({
+            url: "@Url.Content("~/Report/GetAccountInfoList/")",
+            data: { IsHeadOffice: employeeInfo.IsHeadOffice, Code: StringCode },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                $("#SmallSort").children().remove();
+                if (result) {
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<option value=" + result[i].No + ">" + result[i].Name + "</option>").appendTo("#SmallSort");
+                    }
+                }
+            }
+        })
+    }
+</script>
+
+
+<div style="margin-top: 70px; font-size: 30px; display: none;">
+    <span>正在开发中</span>
+    <a target="_blank" href="http://210.75.9.166/Marisfrolg.HR/pdfjs/web/viewer.html?file=/Marisfrolg.HR/UploadFile/pdf/201608251422275656.pdf  ">PDF打开测试</a>
+</div>
+@*报销类型和费用所处片区*@
+<div class="row" style="margin-top: 70px;">
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">报表类型:</div>
+        <div class="form-group">
+            <select id="lunchBegins" class="selectpicker bs-select-hidden" data-live-search="true" data-live-search-style="begins" title="Please select a lunch ...">
+                <option class="bs-title-option" val="5">单据状态查询</option>
+                @*   <option val="1">费用KPI考核</option>
+                <option val="2">费用子项统计</option>*@
+                <option val="9">单据时间查询</option>
+                <option val="3">财务数据导出</option>
+                <option val="4">汇总报表</option>
+                <option val="6">多条件查询</option>
+                <option val="7">汇款明细查询</option>
+                <option val="8">综合明细查询</option>
+                <option val="5">单据状态查询</option>
+                <option val="10">借款单查询</option>
+
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">所在部门:</div>
+
+        <div class="form-group" style="float: left; display: block;">
+
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="InDepartment">
+                <optgroup label="" id="KpiArea">
+                </optgroup>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">费用大类:</div>
+        <div class="form-group" style="float: left; display: block;">
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="SelectBigSort">
+                <optgroup label="" id="BigSort">
+                </optgroup>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">费用小类:</div>
+
+        <div class="form-group" style="float: left; display: block;">
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="SelectSmallSort">
+                <optgroup label="" id="SmallSort">
+                </optgroup>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+</div>
+@*费用大类和费用小类*@
+<div class="row">
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">所在公司:</div>
+
+        <div class="form-group" style="float: left; display: block;">
+
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="MyCompanycode">
+                <optgroup label="" id="MyCompanycodeSon">
+                    <option value="1000">玛丝菲尔</option>
+                    <option value="1300">噢姆公司</option>
+                    <option value="2000">素公司</option>
+                    <option value="2100">KRIZIA中国</option>
+                    <option value="4000">惠州制造公司</option>
+                    <option value="1020">新加坡玛丝菲尔</option>
+                    <option value="1030">澳门玛丝菲尔</option>
+                    <option value="1330">澳门AUM</option>
+                    <option value="2200">朗伊尔公司</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">单据类型:</div>
+
+        <div class="form-group" style="float: left; display: block;">
+
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="MybillType">
+                <optgroup label="" id="MybillTypeSon">
+                    <option value="1">费用报销单</option>
+                    <option value="2">付款通知书</option>
+                    <option value="3">借款单</option>
+                    <option value="4">还款单</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">单据状态:</div>
+        <div class="form-group" style="float: left; display: block;">
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="BillTypes">
+                <optgroup label="">
+                    <option value="0">审核中</option>
+                    <option value="1">通过</option>
+                    <option value="2">拒绝</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">特殊选项:</div>
+        <div class="form-group" style="float: left; display: block;">
+            <select class="selectpicker bs-select-hidden" multiple="" data-live-search="true" data-live-search-placeholder="Search" data-actions-box="true" id="SpecialProperty">
+                <optgroup label="活动经费">
+                    <option value="hd1">是</option>
+                    <option value="hd0">否</option>
+                </optgroup>
+                <optgroup label="代理商费用">
+                    <option value="dl1">是</option>
+                    <option value="dl0">否</option>
+                </optgroup>
+                <optgroup label="商场账扣">
+                    <option value="sc1">是</option>
+                    <option value="sc0">否</option>
+                </optgroup>
+                <optgroup label="银行账扣">
+                    <option value="yh1">是</option>
+                    <option value="yh0">否</option>
+                </optgroup>
+                <optgroup label="押金账扣">
+                    <option value="yj1">是</option>
+                    <option value="yj0">否</option>
+                </optgroup>
+                <optgroup label="发票已回收">
+                    <option value="fp1">是</option>
+                    <option value="fp0">否</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">输入单号:</div>
+        <input type="text" class="form-control" autocomplete="off" placeholder="支持输入多个单号" style="width: 68%" id="InputBillNo">
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 20px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">输入备注:</div>
+        <input type="text" class="form-control" autocomplete="off" placeholder="模糊搜索备注" style="width: 68%" id="InputRemark">
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 20px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">收款人:</div>
+        <input type="text" class="form-control" autocomplete="off" placeholder="模糊搜索收款人" style="width: 68%" id="InputProviderName">
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 20px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div class="col-md-3">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;" id="MoenyCountReport">发生金额:</div>
+        <div>
+            <span style="float: left; margin-top: 5px;">大于</span>
+            <input type="number" class="form-control" autocomplete="off" placeholder="金额" style="width: 25%; float: left" id="MinMoney">
+            <span style="float: left; margin-top: 5px;">小于</span>
+            <input type="number" class="form-control" autocomplete="off" placeholder="金额" style="width: 25%; float: left" id="MaxMoney">
+        </div>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 20px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+</div>
+
+@*单据状态和时间区间*@
+<div class="row">
+
+    <div class="col-md-3" id="BillNo">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">创建时间:</div>
+
+
+        <input id="AccountTime1" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+        <input id="AccountTime2" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+    <div class="col-md-3" id="OverTimeCssForPrint">
+        <div style="width: 90px; font-size: 12px; text-align: center; float: left; vertical-align: bottom; padding-top: 7px;">办结日期:</div>
+
+
+        <input id="AccountTime3" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+        <input id="AccountTime4" class="weui_input" type="date" style="display: block; width: auto; float: left;">
+
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+    <div class="col-md-3" id="ButtonSearch">
+        <a id="ButtonSearch1" href="javascript:GetReportData();" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-left: 21px; margin-top: 10px;">查询</a>
+        <a href="javascript:GetExportOption();" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-left: 10px; margin-top: 10px;">导出Excel</a>
+        <a href="javascript:PrintTrNode();" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-left: 10px; margin-top: 10px;">批量打印</a>
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+</div>
+
+<div style="margin: 15px; overflow: auto" class="table-responsive">
+    <table class="table table-bordered" id="Mytable">
+        <thead id="Phead">
+        </thead>
+        <tbody id="Pbody">
+        </tbody>
+    </table>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogExportOption" style="display: none; background-color: #52a4a4">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 150px;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">导出选项</strong></div>
+        <div class="weui_dialog_bd">
+
+            <div class="col-md-4">
+                <label for="Ex1">公司代码</label><input type="checkbox" id="Ex1" checked="checked" disabled="disabled">
+            </div>
+            <div class="col-md-4">
+                <label for="Ex2">所在城市</label><input type="checkbox" id="Ex2" checked="checked">
+            </div>
+            <div class="col-md-4">
+                <label for="Ex3">单据类型</label><input type="checkbox" id="Ex3" checked="checked">
+            </div>
+
+        </div>
+        <div class="weui_dialog_ft" style="position: absolute; width: 100%; bottom: 0px;">
+            <a href="#" class="weui_btn_dialog default" onclick="HideBanners('dialogExportOption')">取消</a>
+            <a href="#" class="weui_btn_dialog primary" onclick="DownloadFile()">确定</a>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("~/Views/Report/Js.cshtml")
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link href="~/Scripts/Bootstrap/css/bootstrap-select.css" rel="stylesheet" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-select.js"></script>
+@Html.Partial("~/Views/Shared/PublicPrint.cshtml")
+

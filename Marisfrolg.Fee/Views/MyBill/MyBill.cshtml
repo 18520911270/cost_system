@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "我的打印";
+}
+
+<style type="text/css">
+    html {
+        -webkit-text-size-adjust: none;
+    }
+
+    .NormalTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #CCCCCC;
+        float: left;
+    }
+
+    .SelectTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #5CB85C;
+        float: left;
+    }
+</style>
+
+<script>
+    $(function () {
+        GetMyBillList(1, 1);  //获取打印数据(加载费用报销单，所以给5)
+    })
+    //标签点击事件
+    //标签点击事件
+    function tagClick(eml) {
+        //设置标签状态
+        $(eml).siblings().removeClass("SelectTabItem label label-success").addClass("NormalTabItem label label-default").end().addClass("SelectTabItem label label-success");
+        var rfm = "";
+        var tags = "";
+
+        //获取选中的值
+        $(".SearchKeywords").children("div").each(function () {
+            if ($(this).hasClass("SelectTabItem")) {
+
+                var val = $(this).attr("val");
+                if (val.indexOf("s") >= 0) {
+                    tags = val.split('s')[1];
+                } else {
+                    rfm = val.split('y')[1];
+                }
+            }
+        })
+        //获取打印数据
+        GetMyBillList(tags, rfm);
+    }
+
+    function tagsMeanV1(tags) {
+        if (tags == 1) {
+            return "费用报销单";
+        }
+        else if (tags == 2) {
+            return "付款通知书";
+        }
+        else if (tags == 3) {
+            return "借款单";
+        }
+        else if (tags == 4) {
+            return "还款单";
+        }
+    }
+
+    function GetMyBillList(tags, val) {
+        $.ajax({
+            url: "@Url.Content("~/MyBill/GetMyBillList/")",
+            data: { Type: tags, BillBelong: 1, CreateTimeParameters1: $("#UserDefinedOne").val(), CreateTimeParameters2: $("#UserDefinedTwo").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#table").find("tbody").remove();
+                if (result) {
+                    result = JSON.parse(result);
+                    var newlist = new Array();
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { BillNo: "", Type: "", Onwer: "", TotalMoney: "", CreateTime: "", ApprovalTime: "", ApprovalStatus: "" };
+                        model.BillNo = result[i].BillNo;
+                        model.Type = tagsMeanV1(tags);
+                        model.Owner = result[i].Owner;
+                        model.TotalMoney = result[i].TotalMoney;
+                        model.CreateTime = result[i].StringTime;
+                        model.ApprovalTime = result[i].ApprovalTime;
+                        model.ApprovalStatus = ApprovalStatusMean(result[i].ApprovalStatus, result[i].ApprovalPost);
+                        model.Operation = "<a onclick=\"showDialog('" + model.BillNo + "','" + model.Type + "')\">查看详情</a>";
+                        newlist.push(model);
+                    }
+                    $('#table').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+    function ApprovalStatusMean(ApprovalStatus, ApprovalPost) {
+        if (ApprovalStatus == 2) {
+            return "通过";
+        }
+        if (ApprovalStatus == 3) {
+            return "拒绝";
+        }
+        if (ApprovalPost) {
+            return ApprovalPost + "审核中";
+        }
+    }
+</script>
+
+<div class="hd">
+    <h2 class="page_title">我的单据</h2>
+</div>
+
+<div class="row" style="margin-top: 40px;">
+    <div>
+        <div style="width: 70px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;">单据类型:</div>
+        <div class="SearchKeywords" id="BillTypes">
+            <div val="s1" class="SelectTabItem label label-success" onclick="tagClick(this)">费用报销单</div>
+            <div val="s2" class="NormalTabItem label label-default" onclick="tagClick(this)">付款通知书</div>
+            <div val="s3" class="NormalTabItem label label-default" onclick="tagClick(this)">借款单</div>
+            <div val="s4" class="NormalTabItem label label-default" onclick="tagClick(this)">还款单</div>
+
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div>
+        <div style="width: 70px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;">日期范围:</div>
+        <div class="SearchKeywords">
+            <div val="y1" class="SelectTabItem label label-success" onclick="tagClick(this)">全部</div>
+            <div val="y2" class="NormalTabItem label label-default" onclick="tagClick(this)">当天</div>
+            <div val="y3" class="NormalTabItem label label-default" onclick="tagClick(this)">本周</div>
+            <div val="y4" class="NormalTabItem label label-default" onclick="tagClick(this)">本月</div>
+            <div val="y5" class="NormalTabItem label label-default" onclick="tagClick(this)">上月</div>
+
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+</div>
+
+
+<div class="row">
+    <div style="margin: 15px;">
+        <table id="table"
+            data-search="false"
+            data-mobile-responsive="true"
+            data-check-on-init="true">
+            <thead>
+                <tr>
+                    <th data-field="BillNo" data-sortable="true" style="width: 90px;">单号</th>
+                    <th data-field="Type" data-sortable="true">单据类型</th>
+                    <th data-field="Owner" data-sortable="true">业务人</th>
+                    <th data-field="TotalMoney" data-sortable="true">发生金额</th>
+                    <th data-field="CreateTime" data-sortable="true">创建日期</th>
+                    <th data-field="ApprovalTime" data-sortable="true">办结日期</th>
+                    <th data-field="ApprovalStatus" data-sortable="true">审核状态</th>
+                    <th data-field="Operation" data-sortable="true">操作</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/Shared/PublicPrint.cshtml")
+
+<script src="~/Scripts/Bootstrap/js/bootstrap.min.js"></script>
+<link href="~/Scripts/Bootstrap/css/bootstrap-table.css" rel="stylesheet" />
+<script src="~/Scripts/Bootstrap/js/bootstrap-table.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-table-mobile.js"></script>
+
+
+
+
+

@@ -1,0 +1,177 @@
+﻿@{
+    ViewBag.Title = "我的还款单";
+    string str = ViewData["ModelString"] as String;
+}
+
+<style type="text/css">
+    html {
+        -webkit-text-size-adjust: none;
+    }
+
+    .NormalTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #CCCCCC;
+        float: left;
+    }
+
+    .SelectTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #5CB85C;
+        float: left;
+    }
+</style>
+
+<script>
+    $(function () {
+        LoadData();
+    })
+    //标签点击事件
+    function tagClick(eml) {
+        //设置标签状态
+        $(eml).siblings().removeClass("SelectTabItem label label-success").addClass("NormalTabItem label label-default").end().addClass("SelectTabItem label label-success");
+        var rfm = "";
+
+        //获取选中的值
+        $(".SearchKeywords").children("div").each(function () {
+            if ($(this).hasClass("SelectTabItem")) {
+                var val = $(this).attr("val");
+                ShowData(val);
+            }
+        })
+    }
+
+    function ShowData(Name) {
+        if (Name == '全部') {
+            $('#table').bootstrapTable('filterBy', {
+                RefundType: ["费用单", "现金", "总部现金冲账"]
+            });
+        }
+        else {
+            $('#table').bootstrapTable('filterBy', {
+                RefundType: [Name]
+            });
+        }
+    }
+
+    function LoadData() {
+
+        var model;
+        try {
+            model = JSON.parse('@Html.Raw(str)');
+
+        } catch (e) {
+
+            model = eval('@Html.Raw(str)');
+        }
+
+        var list = new Array();
+        if (model.length != 0) {
+            for (var i = 0; i < model.length; i++) {
+                var obj = { BorrowBillNo: "", BillNo: "", RefundType: "", Owner: "", RealRefundMoney: "", StringTime: "", ApprovalTime: "", ApprovalStatus: "" };
+                obj.BorrowBillNo = model[i].BorrowBillNo;
+                obj.BillNo = model[i].BillNo;
+                obj.RefundType = GetBillTypeFromModel(model[i].RefundType, model[i].Flag);
+                obj.Owner = model[i].Owner;
+                obj.RealRefundMoney = model[i].RealRefundMoney;
+                obj.StringTime = model[i].StringTime;
+                obj.ApprovalTime = model[i].ApprovalTime;
+                obj.ApprovalStatus = ApprovalStatusMean(model[i].ApprovalStatus, model[i].ApprovalPost);
+                list.push(obj);
+            }
+        }
+        $('#table').bootstrapTable({
+            data: list
+        });
+    }
+
+    function GetBillTypeFromModel(RefundType, Flag) {
+        if (RefundType == "FeeBill") {
+            return "费用单";
+        }
+        else if (RefundType == "Cash") {
+            if (Flag == "0") {
+                return "现金";
+            }
+            else {
+                return "总部现金冲账";
+            }
+        }
+    }
+
+    function ApprovalStatusMean(ApprovalStatus, ApprovalPost) {
+        if (ApprovalStatus == 2) {
+            return "通过";
+        }
+        if (ApprovalStatus == 3) {
+            return "拒绝";
+        }
+        if (ApprovalPost) {
+            return ApprovalPost + "审核中";
+        }
+    }
+</script>
+
+<div class="hd">
+    <h2 class="page_title">还款记录</h2>
+</div>
+
+<div class="row" style="margin-top: 40px;">
+    <div>
+        <div style="width: 70px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;">还款类型:</div>
+        <div class="SearchKeywords">
+            <div val="全部" class="SelectTabItem label label-success" onclick="tagClick(this)">全部</div>
+            <div val="费用单" class="NormalTabItem label label-default" onclick="tagClick(this)">费用单</div>
+            <div val="现金" class="NormalTabItem label label-default" onclick="tagClick(this)">现金</div>
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div style="margin: 15px;">
+        <table id="table"
+            data-show-columns="true"
+            data-search="true"
+            data-mobile-responsive="true"
+            data-check-on-init="true">
+            <thead>
+                <tr>
+                    <th data-field="BorrowBillNo" data-sortable="true" style="width: 90px;">借款单号</th>
+                    <th data-field="BillNo" data-sortable="true" style="width: 90px;">还款单号</th>
+                    <th data-field="RefundType" data-sortable="true">还款类型</th>
+                    <th data-field="Owner" data-sortable="true">业务人</th>
+                    <th data-field="RealRefundMoney" data-sortable="true">还款总额</th>
+                    <th data-field="StringTime" data-sortable="true">还款时间</th>
+                    <th data-field="ApprovalTime" data-sortable="true">办结时间</th>
+                    <th data-field="ApprovalStatus" data-sortable="true">审核状态</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+
+</div>
+
+
+
+
+<script src="~/Scripts/Bootstrap/js/bootstrap.min.js"></script>
+<link href="~/Scripts/Bootstrap/css/bootstrap-table.css" rel="stylesheet" />
+<script src="~/Scripts/Bootstrap/js/bootstrap-table.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-table-mobile.js"></script>

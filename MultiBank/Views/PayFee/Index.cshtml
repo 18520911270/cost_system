@@ -1,0 +1,138 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Scripts/mobiscroll/mobiscroll-2.13.2.full.min.css" rel="stylesheet" />
+
+
+<div class="panel blue-bg" style="margin-top: 70px;">
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-md-12">
+                <span class="state-title" style="color: #313131; font-family: 'Microsoft YaHei'; font-size: 30px; text-align: center;">费用汇总</span>
+                <span class="state-title" style="color: #313131; font-family: 'Microsoft YaHei'; font-size: 16px; text-align: center;">费用报销</span>
+
+                <div class="col-md-12">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11" style="line-height: 35px; text-align: left">
+                        同步<i class="iconfont" style="cursor: pointer; margin-right: 20px;" onclick="SynchData()">&#xe600;</i>
+                        收藏<i class="iconfont" style="cursor: pointer" onclick="CollectionHabit()">&#xe622;</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div style="border-top: #cccccc 1px dotted; overflow: hidden; height: 1px">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-1" style="line-height: 35px; text-align: right">
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">选择日期</span>
+                        <input type="text" id="StartTime" readonly="readonly" style="width: 120px; background: #FFFFFF" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">付款代码</span>
+                        <select class="form-control" style="width: 120px;" id="PayCompanyCode">
+                            <option value="">全部</option>
+                            <option value="1000">玛丝菲尔</option>
+                            <option value="1300">噢姆公司</option>
+                            <option value="2000">素公司</option>
+                            <option value="2100">KRIZIA中国</option>
+                            <option value="4000">惠州制造公司</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">所在城市</span>
+                        <select id="City" class="form-control" style="width: 120px;">
+                            <option value="">未选定</option>
+                            <option value="1">选定</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">单据类型</span>
+                        <select id="BillType" class="form-control" style="width: 120px;">
+                            <option value="">未选定</option>
+                            <option value="1">选定</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">公私类型</span>
+                        <select id="TradeType" class="form-control" style="width: 120px;">
+                            <option value="">未选定</option>
+                            <option value="1">对私</option>
+                            <option value="2">对公</option>
+                            <option value="3">外汇</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <button class="btn btn-success" id="btnSearch" onclick="_GetIndexData('prepay')"><i class="iconfont">&#xe62d;</i>&nbsp;查询</button>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12">
+                <ul class="nav nav-tabs" role="tablist" style="cursor: pointer" id="tablist">
+                    <li role="presentation" class="active"><a aria-controls="apply" role="tab" data-toggle="tab" onclick="_GetIndexData('prepay')">待付清单</a></li>
+                    <li role="presentation"><a aria-controls="replenishment" role="tab" data-toggle="tab" onclick="_GetIndexData('original')">原始数据</a></li>
+                    <li role="presentation"><a aria-controls="replenishment" role="tab" data-toggle="tab" onclick="_GetIndexData('Invalid')">无效数据</a></li>
+                    <li role="presentation"><a aria-controls="allot" role="tab" data-toggle="tab" onclick="_GetIndexData('notpush')">未推送</a></li>
+                    <li role="presentation"><a aria-controls="allot" role="tab" data-toggle="tab" onclick="_GetIndexData('nopay')">已推送未付款</a></li>
+                    <li role="presentation"><a aria-controls="takestock" role="tab" data-toggle="tab" onclick="_GetIndexData('successpay')">成功付款</a></li>
+                    <li role="presentation"><a aria-controls="takestock" role="tab" data-toggle="tab" onclick="_GetIndexData('fail')">导入银企失败数据</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="apply">
+                        <section class="panel">
+                            <div class="panel-body">
+                                <div class="dt-grid-container" style="margin-top: 25px;">
+                                    <table class="dt-grid table table-bordered table-hover table-responsive" id="_PayFeeTable">
+                                    </table>
+                                </div>
+                                <div id="NoData" class="dt-grid-container">
+                                </div>
+                                <div id="SubmitData" class="dt-grid-container" style="display: none">
+                                    <div class="col-md-8">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-success" onclick="downloadExcel()"><i class="iconfont">&#xe605;</i>&nbsp;导出到excel</button>
+                                    </div>
+                                    <div class="col-md-2" id="SubmitButton">
+                                        <button class="btn btn-success" onclick="SubmitData()"><i class="iconfont">&#xe66b;</i>&nbsp;提交到银连系统</button>
+                                    </div>
+                                    <div class="col-md-2" id="Revoke" style="display: none">
+                                        <button class="btn btn-success" onclick="UndoOperation()"><i class="iconfont">&#xe60d;</i>&nbsp;回退</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@Html.Partial("Js", "PayFee")
+
+
+

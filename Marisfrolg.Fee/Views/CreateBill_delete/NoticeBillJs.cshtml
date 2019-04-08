@@ -1,0 +1,57 @@
+﻿<link rel="stylesheet" href="~/Scripts/autoComplete/horsey.css" />
+<script type="text/javascript" src="~/Scripts/autoComplete/horsey.js"></script>
+
+
+
+<script type="text/javascript">
+
+    
+
+
+    $(function () {
+        loadAutoComplete();
+    });
+
+    function loadAutoComplete()
+    {
+        horsey(providerText, {
+            suggestions: [
+              { value: 'banana', text: 'Bananas from Amazon Rainforest' },
+              { value: 'apple', text: 'Red apples from New Zealand' },
+              { value: 'orange', text: 'Oranges from Moscow' },
+              { value: 'lemon', text: 'Juicy lemons from the rich Amalfitan Coast' },
+              { value: 'akt', text: '深圳阿卡特加工厂' }
+            ]
+        });
+
+
+        events(providerText, 'horsey-selected', function (e) {
+
+            
+        });
+
+
+    }
+
+
+    function events(el, type, fn) {
+        if (el.addEventListener) {
+            el.addEventListener(type, fn);
+        } else if (el.attachEvent) {
+            el.attachEvent('on' + type, wrap(fn));
+        } else {
+            el['on' + type] = wrap(fn);
+        }
+        function wrap(originalEvent) {
+            var e = originalEvent || global.event;
+            e.target = e.target || e.srcElement;
+            e.preventDefault = e.preventDefault || function preventDefault() { e.returnValue = false; };
+            e.stopPropagation = e.stopPropagation || function stopPropagation() { e.cancelBubble = true; };
+            fn.call(el, e);
+        }
+    }
+
+</script>
+
+
+

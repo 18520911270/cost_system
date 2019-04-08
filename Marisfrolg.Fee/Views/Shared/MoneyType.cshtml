@@ -1,0 +1,25 @@
+﻿<div class="col-md-8">
+    <!-- 第3大块 -->
+    <div class="weui_cells_title">货币类型</div>
+    <div class="weui_cells">
+        <div class="weui_cell">
+            <div class="weui_cell_hd">
+                <label for="" class="weui_label" style="width: 5em;" id="bxr">货币类型</label>
+            </div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p id="MoneyName" style="color: #999999; font-size: 15px;" moneytype="CNY">元</p>
+            </div>
+            <div class="weui_cell_ft"><a id="MoneyType" class="weui_btn weui_btn_mini weui_btn_default" role="货币类型">修改</a></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#MoneyType").click(function () {
+            $("#big_title").text($(this).attr("role"));
+            $('#showList').trigger("click");
+        })
+    })
+</script>
+

@@ -1,0 +1,502 @@
+﻿@{
+    ViewBag.Title = "我的审批";
+}
+
+<style type="text/css">
+    html {
+        -webkit-text-size-adjust: none;
+    }
+
+    .NormalTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #CCCCCC;
+        float: left;
+    }
+
+    .SelectTabItem {
+        font-family: 'Microsoft YaHei';
+        font-size: 12px;
+        vertical-align: bottom;
+        margin: 3px;
+        cursor: pointer;
+        /*padding:5px;*/
+        padding-top: 5px;
+        padding-bottom: 5px;
+        background-color: #5CB85C;
+        float: left;
+    }
+
+    .input_date {
+        width: 100%;
+        border: 0;
+        outline: 0;
+        -webkit-appearance: none;
+        background-color: transparent;
+        font-size: inherit;
+        color: inherit;
+        height: 14px;
+        line-height: 14px;
+    }
+
+    @@media screen and (max-width: 800px) {
+        #tempdata11 {
+            display: none;
+        }
+
+        #BillTypes {
+            margin-left: 15px;
+        }
+
+        #tempdata12 {
+            display: none;
+        }
+
+        #tempdata13 {
+            margin-left: 15px;
+        }
+
+        #quickConfirmID {
+            display: none;
+        }
+
+        #tempdata14 {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    $(function () {
+        GetMyBillList(0, 1);  //获取打印数据(加载费用报销单，所以给5)
+        jinzhi = 1;  //让可以滑动
+
+        if (employeeInfo.EmployeeNo == "00100" || employeeInfo.EmployeeNo == "01981") {
+            $("#BatchApproval").show();
+        }
+    });
+    //标签点击事件
+    //标签点击事件
+    function tagClickSearchBill(eml) {
+        if (eml != null) {
+            //设置标签状态
+            $(eml).siblings().removeClass("SelectTabItem label label-success").addClass("NormalTabItem label label-default").end().addClass("SelectTabItem label label-success");
+            var rfm = "";
+            var tags = "";
+        }
+        //获取选中的值
+        $(".SearchKeywords").children("div").each(function () {
+            if ($(this).hasClass("SelectTabItem")) {
+
+                var val = $(this).attr("val");
+                if (val) {
+                    if (val.indexOf("s") >= 0) {
+                        tags = val.split('s')[1];
+                    } else {
+                        rfm = val.split('y')[1];
+                    }
+                }
+            }
+        })
+        if (rfm == "6") {
+            $("#CreateTimeDefined").show();
+            if (eml == null) {
+                GetMyBillList(tags, rfm);
+            }
+        }
+        else {
+            $("#CreateTimeDefined").hide();
+            //获取打印数据
+            GetMyBillList(tags, rfm);
+        }
+    }
+
+    function UserDefinedFunction() {
+        //获取选中的值
+        $(".SearchKeywords").children("div").each(function () {
+            if ($(this).hasClass("SelectTabItem")) {
+
+                var val = $(this).attr("val");
+                if (val.indexOf("s") >= 0) {
+                    tags = val.split('s')[1];
+                } else {
+                    rfm = val.split('y')[1];
+                }
+            }
+        });
+        GetMyBillList(tags, rfm);
+    }
+
+
+    var uiDatas = new Array();
+    function GetMyBillList(tags, val) {
+        $("#loadingToast").show();
+        $.ajax({
+            url: "@Url.Content("~/FinanceApproval/GetMyProcess/")",
+            data: { Type: tags, Time: val, TimeValue1: $("#UserDefinedOne").val(), TimeValue2: $("#UserDefinedTwo").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#table").find("tbody").remove();
+                if (result) {
+                    $("#FinanceApproval1").show();
+                    $("#loadingToast").hide();
+                    result = JSON.parse(result);
+                    debugger;
+                    var newlist = new Array();
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { CheckStatus: "", DepartmentName: "", Shop: "", BillNo: "", Type: "", Brand: "", Onwer: "", TotalMoney: "", CreateTime: "", ApprovalTime: "", ApprovalStatus: "", AssignmentID: "", PageName: "", AuditTime: "", CostTime: "" };
+                        var Brand = "";
+                        if (result[i].PersonInfo != undefined && result[i].PersonInfo.Brand != undefined && result[i].PersonInfo.Brand.length > 0) {
+                            for (var k = 0; k < result[i].PersonInfo.Brand.length; k++) {
+                                if (k < result[i].PersonInfo.Brand.length - 1) {
+                                    Brand += result[i].PersonInfo.Brand[k] + ","
+                                }
+                                else {
+                                    Brand += result[i].PersonInfo.Brand[k];
+                                }
+                            }
+                        }
+                        else {
+                            Brand = "无记账品牌";
+                        }
+                        //$("#billType").text(tagsMean(tags));
+                        model.DepartmentName = result[i].PersonInfo.Department;
+                        model.Shop = result[i].PersonInfo.Shop;
+                        model.BillNo = result[i].BillNo;
+                        model.Type = tagsMean(result[i].PageName);
+                        model.Brand = Brand;
+                        model.Owner = result[i].Owner;
+                        model.TotalMoney = result[i].TotalMoney;
+                        model.CreateTime = result[i].StringTime;
+                        model.AssignmentID = result[i].AssignmentID;
+                        model.PageName = result[i].PageName;
+                        model.ApprovalStatus = ApprovalStatusMean(result[i].ApprovalStatus, result[i].ApprovalPost);
+                        if (result[i].AuditTime.split('T')[0] != "0001-01-01") {
+                            model.AuditTime = result[i].AuditTime.split('T')[0];
+                            model.CostTime = result[i].CostTime;
+                        }
+
+                        //具有财务权限
+                        var OperationContent = "";
+                        if (IsShowEdit) {
+                            OperationContent += "<a onclick=\"showEditDialog('" + result[i].BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '编辑' + "</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+                        }
+                        OperationContent += "<a onclick=\"showDialog('" + result[i].BillNo + "','" + result[i].PageName + "','" + result[i].AssignmentID + "')\" style='color:blue;cursor:pointer;'>" + '审批' + "</a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick=\"PrintOneBill('" + result[i].BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a>";
+                        if (navigator.userAgent.indexOf("Marisfrolg") >= 1) {
+                            OperationContent += "&nbsp;&nbsp;&nbsp;&nbsp;<a  href=\"#uc:" + result[i].Creator + "\"  style='color:blue;cursor:pointer;'>" + 'UC沟通' + "</a>";
+                        }
+                        if (result[i].ApprovalStatus != "5") {
+                            OperationContent += "&nbsp;&nbsp;&nbsp;&nbsp;<a onclick=\"ShowShelveWindow('" + result[i].BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '搁置' + "</a>";
+                        }
+
+                        model.Operation = OperationContent;
+                        newlist.push(model);
+                    }
+                    $('#table').bootstrapTable({
+                        data: newlist
+                    });
+                    uiDatas = newlist;
+                    $('#table').bootstrapTable('refreshOptions', {
+                        data: newlist,
+                        quickConfirm: true,
+                        onQuickConfirm: quickHandleBill
+                    });
+                }
+            }
+        })
+    }
+
+
+    function quickHandleBill(billNo) {
+        var CanHandle = JudgeCookieExpires();
+        if (CanHandle == false) {
+            return false;
+        }
+
+        var $BillNoList;  //数据集列表
+        if (billNo) {
+            billNo = billNo.toUpperCase();
+            $BillNoList = billNo.replace(/\s/g, "").replace(/,/g, "").replace(/F/g, ",F").replace(/J/g, ",J").substr(1).split(",");     //得到数据集列表
+        }
+
+        if ($BillNoList) {
+            for (var j = 0; j < $BillNoList.length; j++) {
+                var $billNo = null;
+                var $Type;
+                var $AssignmentID;
+                for (var i = 0; i < uiDatas.length; i++) {
+                    if (uiDatas[i].BillNo == $BillNoList[j]) {
+                        $billNo = uiDatas[i].BillNo;
+                        $Type = uiDatas[i].PageName;
+                        $AssignmentID = uiDatas[i].AssignmentID;
+                        break;
+                    }
+                }
+                if ($billNo) {
+                    //showDialog($billNo, $Type, $AssignmentID);
+                    quickSubmitWorkFlow($AssignmentID, "1");
+                    $("#ShowBillStatus").text("单号" + $BillNoList[j] + "审批成功");
+                    NoAjaxLoadDada($billNo);
+                    //return;
+                    continue;
+                }
+            }
+        }
+        else {
+            //$("#ShowBillStatus").text("单号" + billNo + "不存在");
+            submitMessageShow("此单据不存在!", "error");
+        }
+    }
+
+    //不用异步重新刷新数据
+    function NoAjaxLoadDada(billNo) {
+        var NewArrayDatas = new Array();
+        for (var i = 0; i < uiDatas.length; i++) {
+            if (uiDatas[i].BillNo != billNo) {
+                NewArrayDatas.push(uiDatas[i]);
+            }
+        };
+        uiDatas = NewArrayDatas;
+        $("#table").find("tbody").remove();
+        $('#table').bootstrapTable({
+            data: NewArrayDatas
+        });
+        $('#table').bootstrapTable('refreshOptions', {
+            data: NewArrayDatas,
+            quickConfirm: true,
+            onQuickConfirm: quickHandleBill
+        });
+    }
+
+
+    //提交审批(跟单据类型无关)
+    function quickSubmitWorkFlow(AssignmentID, work) {
+        $.ajaxSetup({
+            async: false
+        });
+        $.ajax({
+            url: "@Url.Content("~/Home/SubmitWorkFlowList/")",
+            data: { AssignmentID: AssignmentID, ActionName: work, Remark: "" },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result) {
+                    submitMessageShow("审批已完成!");
+                }
+                else {
+                    submitMessageShow("失败!", "error");
+                }
+            }
+        })
+
+        $.ajaxSetup({
+            async: true
+        });
+    };
+
+    //搁置单据
+    function ShelveBill() {
+        var BillNo = $("#ShelveHiddenValue").attr("BillNo");
+        var Type = $("#ShelveHiddenValue").attr("SType");
+        var Remark = $("#ShelveContent").val();
+        if (Remark == "" || Remark == undefined) {
+            submitMessageShow("需填写搁置理由!", "error");
+            return false;
+        }
+        $.ajax({
+            url: "@Url.Content("~/FinanceApproval/ShelveBill/")",
+            data: { BillNo: BillNo, Type: Type, Remark: Remark },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result == "Success") {
+                    //1.0提示搁置成功
+                    submitMessageShow("搁置成功!");
+                    //2.0js更改一个值
+                    var NewArrayDatas = new Array();
+                    for (var i = 0; i < uiDatas.length; i++) {
+                        if (uiDatas[i].BillNo != BillNo) {
+                            NewArrayDatas.push(uiDatas[i]);
+                        }
+                        else {
+                            uiDatas[i].ApprovalStatus = "搁置中,理由为：" + Remark;
+                            var OperationContent = "";
+                            if (IsShowEdit) {
+                                OperationContent += "<a onclick=\"showEditDialog('" + uiDatas[i].BillNo + "','" + uiDatas[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '编辑' + "</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+                            }
+                            OperationContent += "<a onclick=\"showDialog('" + uiDatas[i].BillNo + "','" + uiDatas[i].PageName + "','" + uiDatas[i].AssignmentID + "')\" style='color:blue;cursor:pointer;'>" + '审批' + "</a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick=\"PrintOneBill('" + uiDatas[i].BillNo + "','" + uiDatas[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a>";
+                            if (navigator.userAgent.indexOf("Marisfrolg") >= 1) {
+                                OperationContent += "&nbsp;&nbsp;&nbsp;&nbsp;<a  href=\"#uc:" + uiDatas[i].Creator + "\"  style='color:blue;cursor:pointer;'>" + 'UC沟通' + "</a>";
+                            }
+                            uiDatas[i].Operation = OperationContent;
+                            NewArrayDatas.push(uiDatas[i]);
+                        }
+                    };
+                    uiDatas = NewArrayDatas;
+                    $("#table").find("tbody").remove();
+
+                    $('#table').bootstrapTable({
+                        data: NewArrayDatas
+                    });
+                    $('#table').bootstrapTable('refreshOptions', {
+                        data: NewArrayDatas
+                    });
+                }
+                else {
+                    submitMessageShow("搁置失败!", "error");
+                }
+                $("#dialoShelve").hide();
+            }
+        });
+    }
+
+    function ShowShelveWindow(BillNo, Type) {
+        var remark = "单据格式不符！";
+        $("#ShelveContent").val(remark);
+        $("#dialoShelve").show();
+        $("#ShelveHiddenValue").attr("BillNo", BillNo);
+        $("#ShelveHiddenValue").attr("SType", Type);
+    }
+
+    function BatchApproval() {
+
+        var model = $("#table").bootstrapTable('getSelections');
+        if (model == undefined || model.length <= 0) {
+            submitMessageShow("请勾选需要批量审批的单据!", "error");
+            return false;
+        }
+        //循环审批
+        for (var i = 0; i < model.length; i++) {
+            quickSubmitWorkFlow(model[i].AssignmentID, 1);
+            NoAjaxLoadDada(model[i].BillNo);
+        }
+    }
+
+</script>
+
+<div class="hd">
+    <h2 class="page_title">我的审批</h2>
+</div>
+
+<div class="row" style="margin-top: 40px;">
+    <div>
+        <div style="width: 70px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;" id="tempdata11">单据类型:</div>
+        <div class="SearchKeywords" id="BillTypes">
+            <div val="s0" class="SelectTabItem label label-success" onclick="tagClickSearchBill(this)">全部</div>
+            <div val="s1" class="NormalTabItem label label-default" onclick="tagClickSearchBill(this)">费用报销单</div>
+            <div val="s2" class="NormalTabItem label label-default" onclick="tagClickSearchBill(this)">付款通知书</div>
+            <div val="s3" class="NormalTabItem label label-default" onclick="tagClickSearchBill(this)">借款单</div>
+            <div val="s4" class="NormalTabItem label label-default" onclick="tagClickSearchBill(this)">还款单</div>
+
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+    </div>
+
+    <div>
+        <div style="width: 70px; font-size: 12px; text-align: right; float: left; vertical-align: bottom; padding-top: 5px;" id="tempdata12">创建日期:</div>
+        <div class="SearchKeywords" id="tempdata13">
+            <div val="y1" class="SelectTabItem label label-success" onclick="tagClickSearchBill(this)">全部</div>
+            <div val="y2" class="NormalTabItem label label-default" onclick="tagClickSearchBill(this)">当天</div>
+            <div val="y3" class="NormalTabItem label label-default" onclick="tagClickSearchBill(this)">本周</div>
+            <div val="y4" class="NormalTabItem label label-default" onclick="tagClickSearchBill(this)">本月</div>
+            <div val="y5" class="NormalTabItem label label-default" onclick="tagClickSearchBill(this)">上月</div>
+            <div val="y6" class="NormalTabItem label label-default" onclick="tagClickSearchBill(this)">自定义</div>
+
+
+            <div style="background-color: #5CB85C; display: none; margin-top: 2px;" id="CreateTimeDefined">
+                <input class="weui_input" type="date" style="display: block; width: 120px; float: left;" id="UserDefinedOne">
+                <input class="weui_input" type="date" style="display: block; width: 120px; float: left;" id="UserDefinedTwo">
+                <span id="fail" style="font-size: 14px; padding-top: 0px; padding-bottom: 0px;" onclick="UserDefinedFunction()">搜索</span>
+            </div>
+        </div>
+
+        <div class="col-md-12" style="clear: both; border-top: #cccccc 0px dotted; overflow: hidden; height: 1px; margin-top: 0px; margin-bottom: 5px;"></div>
+
+    </div>
+
+
+    <div class="col-md-3" id="tempdata14">
+        <a href="javascript:BulkPrint();" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-top: 6px;">批量打印</a>
+        <a href="javascript:BatchApproval();" class="weui_btn weui_btn_mini weui_btn_primary" style="margin-top: 6px; display: none;" id="BatchApproval">批量审批</a>
+    </div>
+
+
+    <div class="col-md-12">
+        <span style="margin-left: 4px; color: #F00; margin-left: 10px;" id="ShowBillStatus"></span>
+    </div>
+</div>
+
+
+<div class="row" id="FinanceApproval1" style="display: none">
+    <div style="margin: 15px;">
+        <table id="table"
+            data-pagination="true"
+            data-search="true"
+            data-mobile-responsive="true"
+            data-check-on-init="true">
+            <thead>
+                <tr>
+                    <th data-field="CheckStatus" data-checkbox="true"></th>
+                    <th data-field="DepartmentName" data-sortable="true">所在片区</th>
+                    <th data-field="Shop" data-sortable="true">所在店柜</th>
+                    <th data-field="BillNo" data-sortable="true">单号</th>
+                    <th data-field="Type" data-sortable="true" data-visible="false">单据类型</th>
+                    <th data-field="Brand" data-sortable="true">发生品牌</th>
+                    <th data-field="Owner" data-sortable="true">业务人</th>
+                    <th data-field="TotalMoney" data-sortable="true">发生金额</th>
+                    @* <th data-field="CreateTime" data-sortable="true">创建日期</th>
+                    <th data-field="ApprovalStatus" data-sortable="true">审核状态</th>*@
+                    <th data-field="AuditTime" data-sortable="true">上游审批时间</th>
+                    <th data-field="CostTime" data-sortable="true">所耗时(天)</th>
+                    <th data-field="Operation" data-sortable="true">操作</th>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+
+</div>
+
+<input type="hidden" id="ShelveHiddenValue" />
+
+<div class="weui_dialog_confirm" id="dialoShelve" style="display: none; background-color: #52a4a4">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 130px;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">填写搁置意见</strong></div>
+        <div class="weui_dialog_bd">
+            <input class="weui_input" id="ShelveContent" style="color: red;" />
+        </div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default" onclick="HideBanners('dialoShelve')">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary" onclick="ShelveBill()">确定</a>
+        </div>
+    </div>
+</div>
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/Shared/PublicPrint.cshtml")
+@Html.Partial("~/Views/FinanceApproval/EditView.cshtml")
+@Html.Partial("~/Views/Shared/MyBillList.cshtml")
+
+
+<script src="~/Scripts/Bootstrap/js/bootstrap.min.js"></script>
+<link href="~/Scripts/Bootstrap/css/bootstrap-table.css" rel="stylesheet" />
+<script src="~/Scripts/Bootstrap/js/bootstrap-table.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-table-mobile.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.Barcode/jquery-barcode.js"></script>
+<script type="text/javascript" src="~/Scripts/Jquery.Barcode/jquery.jqprint-0.3.js"></script>
+
+
+

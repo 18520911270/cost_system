@@ -1,0 +1,1215 @@
+﻿<script type="text/javascript" src="~/Scripts/jquery.cookies.2.2.0.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<script type="text/javascript" src="~/Scripts/ajaxfileupload.js"></script>
+<link href="~/Scripts/Viewer/viewer.min.css" rel="stylesheet" />
+<script src="~/Scripts/Viewer/viewer.min.js"></script>
+<script src="~/Scripts/clipboard.js"></script>
+
+<div class="weui_dialog_confirm" id="PublicCommitBillTest" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog" style="height: 130px;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提交单据</strong></div>
+        <div class="weui_dialog_bd" id="CommitBillTestText" style="color: black"></div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default LC">不提交，我再看看</a>
+            <a href="javascript:;" class="weui_btn_dialog primary LC">确定提交了</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="weui_dialog_confirm" id="FB_BillInfo" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog" style="height: 130px;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">单据信息</strong></div>
+        <div class="weui_dialog_bd" id="FB_BillNo" style="color: black"></div>
+        <div class="weui_dialog_ft">
+            <a class="weui_btn_dialog default btncopy" onclick="submitMessageShow('复制成功!')" data-clipboard-action="copy" data-clipboard-target="#FB_BillNo">复制单号</a>
+            <a class="weui_btn_dialog primary" onclick="GotoPage_V1()">前往当前页</a>
+        </div>
+    </div>
+</div>
+
+
+<ul id="photosV1" class="weui_uploader_files" style="margin-top: 5px; margin-left: -15px; display: none">
+</ul>
+
+
+<script type="text/javascript">
+
+    @{
+        Marisfrolg.Fee.Models.FeeBillModelRef FeeModel = ViewData["FeeBillModelRef"] as Marisfrolg.Fee.Models.FeeBillModelRef;
+        if (FeeModel == null)
+        {
+            FeeModel = new Marisfrolg.Fee.Models.FeeBillModelRef();
+        }
+        if (FeeModel.CountTime == null)
+        {
+            FeeModel.CountTime = new Marisfrolg.Fee.Models.CountTime();
+        }
+        string Type = FeeModel.BillNo == null ? "FeeBill" : "Draft";
+        string IsDeleteDrafeNo = FeeModel.DeleteDraftNo == null ? "0" : "1";
+}
+    function louisUpload(option) {
+        var xhr = new XMLHttpRequest();
+
+        //构造模式
+        var uploadUrl, callback, uploading, beforeSend, guid;
+        guid = option.guid;
+        uploadUrl = option.uploadUrl;//上传地址
+        callback = option.callback;//上传完成回调
+        uploading = option.uploading;//上传进度回调
+        beforeSend = option.beforeSend;//上传开始检查
+        this.file = option.file;
+
+
+        //开始上传命令
+        this.start = function () {
+
+            if (beforeSend instanceof Function) {
+                if (beforeSend(this.file, guid) === false) {
+                    return false;
+                }
+            }
+            var fd = new FormData();
+            fd.append("files", this.file);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    if (callback instanceof Function) {
+                        callback(xhr.responseText, guid);
+                    }
+                }
+            }
+
+
+            xhr.upload.onprogress = function (evt) {
+                //侦查附件上传情况  
+                //通过事件对象侦查  
+                //该匿名函数表达式大概0.05-0.1秒执行一次  
+                //console.log(evt);  
+                //console.log(evt.loaded);  //已经上传大小情况  
+                //evt.total; 附件总大小  
+                var loaded = evt.loaded;
+                var tot = evt.total;
+                var per = Math.floor(100 * loaded / tot);  //已经上传的百分比  
+
+                if (uploading instanceof Function) {
+                    uploading(per, guid);
+                }
+
+            };
+
+            xhr.open("post", uploadUrl);
+            xhr.send(fd);
+        };
+
+    }
+
+
+    $(function () {
+        InitPageData();
+        LoadBillInfo();
+    });
+
+    $(document).ready(function () {
+        var clipboard = new Clipboard('.btncopy'); //复制单据
+
+        $("#photos").delegate("li", "click", function () {
+            var url = $(this).attr("url");
+            if (url == undefined) {
+                return;
+            }
+            if (url.indexOf("pdf") > -1) {
+                return;
+            }
+            var viewer = new Viewer(document.getElementById('photosV1'), {
+                url: 'data-original',
+                zIndex: 9999,
+                hide: function () {
+                    viewer.destroy();
+                }
+            });
+            $("#photosV1 li ").eq($(this).index()).find("img").click();
+        });
+    });
+
+
+    function InitPageData() {
+
+        $('#btnSubmitFeeBill').click(function () {
+            submit();
+        });
+        $('#btnSubmitFeeBillDraftBox').click(function () {
+            submitDraftBox();
+
+
+        });
+
+        $('#workFlowCreate').click(function () {
+            FlowCreate();
+
+        });
+
+       // InitWeiXinConfig();
+
+
+        $("#invoiceSelect").change(function (e) {
+            var file = e.target.files || e.dataTransfer.files;
+            if (file) {
+                for (var i = 0; i < file.length; i++) {
+                    var temps = file[i].name.split('.');
+                    var extendName = temps[temps.length - 1].toLowerCase();
+                    var src = window.URL.createObjectURL(file[i]);
+                    //本地图像id,与服务器文件名无关，处理图片的属性
+                    var newguid = newGuid().toString();
+                    var insertObj;
+                    if (!(extendName == "jpg" || extendName == "jpeg" || extendName == "bmp" || extendName == "png" || extendName == "gif")) {
+                        insertObj = ("<li id=\"" + newguid + "\" class=\"weui_uploader_file weui_uploader_status\" style=\"background-image:url(../Content/Images/PDF.jpg)\">"
+    + "<div class=\"weui_uploader_status_content\">50%</div>"
+    + "<div onclick=\"deletePhoto('" + newguid + "',this)\" class=\"btnDelete\" style=\"float:right;width:30px;height:30px;background-color:#FEFEFE;\"><span  class=\"glyphicon glyphicon-minus btnDelete\" aria-hidden=\"true\" style=\"color:red;\"></span></div>"
+    + "</li>");
+                    }
+                    else {
+                        insertObj = ("<li id=\"" + newguid + "\" class=\"weui_uploader_file weui_uploader_status\" style=\"background-image:url(" + src + ")\">"
+                            + "<div class=\"weui_uploader_status_content\">50%</div>"
+                            + "<div onclick=\"deletePhoto('" + newguid + "',this)\" class=\"btnDelete\" style=\"float:right;width:30px;height:30px;background-color:#FEFEFE;\"><span  class=\"glyphicon glyphicon-minus btnDelete\" aria-hidden=\"true\" style=\"color:red;\"></span></div>"
+                            + "<img width='100%' height='100%' src='" + src + "' onerror='ImgError(this)' data-original=\"" + src + "\" / style=\"display: none\">"
+                            + "</li>");
+                    }
+                    $(insertObj).insertBefore($("#btnPhotoAdd"));
+                    $("#photosV1").append(insertObj);
+
+
+                    var Cjdate = new Date;
+                    var Cjyear = Cjdate.getFullYear();
+                    var Cjmonth = Cjdate.getMonth() + 1;
+                    var CjDay = Cjdate.getDate();
+                    Cjmonth = (Cjmonth < 10 ? "0" + Cjmonth : Cjmonth);
+                    var Cjmydate = (Cjyear.toString() + Cjmonth.toString() + CjDay.toString());
+
+                    //构造上传器
+                    var louis = new louisUpload(
+                    {
+                        uploadUrl: "@Url.Content("~/FeeBill/FileUpload/")?time=" + Cjmydate + "",
+                        beforeSend: function (file, guid) {
+
+                        },
+                        callback: function (filename, guid) {
+                            var Newfilename = filename.split(',');
+                            $('#' + guid).removeClass().addClass("weui_uploader_file");
+                            $('#' + guid).find(".weui_uploader_status_content").remove();
+                            $('#' + guid).attr("filename", Newfilename[0]);
+
+
+
+                            var src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/" + Cjmydate + "/" + Newfilename[0];
+                            $('#' + guid).attr("url", src_remoute);
+
+                            if (Newfilename[0].indexOf("pdf") > -1) {
+                                $('#' + guid).bind("click", function () {
+                                    SkipUrl(src_remoute, this);
+                                });
+                            }
+
+                            //word或者excle
+                            if (Newfilename[1]) {
+                                var OriginalUrl = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/" + Cjmydate + "/" + Newfilename[1];
+                                $('#' + guid).attr("OriginalUrl", OriginalUrl);
+
+
+                            }
+
+                            //微信中可预览，电脑中不可以
+
+                            $('#' + guid).click(function () {
+                                wx.previewImage({
+                                    current: src_remoute,
+                                    urls: [
+                                      src_remoute,
+                                    ]
+                                });
+                            });
+                        },
+                        uploading: function (percentage, guid) {
+                            $('#' + guid).find(".weui_uploader_status_content").text(percentage + "%");
+                        },
+                        file: file[i],
+                        guid: newguid
+                    }
+                    );
+                    //开始上传
+                    try {
+                        louis.start();
+                    } catch (e) {
+                        $("<i class=\"weui_icon_warn\"></i>")
+                        .appendTo($('#' + guid).find(".weui_uploader_status_content"));
+                        $('#' + guid).find(".weui_uploader_status_content").text("上传错误");
+                    }
+                }
+            }
+        });
+
+    }
+    function SkipUrl(url, e) {
+        if (url) {
+            window.open(url);
+        }
+        if (e && e.stopPropagation) {
+            e.stopPropagation();
+        }
+        else {
+            window.event.cancelBubble = true;
+            return false;
+        }
+
+    }
+
+    function deletePhoto(guid, e) {
+        $("#invoiceSelect").val("");
+        $('#' + guid).remove();
+        $('#' + guid).remove();//删除那个重复的ID
+        if (e && e.stopPropagation) {
+            e.stopPropagation();
+        }
+        else {
+            window.event.cancelBubble = true;
+            return false;
+        }
+
+    }
+
+    function newGuid() {
+        var guid = "";
+        for (var i = 1; i <= 32; i++) {
+            var n = Math.floor(Math.random() * 16.0).toString(16);
+            guid += n;
+            if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+                guid += "-";
+        }
+        return guid;
+    }
+
+
+    //微信接口注册，暂时不用
+    function InitWeiXinConfig() {
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '@((ViewData["Config"] as Marisfrolg.Fee.BLL.WeChat.WeiXin_SDK_CONFIG_MODEL).AppId)', // 必填，企业号的唯一标识，此处填写企业号corpid
+            timestamp: '@((ViewData["Config"] as Marisfrolg.Fee.BLL.WeChat.WeiXin_SDK_CONFIG_MODEL).Timestamp)', // 必填，生成签名的时间戳
+            nonceStr: '@((ViewData["Config"] as Marisfrolg.Fee.BLL.WeChat.WeiXin_SDK_CONFIG_MODEL).Noncestr)', // 必填，生成签名的随机串
+            signature: '@((ViewData["Config"] as Marisfrolg.Fee.BLL.WeChat.WeiXin_SDK_CONFIG_MODEL).Signature)',// 必填，签名，见附录1
+            jsApiList: ['chooseImage',
+                        'previewImage',
+                        'uploadImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+
+        wx.ready(function () {
+            // config信息验证后会执行
+            //alert('微信SDK注册成功');
+            //开始异步注册事件
+            $('#choosePhotoMessage').text("发票拍照(微信准备完毕)");
+
+
+        });
+    }
+
+    //提交单据
+    function submit() {
+        if ('@FeeModel.RefundType' == "Cash") {
+            if ($("#SurplusMoney").val()) {
+                if (parseFloat('@FeeModel.SurplusMoney') >= parseFloat($("#SurplusMoney").val())) {
+                    //符合条件的数据
+                }
+                else {
+                    submitMessageShow("还款金额超出!", "error");
+                    return;
+                }
+            }
+            else {
+                submitMessageShow("还款金额为空!", "error");
+                return;
+            }
+        }
+        var Brand = new Array();
+        ($("#EditBrand").children().each(function () {
+            if ($(this).hasClass("SelectBrand")) {
+                Brand.push($(this).attr("id"));
+            }
+        }));
+        var rowValueCount = { IsHeadOffice: "", Company: "", CompanyCode: "", Department: "", DepartmentCode: "", Shop: "", ShopCode: "", CostCenter: "", Brand: Brand };
+
+        var Items = new Array();
+        var BillsType;  //单据类型
+        $("#listAccount").find("label").each(function () {
+            if (employeeInfo.IsHeadOffice == "1") {
+                BillsType = "FY1";
+            }
+            else {
+                if ($(this).attr("approvaltype") != "null") {
+                    BillsType = $(this).attr("approvaltype")
+                }
+                if (BillsType == undefined) {
+                    BillsType = "FY0";
+                }
+            }
+            var rowValue = { rowid: "", name: "", code: "", money: 0, reason_code: "", taxcode: "", taxmoney: 0, InvoiceNum: "", AssetsNum: "", ContractNum: "", shiftBank: "", TurnoutBank: "",DispatchNum:"" };
+
+            rowValue.rowid = $(this).attr("id").replace("edit", "");
+            var text = $(this).find("h4").eq(0);
+            rowValue.code = text.attr("code");
+            rowValue.name = text.attr("pname");
+            rowValue.money = parseFloat(text.attr("money"));
+            rowValue.reason_code = $(this).find("div[id*=\"money\"]").attr("code");
+            rowValue.taxcode = text.attr("taxcode");
+            if (parseFloat(text.attr("taxmoeny"))) {
+                rowValue.taxmoney = parseFloat(text.attr("taxmoeny"));
+            }
+
+            var expendV1 = $(this).find("h4").eq(1);
+            if (expendV1 && expendV1.length > 0) {
+                rowValue.InvoiceNum = expendV1.attr("fpbh");
+                rowValue.AssetsNum = expendV1.attr("zcbh");
+                rowValue.ContractNum = expendV1.attr("htbh");
+                rowValue.shiftBank = expendV1.attr("zryh");
+                rowValue.TurnoutBank = expendV1.attr("zcyh");
+                rowValue.DispatchNum = expendV1.attr("fwbh");
+            }
+
+            Items.push(rowValue);
+        });
+        var Photos = new Array();
+        $("#photos").find("li").each(function () {
+            var rowValue = { filename: "", url: "", OriginalUrl: "" };
+            if ($(this).attr("id") != "btnPhotoAdd") {
+                rowValue.filename = $(this).attr("filename");
+                rowValue.url = $(this).attr("url");
+                rowValue.OriginalUrl = $(this).attr("OriginalUrl");
+                Photos.push(rowValue);
+            }
+
+        });
+        //供应商信息
+        var ProviderInfo = { ProviderName: "", BankName: "", BankNo: "", BankCode: "", IBAN: "", ProviderCode: "", CompanyCode: "", InputName: "" };
+        //特殊属性
+        var SpecialAttribute = { Funds: "0", MarketDebt: "0", BankDebt: "0", Agent: "0", Check: "1", Cash: "0" };
+
+        //付款通知书需要供应商信息
+        if ('@FeeModel.CommitType' == "付款通知书") {
+            SpecialAttribute = { Funds: "0", Agent: "0", Check: "1" };
+
+            ProviderInfo.ProviderName = $("#ProviderName").val();
+            ProviderInfo.ProviderCode = $("#ProviderName").attr("code");
+            ProviderInfo.CompanyCode = $("#ProviderName").attr("CompanyCode");
+            ProviderInfo.BankName = $("#ProviderBankName").val();
+            ProviderInfo.BankNo = $("#ProviderBankNo").val();
+            ProviderInfo.BankCode = $("#ProviderBankCode").val();
+            ProviderInfo.IBAN = $("#ProviderIBAN").val();
+            ProviderInfo.InputName = $("#providerText").val();
+        }
+        var MissBill = 0;
+        $("#SpecialAttribute").find("div").each(function (i) {
+            if ($(this).hasClass("SelectBrand label-success")) {
+                var val = $(this).text();
+                if (val == "活动经费") {
+                    SpecialAttribute.Funds = "1";
+                    SpecialAttribute.Check = "0";
+                }
+                else if (val == "商场账扣") {
+                    SpecialAttribute.MarketDebt = "1";
+                }
+                else if (val == "银行账扣") {
+                    SpecialAttribute.BankDebt = "1";
+                }
+                else if (val == "代理商费用") {
+                    SpecialAttribute.Agent = "1";
+                    SpecialAttribute.Check = "0";
+                }
+                else if (val == "押金账扣") {
+                    SpecialAttribute.Cash = "1";
+                }
+                else if (val == "发票已回收") {
+                    MissBill = 1;
+                }
+            }
+        })
+
+        //费用报销单和借款单需要收款信息
+        var CollectionInfo = { City: "", Bank: "", CardCode: "", Name: "", SubbranchBank: "", SubbranchBankCode: "" };
+        if ('@FeeModel.CommitType' == "费用报销单" || '@FeeModel.CommitType' == "借款单" || '@FeeModel.CommitType' == "还款单") {
+            $("#OpenCard").find("input").each(function (i) {
+                var val = $(this).attr("val");
+                if (val == "1") {
+                    CollectionInfo.City = $(this).val();
+                }
+                else if (val == "2") {
+                    CollectionInfo.Bank = $(this).val();
+                }
+                else if (val == "3") {
+                    CollectionInfo.CardCode = $(this).val();
+                }
+                else if (val == "4") {
+                    CollectionInfo.Name = $(this).val();
+                }
+                else if (val == "5") {
+                    CollectionInfo.SubbranchBank = $(this).val();
+                }
+                else if (val == "6") {
+                    CollectionInfo.SubbranchBankCode = $(this).val();
+                }
+            })
+        }
+        //还款类型
+        var RefundType = '@FeeModel.RefundType';
+        var BorrowBillNo = '@FeeModel.BorrowBillNo';
+        //实际还款金额
+        var RealRefundMoney = $("#SurplusMoney").val();
+        //货币类型
+        var Currency = { Name: "", Code: "" };
+        Currency.Name = $("#MoneyName").text();
+        Currency.Code = $("#MoneyName").attr("moneytype");
+
+        //个人中心信息统计
+        rowValueCount.IsHeadOffice = employeeInfo.IsHeadOffice;
+        rowValueCount.Company = $("#CompanyCode").text();
+        rowValueCount.CompanyCode = $("#CompanyCode").attr("code");
+        rowValueCount.Department = $('#DepartmentName option:selected').text();
+        rowValueCount.DepartmentCode = $('#DepartmentName option:selected').val();
+        if ($('#ChangeShop option:selected').text() == "请选择门店") {
+            rowValueCount.Shop = "";
+        }
+        else {
+            rowValueCount.Shop = $('#ChangeShop option:selected').text();
+            rowValueCount.ShopCode = $('#ChangeShop option:selected').val();
+        }
+        rowValueCount.CostCenter = $("#CostCenter").find("option:selected").attr("value");
+
+        var CountTime = { CountStartTime: "", CountEndTime: "" };
+        CountTime.CountStartTime = $("#AccountTime1").val();
+        CountTime.CountEndTime = $("#AccountTime2").val();
+
+        //成本中心
+        if (rowValueCount.CostCenter == "" || rowValueCount.CostCenter == undefined) {
+            submitMessageShow("成本中心不能为空!", "error");
+            return false;
+        }
+
+        var postData = {
+            BillNo: "",
+            Owner: $("#FeeBillName").val(),
+            WorkNumber: $("#FeeBillName").attr("code"),
+            Creator: employeeInfo.EmployeeNo,
+            DepartmentID: employeeInfo.DepartmentID,
+            DepartmentName: employeeInfo.DepartmentName,
+            TransactionDate: $("#busDate").val(),
+            Remark: $(".weui_textarea").eq(0).val().replace(/\n/g, ' '),
+            COST_ACCOUNT: $("#CostCenter").find("option:selected").attr("value"),
+            Photos: Photos,
+            Items: Items,
+            PersonInfo: rowValueCount,
+            SpecialAttribute: SpecialAttribute,
+            CollectionInfo: CollectionInfo,
+            BillsType: BillsType,
+            ProviderInfo: ProviderInfo,
+            RefundType: RefundType,
+            RealRefundMoney: RealRefundMoney,
+            BorrowBillNo: BorrowBillNo,
+            Currency: Currency,
+            MissBill: MissBill,
+            CountTime: CountTime
+        };
+
+        if ('@FeeModel.CommitType' == "付款通知书" || '@FeeModel.CommitType' == "借款单") {
+            postData.IsUrgent = $("#Urgent").hasClass("SelectBrand label-success") ? 1 : 0;
+            postData.LastPayDate = $("#UrgentBill").children().eq(1).children().find("input").eq(0).val();
+        }
+
+        if ((postData.Remark == undefined || postData.Remark == null || postData.Remark == "") && '@FeeModel.RefundType' != "Cash") {
+            submitMessageShow("事由不能为空!", "error");
+            return;
+        }
+        if (postData.TransactionDate == "" && '@FeeModel.RefundType' != "Cash") {
+            submitMessageShow("业务日期不能为空!", "error");
+            return;
+        }
+        _CommitModelFBJS = postData;
+
+        //暂时只让总部人员有弹出框
+        if (employeeInfo.IsHeadOffice == 1 || (employeeInfo.IsHeadOffice == 0 && rowValueCount.ShopCode == "")) {
+            $.ajax({
+                url: "@Url.Content("~/FeeBill/GetCoscenterMean/")",
+                data: { IsHeadOffice: employeeInfo.IsHeadOffice, CosterCenter: $("#CostCenter").find("option:selected").attr("value") },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                async: false,
+                success: function (result) {
+                    if (result) {
+                        result = JSON.parse(result);
+                        //MF办事处费用
+
+                        if ($('#ChangeShop option:selected').val() == "" && employeeInfo.IsHeadOffice == 0 && result.NAME == "MF") {
+                            if (Brand != null && Brand.length == 1 && Brand[0] == "MA") {
+                                result.NAME = "MF"
+                            }
+                            else {
+                                result.NAME = "集团"
+                            }
+                        }
+                        $("#CommitBillTestText").text("确认此笔费用归属" + result.NAME + "？需更改请选择成本中心");
+                        $(".LC").unbind('click');
+                        var $dialog = $('#PublicCommitBillTest');
+                        $dialog.show();
+                        $dialog.find('.LC').one('click', function () {
+                            $dialog.hide();
+                            $("body").css("overflow", "auto");
+                            jinzhi = 1;
+                            if ($(this).text() == "确定提交了") {
+                                $("#btnSubmitFeeBill").attr('disabled', "true");
+                                debugger;
+                                OtherCommitMethod(_CommitModelFBJS);
+                            }
+                        });
+                        $("body").css("overflow", "hidden");
+                        jinzhi = 0;
+                    }
+                }
+            });
+        }
+        else {
+            $("#btnSubmitFeeBill").attr('disabled', "true");
+            OtherCommitMethod(postData);
+        }
+    }
+
+    var _CommitModelFBJS;
+    function OtherCommitMethod(postData) {
+        if ('@FeeModel.RefundType' == "Cash") {
+            var Currency = { Name: "", Code: "" };
+            postData.Owner = $("#FeeBillNameOther").text();
+            postData.Remark = $(".weui_textarea").eq(1).val();
+            postData.TransactionDate = $("#busDateOther").val();
+            Currency.Name = $("#MoneyNameNew").text();
+            Currency.Code = $("#MoneyNameNew").attr("moneytype");
+            postData.Currency = Currency;
+            postData.PersonInfo.Brand = null;
+        }
+        if (postData.SpecialAttribute != null && (postData.SpecialAttribute.MarketDebt == 1 || postData.SpecialAttribute.BankDebt == 1 || postData.SpecialAttribute.Cash == 1)) {
+
+            postData.CollectionInfo.Bank = null;
+        }
+        //费用报销单
+        if ('@FeeModel.CommitType' == "费用报销单") {
+            //编辑功能
+            if ('@IsDeleteDrafeNo' == 0 && '@Type' == "Draft" && '@FeeModel.IsCopy' == "0") {
+                postData.BillNo = '@FeeModel.BillNo';
+                $.ajax({
+                    url: "@Url.Content("~/FeeBill/EditFeeBillContent/")",
+                    data: JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result != "Success") {
+                            submitMessageShow(result, "error");
+                        }
+                        else {
+                            submitMessageShow("编辑成功!");
+                            gotoPage("li7");
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "@Url.Content("~/FeeBill/CreateFeeBill/")",
+                    data: JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.indexOf("FB") > -1) {
+
+                            //保存完毕后页面跳转
+                            if ('@IsDeleteDrafeNo' == 1) {
+                                //删除草稿箱内容       
+                                $.ajax({
+                                    url: "@Url.Content("~/FeeBill/DeleteDraftContent/")",
+                                    data: { BillNo: '@FeeModel.DeleteDraftNo' },
+                                    contentType: "application/json; charset=utf-8",
+                                    datatype: "json",
+                                    type: "GET",
+                                    success: function (result) {
+                                    }
+                                });
+                            }
+
+                            if (employeeInfo.IsHeadOffice == 0) {
+                                $("#FB_BillNo").text(result);
+                                $('#FB_BillInfo').show();
+                            }
+                            else {
+                                submitMessageShow("已完成!");
+                                gotoPage("li1");
+                            }
+                        }
+                        else if (result == "Fail") {
+                            submitMessageShow("提交失败!", "error");
+                        } else {
+                            submitMessageShow(result, "error");
+                        }
+                    }
+                });
+            }
+        }
+            //付款通知书
+        else if ('@FeeModel.CommitType' == "付款通知书") {
+            //编辑功能
+            if ('@Type' == "Draft" && '@FeeModel.IsCopy' == "0") {
+                postData.BillNo = '@FeeModel.BillNo';
+                $.ajax({
+                    url: "@Url.Content("~/NoticeBill/EditNoticeBillContent/")",
+                    data: JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result != "Success") {
+                            submitMessageShow(result, "error");
+                        }
+                        else {
+                            submitMessageShow("编辑成功!");
+                            gotoPage("li7");
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "@Url.Content("~/NoticeBill/CreateNoticeBill/")",
+                    data: JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.indexOf("FT") > -1) {
+                            //保存完毕后页面跳转
+                            if (employeeInfo.IsHeadOffice == 0) {
+                                $("#FB_BillNo").text(result);
+                                $('#FB_BillInfo').show();
+                            }
+                            else {
+                                submitMessageShow("已完成!");
+                                gotoPage("li1");
+                            }
+                        }
+                        else if (result == "Fail") {
+                            submitMessageShow("提交失败!", "error");
+                        } else {
+                            submitMessageShow(result, "error");
+                        }
+                    }
+                });
+            }
+        }
+
+            //借款单
+        else if ('@FeeModel.CommitType' == "借款单") {
+            if ('@Type' == "Draft" && '@FeeModel.IsCopy' == "0") {
+                postData.BillNo = '@FeeModel.BillNo';
+                $.ajax({
+                    url: "@Url.Content("~/BorrowBill/EditBorrowBillContent/")",
+                    data: JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result != "Success") {
+                            submitMessageShow(result, "error");
+                        }
+                        else {
+                            submitMessageShow("编辑成功!");
+                            gotoPage("li7");
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "@Url.Content("~/BorrowBill/CreateBorrowBill/")",
+                    data: JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.indexOf("JS") > -1) {
+                            //保存完毕后页面跳转
+                            if (employeeInfo.IsHeadOffice == 0) {
+                                $("#FB_BillNo").text(result);
+                                $('#FB_BillInfo').show();
+                            }
+                            else {
+                                submitMessageShow("已完成!");
+                                gotoPage("li1");
+                            }
+                        }
+                        else if (result == "Fail") {
+                            submitMessageShow("提交失败!", "error");
+                        } else {
+                            submitMessageShow(result, "error");
+                        }
+                    }
+                });
+            }
+        }
+            //还款单
+        else if ('@FeeModel.CommitType' == "还款单") {
+            if ('@Type' == "Draft" && '@FeeModel.IsCopy' == "0") {
+                postData.BillNo = '@FeeModel.BillNo';
+                $.ajax({
+                    url: "@Url.Content("~/RefundBill/EditRefundBillContent/")",
+                    data: JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result != "Success") {
+                            submitMessageShow(result, "error");
+                        }
+                        else {
+                            submitMessageShow("编辑成功!");
+                            gotoPage("li7");
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "@Url.Content("~/RefundBill/CreateRefundBill/")",
+                    data: JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    type: "POST",
+                    success: function (result) {
+                        if (result.indexOf("FB") > -1 || result.indexOf("HK") > -1) {
+                            //保存完毕后页面跳转
+                            if (employeeInfo.IsHeadOffice == 0) {
+                                $("#FB_BillNo").text(result);
+                                $("#FB_BillNo").attr("IsRefund", "true");
+                                $('#FB_BillInfo').show();
+                            }
+                            else {
+                                submitMessageShow("已完成!");
+                                gotoPage("li6");
+                            }
+                        }
+                        else if (result == "Fail") {
+                            submitMessageShow("提交失败!", "error");
+                        } else {
+                            submitMessageShow(result, "error");
+                        }
+                    }
+                });
+            }
+        }
+}
+
+function GotoPage_V1() {
+    var BillNo = $("#FB_BillNo").text();
+    if (BillNo.indexOf("FB") > -1) {
+        if ($("#FB_BillNo").attr("IsRefund")) {
+            gotoPage("li7");
+        }
+        else {
+            gotoPage("li2");
+        }
+    }
+    else if (BillNo.indexOf("JS") > -1) {
+        gotoPage("li5");
+    }
+    else if (BillNo.indexOf("FT") > -1) {
+        gotoPage("li3");
+    }
+    else {
+        gotoPage("li7");
+    }
+    $('#FB_BillInfo').hide();
+}
+
+
+//提交到草稿箱
+function submitDraftBox() {
+    var Brand = new Array();
+    ($("#EditBrand").children().each(function () {
+        if ($(this).hasClass("SelectBrand")) {
+            Brand.push($(this).attr("id"));
+        }
+    }));
+    var rowValueCount = { IsHeadOffice: "", Company: "", CompanyCode: "", Department: "", DepartmentCode: "", Shop: "", ShopCode: "", CostCenter: "", Brand: Brand };
+
+    var Items = new Array();
+    var BillsType;  //单据类型
+    //$("#listAccount").find("label")  $("input[type='checkbox']:checked")
+    $("#listAccount").find("label").each(function () {
+        if (employeeInfo.IsHeadOffice == "1") {
+            BillsType = "FY1";
+        }
+        else {
+            // BillsType = $(this).find("input").eq(0).attr("approvaltype");
+            if ($(this).attr("approvaltype") != "null") {
+                BillsType = $(this).attr("approvaltype")
+            }
+            if (BillsType == undefined) {
+                BillsType = "FY0";
+            }
+        }
+        var rowValue = { rowid: "", name: "", code: "", money: 0, reason_code: "", taxcode: "", taxmoney: 0 };
+
+        rowValue.rowid = $(this).attr("id").replace("edit", "");
+        var text = $(this).find("h4").eq(0);
+        rowValue.code = text.attr("code");
+        rowValue.name = text.attr("pname");
+        rowValue.money = parseFloat(text.attr("money"));
+        rowValue.reason_code = $(this).find("div[id*=\"money\"]").attr("code");
+        rowValue.taxcode = text.attr("taxcode");
+        if (parseFloat(text.attr("taxmoeny"))) {
+            rowValue.taxmoney = parseFloat(text.attr("taxmoeny"));
+        }
+        Items.push(rowValue);
+    });
+    var Photos = new Array();
+    $("#photos").find("li").each(function () {
+        var rowValue = { filename: "", url: "", OriginalUrl: "" };
+        if ($(this).attr("id") != "btnPhotoAdd") {
+            rowValue.filename = $(this).attr("filename");
+            rowValue.url = $(this).attr("url");
+            rowValue.OriginalUrl = $(this).attr("OriginalUrl");
+            Photos.push(rowValue);
+        }
+    });
+
+    var SpecialAttribute = { Funds: "0", MarketDebt: "0", BankDebt: "0", Agent: "0", Check: "1", Cash: "0" };
+    $("#SpecialAttribute").find("div").each(function (i) {
+        if ($(this).hasClass("SelectBrand label-success")) {
+            var val = $(this).text();
+            if (val == "活动经费") {
+                SpecialAttribute.Funds = "1";
+                SpecialAttribute.Check = "0";
+            }
+            else if (val == "商场账扣") {
+                SpecialAttribute.MarketDebt = "1";
+            }
+            else if (val == "银行账扣") {
+                SpecialAttribute.BankDebt = "1";
+            }
+            else if (val == "代理商费用") {
+                SpecialAttribute.Agent = "1";
+                SpecialAttribute.Check = "0";
+            }
+            else if (val == "押金账扣") {
+                SpecialAttribute.Cash = "1";
+            }
+        }
+    })
+
+    var CollectionInfo = { City: "", Bank: "", CardCode: "", Name: "", SubbranchBank: "", SubbranchBankCode: "" };
+    $("#OpenCard").find("input").each(function (i) {
+        var val = $(this).attr("val");
+        if (val == "1") {
+            CollectionInfo.City = $(this).val();
+        }
+        else if (val == "2") {
+            CollectionInfo.Bank = $(this).val();
+        }
+        else if (val == "3") {
+            CollectionInfo.CardCode = $(this).val();
+        }
+        else if (val == "4") {
+            CollectionInfo.Name = $(this).val();
+        }
+        else if (val == "5") {
+            CollectionInfo.SubbranchBank = $(this).val();
+        }
+        else if (val == "6") {
+            CollectionInfo.SubbranchBankCode = $(this).val();
+        }
+    })
+    //个人中心信息统计
+
+    rowValueCount.IsHeadOffice = employeeInfo.IsHeadOffice;
+    rowValueCount.Company = $("#CompanyCode").text();
+    rowValueCount.CompanyCode = $("#CompanyCode").attr("code");
+    rowValueCount.Department = $('#DepartmentName option:selected').text();
+    rowValueCount.DepartmentCode = $('#DepartmentName option:selected').val();
+    if ($('#ChangeShop option:selected').text() == "请选择门店") {
+        rowValueCount.Shop = "";
+    }
+    else {
+        rowValueCount.Shop = $('#ChangeShop option:selected').text();
+        rowValueCount.ShopCode = $('#ChangeShop option:selected').val();
+    }
+    rowValueCount.CostCenter = $("#CostCenter").find("option:selected").attr("value");
+
+    //货币类型
+    var Currency = { Name: "", Code: "" };
+    Currency.Name = $("#MoneyName").text();
+    Currency.Code = $("#MoneyName").attr("moneytype");
+
+
+
+    var CountTime = { CountStartTime: "", CountEndTime: "" };
+    CountTime.CountStartTime = $("#AccountTime1").val();
+    CountTime.CountEndTime = $("#AccountTime2").val();
+
+    var postData = {
+        Owner: $("#FeeBillName").val(),
+        WorkNumber: $("#FeeBillName").attr("code"),
+        Creator: employeeInfo.EmployeeNo,
+        DepartmentID: employeeInfo.DepartmentID,
+        DepartmentName: employeeInfo.DepartmentName,
+        TransactionDate: $("#busDate").val(),
+        Remark: $(".weui_textarea").eq(0).val().replace(/\n/g, ' '),
+        COST_ACCOUNT: $("#CostCenter").find("option:selected").attr("value"),
+        Photos: Photos,
+        Items: Items,
+        PersonInfo: rowValueCount,
+        SpecialAttribute: SpecialAttribute,
+        CollectionInfo: CollectionInfo,
+        BillsType: BillsType,
+        Currency: Currency,
+        CountTime: CountTime
+    };
+    //费用报销单
+
+    $.ajax({
+        url: "@Url.Content("~/FeeBill/CreateFeeBillDraftBox/")",
+        data: JSON.stringify(postData),
+        contentType: "application/json; charset=utf-8",
+        datatype: "json",
+        type: "POST",
+        success: function (result) {
+            if (result == "Success") {
+                submitMessageShow("已完成!");
+                //保存完毕后页面跳转
+                gotoPage("li1");
+            }
+            else if (result == "Fail") {
+                submitMessageShow("提交失败!", "error");
+            } else {
+                submitMessageShow(result, "error");
+            }
+        }
+    });
+}
+
+
+function LoadBillInfo() {
+    //加载草稿箱数据
+    if ("@Type" == "Draft") {
+        var person = ModelString.PersonInfo;
+        if (person != "") {
+            var temp = "所在组织[" + (employeeInfo.IsHeadOffice == 1 ? "总部" : "片区") + "]" + "&nbsp;&nbsp;&nbsp;&nbsp;<small id='CompanyCode' code='" + person.CompanyCode + "'>" + person.Company + "</small>";
+            $("#IsBackOffice").html(temp);
+            if (person.Shop != "" && person.Shop != null) {
+                $("#ChangeShop").show();
+                $("#ChangeShop").attr("style", "");
+            }
+        }
+        //货币类型
+        $("#MoneyName").text(ModelString.Currency.Name);
+        $("#MoneyName").attr("moneytype", ModelString.Currency.Code);
+
+        $("#FeeBillName").val("@FeeModel.Owner");
+        $("#FeeBillName").attr("code", "@FeeModel.WorkNumber");
+
+        $("#busDate").val("@FeeModel.TransactionDate.ToString("yyyy-MM-dd")");
+        $(".weui_textarea").val("@FeeModel.Remark");
+
+        if ('@FeeModel.PageName' != 'BorrowBill' && '@FeeModel.RefundType' != 'Cash') {
+            //特殊属性的处理
+            var SpecialAttribute = ModelString.SpecialAttribute;
+            if (SpecialAttribute) {
+                $("#SpecialAttribute").find("div").each(function (i) {
+                    var val = $(this).text();
+                    if (val == "活动经费") {
+                        if (SpecialAttribute.Funds == "0") {
+                            $(this).removeClass("SelectBrand label-success");
+                        }
+                        else {
+                            $(this).addClass("SelectBrand label-success");
+                        }
+                    }
+                    else if (val == "商场账扣") {
+                        if (SpecialAttribute.MarketDebt == "0") {
+                            $(this).removeClass("SelectBrand label-success");
+                        }
+                        else {
+                            $(this).click();
+                        }
+                    }
+                    else if (val == "银行账扣") {
+                        if (SpecialAttribute.BankDebt == "0") {
+                            $(this).removeClass("SelectBrand label-success");
+                        }
+                        else {
+                            $(this).click();
+                        }
+                    }
+                    else if (val == "代理商费用") {
+                        if (SpecialAttribute.Agent == "0") {
+                            $(this).removeClass("SelectBrand label-success");
+                        }
+                        else {
+                            $(this).addClass("SelectBrand label-success");
+                        }
+                    }
+                    else if (val == "押金账扣") {
+                        if (SpecialAttribute.Cash == "0") {
+                            $(this).removeClass("SelectBrand label-success");
+                        }
+                        else {
+                            $(this).click();
+                        }
+                    }
+                    else if (val == "发票已回收") {
+                        if (ModelString.MissBill == "0") {    //MissBill
+                            $(this).removeClass("SelectBrand label-success");
+                        }
+                        else {
+                            $(this).addClass("SelectBrand label-success");
+                        }
+                    }
+                })
+            }
+        }
+
+        if ('@FeeModel.PageName' == 'FeeBill' || '@FeeModel.PageName' == 'BorrowBill' || '@FeeModel.RefundType' == 'FeeBill') {
+            //加载结算期
+            if ("@FeeModel.CountTime" != null && "@FeeModel.CountTime.CountStartTime.ToString("yyyy-MM-dd")" != "0001-01-01") {
+                $("#AccountTime1").val("@FeeModel.CountTime.CountStartTime.ToString("yyyy-MM-dd")");
+            }
+            if ("@FeeModel.CountTime" != null && "@FeeModel.CountTime.CountEndTime.ToString("yyyy-MM-dd")" != "0001-01-01") {
+                $("#AccountTime2").val("@FeeModel.CountTime.CountEndTime.ToString("yyyy-MM-dd")");
+            }
+        }
+        else if ('@FeeModel.PageName' == 'Notice') {
+            var ProviderInfo = ModelString.ProviderInfo;
+            $("#ProviderName").val(ProviderInfo.ProviderName);
+            $("#ProviderName").attr("code", ProviderInfo.ProviderCode);
+            $("#ProviderName").attr("CompanyCode", ProviderInfo.CompanyCode);
+            $("#ProviderBankName").val(ProviderInfo.BankName);
+            $("#ProviderBankNo").val(ProviderInfo.BankNo);
+            if (ProviderInfo.IBAN) { $("#ProviderIBAN").val(ProviderInfo.IBAN) }
+            if (ProviderInfo.BankCode) { $("#ProviderBankCode").val(ProviderInfo.BankCode) }
+            if (ProviderInfo.InputName) { $("#providerText").val(ProviderInfo.InputName) }
+        }
+
+        var CollectionInfo = ModelString.CollectionInfo;
+        if (CollectionInfo) {
+            $("#OpenCard").find("input").each(function (i) {
+                var val = $(this).attr("val");
+                if (val == "1") {
+                    $(this).val(CollectionInfo.City);
+                }
+                else if (val == "2") {
+                    $(this).val(CollectionInfo.Bank);
+                }
+                else if (val == "3") {
+                    $(this).val(CollectionInfo.CardCode);
+                }
+                else if (val == "4") {
+                    $(this).val(CollectionInfo.Name);
+                }
+                else if (val == "5") {
+                    $(this).val(CollectionInfo.SubbranchBank);
+                }
+                else if (val == "6") {
+                    $(this).val(CollectionInfo.SubbranchBankCode);
+                }
+            })
+        }
+        //如果是片区的且单据类型为FY1则置空
+        if (employeeInfo.IsHeadOffice != 1 && ModelString.BillsType == "FY0") {
+            ModelString.BillsType = "null";
+        }
+        //加载发生项
+        var Items = ModelString.Items;
+        if (Items != "" && Items != undefined) {
+            for (var i = 0; i < Items.length; i++) {
+                if (Items[i].reason_code == null) {
+                    Items[i].reason_code = "";
+                }
+                if (Items[i].taxcode == null) {
+                    Items[i].taxcode = "";
+                }
+
+                var text = "";  //显示文本
+                if (Items[i].shiftBank && Items[i].shiftBank != "null") {
+                    text += "转出行：" + Items[i].TurnoutBank + ",转入行：" + Items[i].shiftBank;
+                }
+                if (Items[i].InvoiceNum && Items[i].InvoiceNum != "null") {
+                    text += "发票编号：" + Items[i].InvoiceNum;
+                }
+                if (Items[i].AssetsNum && Items[i].AssetsNum != "null") {
+                    text += "资产编号：" + Items[i].AssetsNum;
+                }
+                if (Items[i].ContractNum && Items[i].ContractNum != "null") {
+                    text += "合同号：" + Items[i].ContractNum;
+                }
+
+                var total = parseFloat(Items[i].money) + parseFloat(Items[i].taxmoney);
+                var str = ("<label id=\"edit" + Items[i].rowid + "\" approvaltype=\"" + ModelString.BillsType + "\" class=\"weui_cell weui_check_label\" >"
+                       + "<div class=\"weui_cell_hd\">"
+                           + "<div onclick=\"deleteAccount('edit" + Items[i].rowid + "')\" class=\"btnDelete\" style=\"float:right;width:30px;height:30px;background-color:#FEFEFE;\"><span  class=\"glyphicon glyphicon-minus-sign btnDelete\" aria-hidden=\"true\" style=\"color:red;\"></span></div>"
+                       + "</div>"
+                       + "<div class=\"weui_cell_bd weui_cell_primary\">"
+                           + "<h4 code=\"" + Items[i].code + "\" taxcode=\"" + Items[i].taxcode + "\"money=\"" + Items[i].money + "\" taxmoeny=\"" + Items[i].taxmoney + "\" pname=\"" + Items[i].name + "\" style=\"color:#888;font-size:14px\">" + Items[i].name + "(税额:" + Items[i].taxmoney + ")</h4>");
+                if (text) {
+                    str += ("<h4 style=\"color:#888;font-size:14px\" zryh=\"" + Items[i].shiftBank + "\" zcyh=\"" + Items[i].TurnoutBank + "\" fpbh=\"" + Items[i].InvoiceNum + "\" htbh=\"" + Items[i].ContractNum + "\" zcbh=\"" + Items[i].AssetsNum + "\">" + text + "</h4>");
+                }
+                str += ("</div><div class=\"weui_cell_ft\"></div><div id=\"money" + Items[i].rowid + "\" class=\"weui_cell_ft\" code=\"" + Items[i].reason_code + "\">" + total + "</div>"
+            + "</label>");
+                $(str).insertBefore($("#btnAdd"));
+            }
+        }
+        //加载图片
+        var Photos = ModelString.Photos;
+        if (Photos != "") {
+            for (var j = 0; j < Photos.length; j++) {
+                var newguid = newGuid().toString();
+                if (Photos[j].url.indexOf("pdf") > -1) {
+                    $("<li  onclick=\"SkipUrl('" + Photos[j].url + "',this)\"  id=\"" + newguid + "\" class=\"weui_uploader_file\" style=\"background-image:url(../Content/Images/PDF.jpg)\" url=\"" + Photos[j].url + "\"  OriginalUrl=\"" + Photos[j].OriginalUrl + "\"  filename=\"" + Photos[j].filename + "\"><div onclick=\"deletePhoto('" + newguid + "')\" class=\"btnDelete\" style=\"float:right;width:30px;height:30px;background-color:#FEFEFE;\"><span class=\"glyphicon glyphicon-minus btnDelete\" aria-hidden=\"true\" style=\"color:red;\"></span></div></li>").insertBefore($("#btnPhotoAdd"));
+                }
+                else {
+                    $("<li id=\"" + newguid + "\" class=\"weui_uploader_file\" style=\"background-image:url(" + Photos[j].url + ")\" url=\"" + Photos[j].url + "\" filename=\"" + Photos[j].filename + "\"><div onclick=\"deletePhoto('" + newguid + "')\" class=\"btnDelete\" style=\"float:right;width:30px;height:30px;background-color:#FEFEFE;\"><span class=\"glyphicon glyphicon-minus btnDelete\" aria-hidden=\"true\" style=\"color:red;\"></span></div></li>").insertBefore($("#btnPhotoAdd"));
+                }
+            }
+        }
+
+        CountSumMoney(); //统计费用项界面总金额
+        modifySameHeight();  //FindAccount页面保持高端（事由和费用项）
+
+        if (ModelString.BillNo.indexOf("CG") == -1 && ModelString.IsCopy == 0) {
+            $("#btnSubmitFeeBill").text("保存编辑");
+        }
+        $("#DepartmentName").css("color", "#AAAAAA");
+        $("#ChangeShop").css("color", "#AAAAAA");
+        $("#CostCenter").css("color", "#AAAAAA");
+        $("#DepartmentName").attr("disabled", true);
+        $("#ChangeShop").attr("disabled", true);
+        $("#CostCenter").attr("disabled", true);
+    }
+
+    else if ("@Type" == "FeeBill") {
+        if ("@FeeModel.PageName" != "Refund") {
+            $("#FeeBillName").val(employeeInfo.EmployeeName);
+            $("#FeeBillName").attr("code", employeeInfo.EmployeeNo);
+        }
+        var defaultDate = new Date().Format("yyyy-MM-dd");
+        $("#busDate").val(defaultDate);
+    }
+}
+</script>
+
+
+

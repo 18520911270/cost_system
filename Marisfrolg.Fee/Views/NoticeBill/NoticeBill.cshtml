@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "创建付款通知书";
+    
+}
+
+@*<link href="~/Scripts/webUploader/webuploader.css" rel="stylesheet" />
+<link href="~/Images/webUploader_style.css" rel="stylesheet" />*@
+<style type="text/css">
+    .showBrand {
+        display: block;
+    }
+@model Marisfrolg.Fee.Models.FeeBillModelRef
+</style>
+
+
+<div class="page">
+
+    <div class="hd">
+        <h2 class="page_title">付款通知书</h2>
+    </div>
+    <div class="row ">
+        @Html.Partial("~/Views/Shared/PersonInfo.cshtml", ViewData["FeeBillModelRef"] = Model)
+    </div>
+</div>
+
+
+@Html.Partial("~/Views/Shared/FindAccount.cshtml")
+
+<div class="row ">
+    <div class="col-md-8">
+        <div class="bd">
+            <div class="weui_cells">
+                <a href="javascript:;" class="weui_btn weui_btn_primary" id="btnSubmitFeeBill">提交申请</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/FeeBill/Js.cshtml", ViewData["FeeBillModelRef"] = Model)
+
+<!-- 加载页面脚本 -->
+@Html.Partial("~/Views/NoticeBill/NoticeBillJs.cshtml")
+
+@*引用脚本文件*@
+@Html.Partial("~/Views/Shared/MyBillList.cshtml")

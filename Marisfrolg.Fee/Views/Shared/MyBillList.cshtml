@@ -1,0 +1,369 @@
+﻿<a id="showList" href="javascript:;"></a>
+<!--BEGIN 弹出层-->
+<div class="weui_dialog_confirm js_container" id="dialog10" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog weui_dialog_ours">
+        <div class="weui_dialog_hd"><span id="big_title" style="font-family: 'Microsoft YaHei'; font-size: 30px;">我的单据列表</span></div>
+
+        <div class="weui_dialog_bd">
+            <!-- 内容开始 -->
+
+            <div class="row ">
+                <div class="col-md-12" style="min-height: 200px;">
+
+                    <div id="list" class="weui_cells weui_cells_access" style="display: block; margin-top: 0; max-height: 440px; overflow-y: auto;">
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 内容结束 -->
+        </div>
+        <div class="weui_dialog_ft" style="">
+            <input type="hidden" id="editValue" />
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a id="btnSubmit" href="javascript:MyBillListeditList();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+@*<script type="text/javascript" src="~/Scripts/jquery-2.0.0.min.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.cookies.2.2.0.min.js"></script>*@
+
+<!--BEGIN 弹出层-->
+<script type="text/javascript">
+
+    $(function () {
+        InitDialog();
+        $(document).keyup(function (event) {
+            switch (event.keyCode) {
+                case 27:
+                    $("#dialog10").hide();
+            }
+        });
+    });
+
+    function InitDialog() {
+        $("#showList").click(function () {
+            var PageName = "@ViewData["PageName"]";
+            var $dialog = $('#dialog10');
+            $dialog.show();
+            $dialog.find('.weui_btn_dialog').one('click', function () {
+                if (PageName == "Home") {
+                    if ($(this).text() != "确定" || $("#editValue").val() == "") {
+                        $dialog.hide();
+                    }
+                }
+                else {
+                    $dialog.hide();
+                }
+                $("body").css("overflow", "auto");
+                jinzhi = 1;
+            });
+            $("body").css("overflow", "hidden");
+            jinzhi = 0;
+            LoadData();
+        });
+    }
+
+    function LoadData() {
+        var busType = $("#big_title").text();
+
+        switch (busType) {
+            case "今天":
+                LoadDataByBusType(1);
+                break;
+            case "本周":
+                LoadDataByBusType(2);
+                break;
+            case "本月":
+                LoadDataByBusType(3);
+                break;
+            case "上月":
+                LoadDataByBusType(4);
+                break;
+            case "费用报销单":
+                GetMyProcess(busType);  //统计费用报销单待我审批单数
+                break;
+            case "付款通知书":
+                GetMyProcess(busType);  //统计付款通知书待我审批单数
+                break;
+            case "借款单":
+                GetMyProcess(busType);  //统计借款单待我审批单数
+                break;
+            case "还款单":
+                GetMyProcess(busType);  //统计还款单待我审批单数
+                break;
+            case "未办结的单据":
+                GetBill(busType);  //统计未办结单据
+                break;
+            case "发票缺失":
+                GetBill(busType);  //统计发票缺失
+                break;
+            case "借款未还":
+                GetBill(busType);  //统计借款未还
+                break;
+            case "押金":
+                GetBill(busType);  //统计押金
+                break;
+            case "货币类型":
+                GetMoneyType();  //统计押金
+                break;
+            case "选择片区":
+                ChangeArea();
+                break;
+            case "选择门店":
+                ChangeShop();
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
+    function LoadDataByBusType(type) {
+        $.ajax({
+            url: "@Url.Content("~/DraftBox/GetDraftBoxListByParameter/")",
+            data: { "type": type },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result != "Fail") {
+                    result = JSON.parse(result);
+                    $("#list").children().remove();
+                    if (result.length == 0) {
+                        $("<div style=\"color:red;text-align:center;\">未找到记录</div>").appendTo($("#list"))
+                        return;
+                    }
+                    switch (type) {
+                        case 1:
+
+                            //今天草稿
+                            for (var i = 0; i < result.length; i++) {
+                                $("<a class=\"weui_cell\" href=\"javascript:\">"
+                            + "<i class=\"icon iconfont\" style=\"color:#777;font-size:20px;margin-right:10px;\">&#xe609;</i>"
+                            + "<div class=\"weui_cell_bd weui_cell_primary\">" + result[i].BillNo + "</div>"
+                            + "<div class=\"weui_cell_ft\">" + result[i].TotalMoney + "</div>"
+                            + "</a>").appendTo($("#list"))
+                            }
+                            break;
+                        case 2:
+                            //本周草稿
+                            for (var i = 0; i < result.length; i++) {
+                                $("<a class=\"weui_cell\" href=\"javascript:\">"
+                            + "<i class=\"icon iconfont\" style=\"color:#777;font-size:20px;margin-right:10px;\">&#xe609;</i>"
+                            + "<div class=\"weui_cell_bd weui_cell_primary\">" + result[i].BillNo + "</div>"
+                            + "<div class=\"weui_cell_ft\">" + result[i].TotalMoney + "</div>"
+                            + "</a>").appendTo($("#list"))
+                            }
+                            break;
+                        case 3:
+                            //上周草稿
+                            for (var i = 0; i < result.length; i++) {
+                                $("<a class=\"weui_cell\" href=\"javascript:\">"
+                            + "<i class=\"icon iconfont\" style=\"color:#777;font-size:20px;margin-right:10px;\">&#xe609;</i>"
+                            + "<div class=\"weui_cell_bd weui_cell_primary\">" + result[i].BillNo + "</div>"
+                            + "<div class=\"weui_cell_ft\">" + result[i].TotalMoney + "</div>"
+                            + "</a>").appendTo($("#list"))
+                            }
+                            break;
+                        case 4:
+                            //上月草稿
+                            for (var i = 0; i < result.length; i++) {
+                                $("<a class=\"weui_cell\" href=\"javascript:\">"
+                            + "<i class=\"icon iconfont\" style=\"color:#777;font-size:20px;margin-right:10px;\">&#xe609;</i>"
+                            + "<div class=\"weui_cell_bd weui_cell_primary\">" + result[i].BillNo + "</div>"
+                            + "<div class=\"weui_cell_ft\">" + result[i].TotalMoney + "</div>"
+                            + "</a>").appendTo($("#list"))
+                            }
+                            break;
+                            break;
+                        default:
+                            break;
+                    }
+                    //注册跳转链接
+                    $("#list").children().each(function () {
+                        $(this).click(function () {
+                            var billNo = $(this).find(".weui_cell_primary").text();
+                            //跳转过去
+                            $("#list .weui_cell").attr("style", "");
+                            $(this).attr("style", "background-color:#5cb85c;");
+                            $("#editValue").val(billNo);
+                        });
+                    });
+
+                    $("#list").children().eq(0).click();//默认第一行被点击
+                }
+                else if (result == "Fail") {
+                    submitMessageShow("提交失败!", "error");
+                } else {
+                    submitMessageShow(result, "error");
+                }
+            }
+        });
+    }
+
+    function MyBillListeditList() {
+        var PageName = "@ViewData["PageName"]";
+        var busType = $("#big_title").text();
+        var value = $("#editValue").val();
+        if (PageName == "Home") {
+            if (value) {
+                showDialog($("#editValue").val(), $("#editValue").attr("billtype"), $("#editValue").attr("code"));   //点击确定后调用的方法
+            }
+        }
+        else if (PageName == "DraftBox") {
+            if (value) {
+                sessionStorage.setItem("lastClick", "li2");
+                window.location.href = "@Url.Content("~/FeeBill/FeeBill")?BillNo=" + value + "&Mode=Draft";
+            }
+        }
+    if (busType == "货币类型") {
+        var name = $("#MoneyName").text();
+        var countname = $("#CountSumMoney").text();
+        var newname = $("#editValue").val();
+        if (countname.indexOf(name) != -1) {
+            countname = countname.replace(name, newname);
+            $("#CountSumMoney").text(countname);
+        }
+        $("#MoneyName").text($("#editValue").val());
+        $("#MoneyName").attr("Moneytype", $("#editValue").attr("Moneytype"));
+    }
+    else if (busType == "选择片区") {
+        SelectArea();
+    }
+    else if (busType == "选择门店") {
+        SelectShop();
+    }
+}
+
+function ClickStyle() {
+    //注册跳转链接
+    $("#list").children().each(function () {
+        $(this).click(function () {
+            var billNo = $(this).find(".weui_cell_bd").eq(0).text();
+            var code = $(this).find(".weui_cell_bd").eq(0).attr("code");
+            var billtype = $(this).find(".weui_cell_bd").eq(0).attr("billtype");
+            var Moneytype = $(this).find(".weui_cell_ft").eq(0).text();
+            //跳转过去
+            $("#list .weui_cell").attr("style", "");
+            $(this).attr("style", "background-color:#5cb85c;");
+            $("#editValue").val(billNo);
+            $("#editValue").attr("code", code);
+            $("#editValue").attr("billtype", billtype);
+            $("#editValue").attr("Moneytype", Moneytype);
+        });
+    });
+    $("#list").children().eq(0).click();//默认第一行被点击
+}
+
+//获取我审批的信息
+function GetMyProcess(Role) {
+    $("#list").children().remove();
+    $("#editValue").val("");
+    $("#editValue").attr("code", "");
+    $("#editValue").attr("billtype", "");
+    $.ajax({
+        url: "@Url.Content("~/Home/GetMyProcess/")",
+        data: { Type: Role },
+        contentType: "application/json; charset=utf-8",
+        datatype: "json",
+        type: "GET",
+        success: function (result) {
+            if (result) {
+                var result = JSON.parse(result);
+                //为2的时候讲列表数据插入弹出框
+                for (var i = 0; i < result.length; i++) {
+                    $("<a class=\"weui_cell\" href=\"javascript:;\"><i class=\"icon iconfont\" style=\"color: #F91961; font-size: 20px; margin-right: 10px;\">" + GetIcon(result[i].BillNo, Role) + "</i> <div class=\"weui_cell_bd \" code=\"" + result[i].AssignmentID + "\"   billtype=\"" + Role + "\" style='font-size:12px;width:100px;'>" + result[i].BillNo + "</div><div  style='font-size:12px;'class=\"weui_cell_bd weui_cell_primary\">" + result[i].Owner.split('-')[0] + "</div><div class=\"weui_cell_ft\" style='font-size:12px;'>" + result[i].TotalMoney + "</div></a>").appendTo($("#list"));
+                    ClickStyle();
+                }
+
+            }
+            else {
+                $("<div style=\"color:red;text-align:center;\">未找到记录</div>").appendTo($("#list"));
+            }
+        }
+    })
+};
+
+
+//获取我填写的单据信息
+function GetBill(Role) {
+    $("#list").children().remove();
+    $("#editValue").val("");
+    $("#editValue").attr("code", "");
+    $("#editValue").attr("billtype", "");
+    $.ajax({
+        url: "@Url.Content("~/Home/GetMyFilledBill/")",
+        data: { Type: Role },
+        contentType: "application/json; charset=utf-8",
+        datatype: "json",
+        type: "GET",
+        success: function (result) {
+            if (result) {
+                var result = JSON.parse(result);
+                if (result) {
+                    if (Role == "未办结的单据") {
+                        for (var i = 0; i < result.length; i++) {
+                            if (i > 100) {
+                                return;
+                            }
+                            $("<a class=\"weui_cell\" href=\"javascript:;\" ><i class=\"icon iconfont\" style=\"color: #F91961; font-size: 20px; margin-right: 10px;\">" + GetIcon(result[i].BillNo, result[i].PageName) + "</i> <div class=\"weui_cell_bd \" style='font-size:12px;width:100px;' billtype=\"" + result[i].PageName + "\">" + result[i].BillNo + "</div><div  style='font-size:12px;' class=\"weui_cell_bd weui_cell_primary\">" + result[i].Owner.split('-')[0] + "</div><div class=\"weui_cell_ft\"  style='font-size:12px;'>" + result[i].TotalMoney + "</div></a>").appendTo($("#list"));
+                            ClickStyle();
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < result.length; i++) {
+                            $("<a class=\"weui_cell\" href=\"javascript:;\"><i class=\"icon iconfont\" style=\"color: #F91961; font-size: 20px; margin-right: 10px;\">" + GetIcon(result[i].BillNo, Role) + "</i> <div class=\"weui_cell_bd \" style='font-size:12px;width:100px;' billtype=\"" + Role + "\">" + result[i].BillNo + "</div><div  style='font-size:12px;' class=\"weui_cell_bd weui_cell_primary\">" + result[i].Owner.split('-')[0] + "</div><div class=\"weui_cell_ft\"  style='font-size:12px;'>" + result[i].TotalMoney + "</div></a>").appendTo($("#list"));
+                            ClickStyle();
+                        }
+                    }
+                }
+            }
+            else {
+                $("<div style=\"color:red;text-align:center;\">未找到记录</div>").appendTo($("#list"));
+            }
+        }
+    })
+};
+//动态获取对应单据图标
+function GetIcon(BillNo, BillType) {
+    if (BillNo.indexOf("FB") != -1 && BillType == "费用报销单") {
+        return "&#xe608;";
+    }
+    else if (BillNo.indexOf("FT") != -1) {
+        return "&#xe602;";
+    }
+    else if (BillNo.indexOf("JS") != -1) {
+        return "&#xe601;";
+    }
+    else if (BillType == "还款单" && (BillNo.indexOf("HK") != -1 || BillNo.indexOf("FB") != -1)) {
+        return "&#xe60c;";
+    }
+}
+
+function GetMoneyType() {
+    $.ajax({
+        url: "@Url.Content("~/Shared/GetMoneyType/")",
+        data: {},
+        contentType: "application/json; charset=utf-8",
+        datatype: "json",
+        type: "GET",
+        success: function (result) {
+            $("#list").children().remove();
+            if (result) {
+                var result = JSON.parse(result);
+                for (var i = 0; i < result.length; i++) {
+                    $("<a class=\"weui_cell\" href=\"javascript:;\" ><div class=\"weui_cell_bd weui_cell_primary\" style=\"color:#666666\">" + result[i].Name + "</div><div class=\"weui_cell_ft\">" + result[i].No + "</div></a>").appendTo($("#list"));
+                    ClickStyle();
+                }
+            }
+        }
+    })
+}
+</script>
+
+
+

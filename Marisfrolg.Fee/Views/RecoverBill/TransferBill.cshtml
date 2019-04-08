@@ -1,0 +1,3471 @@
+﻿@{
+    ViewBag.Title = "TransferBill";
+}
+<script src="~/Scripts/ajaxfileupload.js"></script>
+
+<div class="bd" style="margin-top: 3%;">
+
+    <div class="weui_cells weui_cells_access  col-md-4">
+        <a class="weui_cell js_tab" href="javascript:;" data-id="navbar" onclick="ShowMyList('listOne')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>转移单据（离职员工转移）</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('listSix')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>借款单操作</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('listFour')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>财务工资导入</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list9')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>个人银行卡信息</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list14')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>公告栏</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list18')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>修改收款信息</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list21')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>单据转移审批人</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list24')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>部门添加额外审批人</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list27')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>检查单据审批人</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+    </div>
+
+    <div class="weui_cells weui_cells_access  col-md-4">
+
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('listTwo')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>维护供应商银行信息（增，删，改，查）</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('listThree')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>单据操作（单据的编辑和删除）</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list8')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>销售物资导入</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list10')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>部门成本中心配置</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list15')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>片区费项配置</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list19')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>修改供应商信息</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list22')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>根据工号查询密码</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list25')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>查询部门成本中心</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list28')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>单据流程修复</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+    </div>
+
+    <div class="weui_cells weui_cells_access  col-md-4">
+        <a class="weui_cell js_tab" href="javascript:;" data-id="navbar" onclick="ShowMyList('list12')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>错误单据处理</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list7')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>修改办结日期</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar">
+            <div class="weui_cell_bd weui_cell_primary" onclick="ShowMyList('list13')">
+                <p>费用项科目明细</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list11')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>流程配置</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list16')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>修改付款公司</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list20')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>个人单据查询与导出</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list23')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>修改供应商名称</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list26')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>开/关店柜</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+        <a class="weui_cell js_tab" href="javascript:;" data-id="tabbar" onclick="ShowMyList('list29')">
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>单据驳回</p>
+            </div>
+            <div class="weui_cell_ft">
+            </div>
+        </a>
+    </div>
+
+</div>
+
+
+
+<div class="row" style="margin-top: 45%;" id="FatherRow">
+
+    <div class="col-md-8" id="listOne" style="display: none">
+
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入工号" style="width: 15%; margin-right: 10px; display: -webkit-inline-box" id="One">
+        转移到
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入工号" style="width: 15%; margin-left: 10px; display: -webkit-inline-box" id="Two">
+
+        <a onclick="TransferBill()" style="margin-left: 10px;">提交</a>
+    </div>
+
+    <div class="col-md-12" id="listTwo" style="display: none">
+        <div style="margin: 15px;">
+            <table id="table"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="PROVIDERNAME" data-sortable="true">供应商名称</th>
+                        <th data-field="CODE" data-sortable="true">供应商编码</th>
+                        <th data-field="BANKNAME" data-sortable="true">银行名称</th>
+                        <th data-field="BANKNO" data-sortable="true">银行账号</th>
+                        <th data-field="SWIFT" data-sortable="true">SWIFT码</th>
+                        <th data-field="IBAN" data-sortable="true">IBAN码</th>
+                        <th data-field="ISUSERDATA" data-sortable="true">数据来源</th>
+                        <th data-field="Operation" data-sortable="true">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="listFour" style="display: none;">
+        <div class="col-md-2">
+            品牌:
+            <select style="width: 160px; height: 34px;" id="listFourSelect" name="listFourSelect">
+                <option>MF</option>
+                <option>SU</option>
+                <option>AM</option>
+                <option>ZCY</option>
+                <option>KA</option>
+                <option>MDC</option>
+                <option>DA</option>
+                <option>无记账品牌</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            币种:
+            <select style="width: 160px; height: 34px;" id="listFourSelect2" name="listFourSelect2">
+                <option>CNY</option>
+            </select>
+        </div>
+
+        <div class="col-md-2" style="text-align: center">
+            业务时间:<input id="Time1" class="weui_input" type="date" style="width: 110px; margin-left: 10px; margin-top: 8px;" name="Time1">
+        </div>
+
+        <div class="col-md-2">
+            <input type="file" name="uploadfile" id="uploadfile" capture="camera" style="margin-top: 8px;" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-default" onclick="UpLoadExcel()">上传</button>
+        </div>
+
+        <div class="col-md-12" id="PersonalData" style="margin-top: 10px; color: #448a41">
+        </div>
+
+    </div>
+
+    <div class="col-md-12" id="list8" style="display: none">
+        <div class="col-md-2">
+            <input type="file" name="uploadfile2" id="uploadfile2" capture="camera" style="margin-top: 8px;" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-default" onclick="UpLoadSaleExcel()">上传</button>
+        </div>
+    </div>
+
+    <div class="col-md-8" id="listThree" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="多个单号，回车操作" style="width: 20%; margin-left: 10px; display: -webkit-inline-box" id="OperateMyBIllNo">
+    </div>
+
+    <div class="col-md-8" id="list7" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入单号回车修改办结日期" style="width: 20%; margin-left: 10px; display: -webkit-inline-box" id="ChangeOverTime">
+    </div>
+
+    <div class="col-md-8" id="listSix" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="多个借款单号，回车操作" style="width: 25%; margin-left: 10px; display: -webkit-inline-box" id="OperateBorrowBill">
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入工号，查看借款单" style="width: 25%; margin-left: 10px; display: -webkit-inline-box" id="OperatePersonNo">
+    </div>
+
+    <div class="col-md-12" id="listSix1" style="display: none">
+        <div style="margin: 15px;">
+            <table id="table2"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="BillNo" data-sortable="true">单号</th>
+                        <th data-field="Brand" data-sortable="true">发生品牌</th>
+                        <th data-field="Creator" data-sortable="true">创建人</th>
+                        <th data-field="Owner" data-sortable="true">业务人</th>
+                        <th data-field="TotalMoney" data-sortable="true">借款单总额</th>
+                        <th data-field="SurplusMoney" data-sortable="true">待还总额</th>
+                        <th data-field="CreateTime" data-sortable="true">创建时间</th>
+                        <th data-field="ApprovalTime" data-sortable="true">办结时间</th>
+                        <th data-field="Remark" data-sortable="true">备注</th>
+                        <th data-field="Operation" data-sortable="true">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="listFive1" style="display: none">
+        <div style="margin: 15px;">
+            <table id="table1"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="BillNo" data-sortable="true">单号</th>
+                        <th data-field="Type" data-sortable="true">单据类型</th>
+                        <th data-field="Brand" data-sortable="true">发生品牌</th>
+                        <th data-field="Owner" data-sortable="true">业务人</th>
+                        <th data-field="TotalMoney" data-sortable="true">总金额</th>
+                        <th data-field="CreateTime" data-sortable="true">创建时间</th>
+                        <th data-field="ApprovalStatus" data-sortable="true">审核状态</th>
+                        <th data-field="Remark" data-sortable="true">备注</th>
+                        <th data-field="Operation" data-sortable="true">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="list9" style="display: none">
+        <div style="margin: 15px;">
+            <table id="table3"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="NO" data-sortable="true">工号</th>
+                        <th data-field="NAME" data-sortable="true">姓名</th>
+                        <th data-field="POSITION" data-sortable="true">职位</th>
+                        <th data-field="BANKNO" data-sortable="true">银行账号</th>
+                        <th data-field="OPENBANK" data-sortable="true">开户行</th>
+                        <th data-field="OPENCITY" data-sortable="true">开卡城市</th>
+                        <th data-field="Operation" data-sortable="true">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="list10" style="display: none">
+        <div style="margin: 15px;">
+            <table id="table4"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="DEPARTMENTID" data-sortable="true">部门ID</th>
+                        <th data-field="NAME" data-sortable="true">部门名称</th>
+                        <th data-field="COMPANYCODE" data-sortable="true">公司代码</th>
+                        <th data-field="COSTERCENTER" data-sortable="true">成本中心</th>
+                        <th data-field="Operation" data-sortable="true">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="list11" style="display: none">
+        <div class="weui_navbar col-md-12">
+            <div class="weui_navbar_item" onclick="PublicConfigInfo('system')">
+                审核人员配置
+            </div>
+            <div class="weui_navbar_item" onclick="PublicConfigInfo('extradata')">
+                部门额外添加审核人
+            </div>
+            <div class="weui_navbar_item" onclick="PublicConfigInfo('company')">
+                父级部门
+            </div>
+            <div class="weui_navbar_item" onclick="PublicConfigInfo('Items')">
+                行项目配置
+            </div>
+            <div class="weui_navbar_item" onclick="PublicConfigInfo('EmployeeNo')">
+                特殊配置1
+            </div>
+            <div class="weui_navbar_item" onclick="PublicConfigInfo('SuFOB')">
+                特殊配置2
+            </div>
+            <div class="weui_navbar_item" onclick="PublicConfigInfo('BrandPost')">
+                品牌审批岗配置
+            </div>
+            <div class="weui_navbar_item" onclick="PublicConfigInfo('KeepManager')">
+                强制走总经办
+            </div>
+            <div class="weui_navbar_item" onclick="PublicConfigInfo('PaymentCode')">
+                付款公司代码
+            </div>
+        </div>
+
+
+        <div style="margin-top: 70px;">
+            <table class="table table-bordered" id="Mytable">
+                <thead id="Phead">
+                </thead>
+                <tbody id="Pbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="list12" style="display: none">
+
+        <input type="file" name="uploadErrorFile" id="uploadErrorFile" capture="camera" style="margin-top: 8px;" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+
+        <button class="btn btn-default" onclick="uploadErrorFile()">查询</button>
+
+
+        <div style="margin: 15px;">
+            <table id="table5"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="BillNo" data-sortable="true">单号</th>
+                        <th data-field="Department" data-sortable="true">部门名称</th>
+                        <th data-field="Creator" data-sortable="true">创建人</th>
+                        <th data-field="WorkFlowID" data-sortable="true">流程号</th>
+                        <th data-field="Operation" data-sortable="true">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="list13" style="display: none">
+        <button class="btn btn-default" style="margin-left: 15px;" onclick="DownLoadFeeSystemFeeAccount()">导出</button>
+
+        <div style="margin: 15px;">
+            <table id="table6"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="c1" data-sortable="true">费用大类</th>
+                        <th data-field="c2" data-sortable="true">费用项</th>
+                        <th data-field="c3" data-sortable="true">审批岗</th>
+                        <th data-field="c4" data-sortable="true">是否可见</th>
+                        <th data-field="c5" data-sortable="true">是否考核</th>
+                        <th data-field="c6" data-sortable="true">科目号</th>
+                        <th data-field="c7" data-sortable="true">排序号</th>
+                        <th data-field="c8" data-sortable="true">审核人员</th>
+                        <th data-field="c9">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="list14" style="display: none">
+        <div class="col-md-12">
+            <div class="col-md-2">
+                <input type="file" name="uploadfile2" id="uploadfile3" capture="camera" style="margin-top: 8px;" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-default" onclick="UpLoadNotice()">上传</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div style="margin: 15px;">
+                <table id="table7"
+                       data-pagination="true"
+                       data-search="true"
+                       data-mobile-responsive="true"
+                       data-check-on-init="true" style="overflow: auto">
+                    <thead>
+                        <tr>
+                            <th data-field="NAME" data-sortable="true">名称</th>
+                            <th data-field="Operation" data-sortable="true">操作</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="list15" style="display: none">
+        <div style="margin: 15px;">
+            <table id="table8"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="c1" data-sortable="true">ID</th>
+                        <th data-field="c2" data-sortable="true">品牌</th>
+                        <th data-field="c3" data-sortable="true">审批岗</th>
+                        <th data-field="c4" data-sortable="true">是否分品牌</th>
+                        <th data-field="c5" data-sortable="true">分品牌列表</th>
+                        <th data-field="c6" data-sortable="true">审核岗1</th>
+                        <th data-field="c7" data-sortable="true">审核岗2</th>
+                        <th data-field="c8" data-sortable="true">品牌审批岗列表</th>
+                        <th data-field="Operation" data-sortable="true">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-8" id="list16" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入单号修改付款公司" style="width: 20%; margin-left: 10px; display: -webkit-inline-box" id="EditPayCode">
+        <select style="width: 100px; margin-left: 50px; margin-right: 50px;" id="PayCodeSelect">
+            <option>1000</option>
+            <option>1300</option>
+            <option>2000</option>
+            <option>2100</option>
+            <option>2300</option>
+            <option>4000</option>
+        </select>
+        <a onclick="UpdatePayCode()" style="margin-left: 10px;">提交</a>
+    </div>
+
+    <div class="col-md-12" id="list17" style="display: none">
+        <div style="margin: 15px;">
+            <table id="table9"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="c1" data-sortable="true">单号</th>
+                        <th data-field="c2" data-sortable="true">单据类型</th>
+                        <th data-field="c3" data-sortable="true">创建人</th>
+                        <th data-field="c4" data-sortable="true">业务人</th>
+                        <th data-field="c5" data-sortable="true">创建时间</th>
+                        <th data-field="c6" data-sortable="true">办结时间</th>
+                        <th data-field="c7" data-sortable="true">付款公司代码</th>
+                        <th data-field="c8" data-sortable="true">备注</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-8" id="list18" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="修改付款信息（单个/批量）" style="width: 20%; margin-left: 10px; display: -webkit-inline-box" id="CollectionList">
+        <a onclick="EidtCollection()" style="margin-left: 30px;">提交</a>
+        <div class="col-md-12" id="CollectionInfoList">
+            <!-- 第4大块 -->
+            <div class="weui_cells_title" style="color: black;" id="CollectionInfoDetail">
+                收款信息
+            </div>
+            <div id="OpenCard" class="my_weui_cells weui_cells_form">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto;">开卡姓名</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary" style="padding-left: 10px;">
+                        <input class="weui_input" type="text" placeholder="请输入开卡姓名" val="4" id="CollectionInfoName">
+                    </div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto;">开卡支行</label>
+                    </div>
+
+                    <div class="weui_cell_bd weui_cell_primary" style="padding-left: 10px;" id="SubbranchBankFather">
+                        <input class="weui_input" type="text" placeholder="如 民生 深圳 皇岗 点回车" val="5" id="CollectionInfoSubbranchBank">
+                    </div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto;">开卡卡号</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary" style="padding-left: 10px;">
+                        <input class="weui_input" type="text" placeholder="请输入开卡卡号" val="3" id="CollectionInfoBankCode">
+                    </div>
+                </div>
+
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto;">联行号</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary" style="padding-left: 10px;">
+                        <input class="weui_input" type="text" placeholder="选择正确支行即可带出联行号" val="6" id="Unionlinenumber" readonly="readonly">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8" id="list19" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="修改供应商信息（单个/批量）" style="width: 20%; margin-left: 10px; display: -webkit-inline-box" id="ProViderInfoList">
+        <a onclick="EditProviderInfo()" style="margin-left: 30px;">提交</a>
+
+        <div class="col-md-12" style="color: black" id="ProviderInfoList">
+            <!-- 供应商信息块 -->
+            <div class="weui_cells_title" style="color: black;">供应商信息</div>
+            <div class="my_weui_cells" id="providerPanel">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: 70px;">供应商</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary" id="providerFather">
+                        <input id="providerText" class="weui_input awesomplete" style="min-width: 250px;" pattern="*" placeholder="输入模糊信息" />
+                    </div>
+                </div>
+                <div class="weui_cell" style="height: 49px;">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto; font-weight: normal">供应商名称</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input id="ProviderName" class="weui_input awesomplete" style="margin-left: 15px;" pattern="*" placeholder="供应商名称" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="weui_cell" style="height: 49px;">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto; font-weight: normal">开户支行</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary" id="ProviderBankNameFather">
+                        <input id="ProviderBankName" class="weui_input" style="margin-left: 15px;" pattern="*" placeholder="如 民生 深圳 皇岗 点回车" />
+                    </div>
+                </div>
+                <div class="weui_cell" style="height: 49px;">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto; font-weight: normal">银行账号</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+
+                        <input id="ProviderBankNo" class="weui_input awesomplete" style="margin-left: 15px;" pattern="*" placeholder="输入银行账号" />
+
+                    </div>
+                </div>
+                <div class="weui_cell" style="height: 49px;">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto; font-weight: normal">银行代码(SWIFT)</label>
+                    </div>
+
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input id="ProviderBankCode" class="weui_input awesomplete" style="margin-left: 15px;" pattern="*" placeholder="输入SWIFT码（非必填）" />
+                    </div>
+
+                </div>
+                <div class="weui_cell" style="height: 49px;">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto; font-weight: normal" id="IBANNAME">IBAN</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+
+                        <input id="ProviderIBAN" class="weui_input awesomplete" style="margin-left: 15px;" pattern="*" placeholder="输入IBAN码（非必填）" />
+
+                    </div>
+                </div>
+
+                <div class="weui_cell" style="height: 49px;">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label" style="width: auto; font-weight: normal">联行号</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input id="UnionNumer" class="weui_input" style="margin-left: 15px;" pattern="*" placeholder="联行号" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-8" id="list20" style="display: none;">
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入工号，查看单据" style="width: 25%; margin-left: 10px; display: -webkit-inline-box" id="AllBillNo">
+    </div>
+
+    <div class="col-md-12" id="list20son" style="display: none">
+        <div style="margin: 15px;">
+            <table id="table10"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="BillNo" data-sortable="true">单号</th>
+                        <th data-field="PageName" data-sortable="true">单据类型</th>
+                        <th data-field="Brand" data-sortable="true">发生品牌</th>
+                        <th data-field="Owner" data-sortable="true">业务人</th>
+                        <th data-field="TotalMoney" data-sortable="true">总金额</th>
+                        <th data-field="CreateTime" data-sortable="true">创建时间</th>
+                        <th data-field="ApprovalStatus" data-sortable="true">审核状态</th>
+                        <th data-field="Delete" data-sortable="true">是否删除</th>
+                        <th data-field="Borrow" data-sortable="true">借款还清</th>
+                        <th data-field="MissBill" data-sortable="true">发票回收</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-8" id="list21" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入单号，支持多个" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入工号，只允许填写一个" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <button class="btn btn-default" onclick="TransferAuditor()">转移</button>
+    </div>
+
+    <div id="list22" class="col-md-8" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入工号" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <input type="text" class="form-control" autocomplete="off" placeholder="密码" style="width: 25%; margin-left: 10px; display: -webkit-inline-box" readonly="readonly">
+        <button class="btn btn-default" onclick="QueryPassword()">查询</button>
+    </div>
+
+    <div id="list23" class="col-md-8" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入单号，支持多个" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <input type="text" class="form-control" autocomplete="off" placeholder="供应商名称" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <button class="btn btn-default" onclick="EditProviderName()">修改</button>
+    </div>
+
+    <div id="list24" class="col-md-8" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="部门ID" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <input type="text" class="form-control" autocomplete="off" placeholder="中心负责人工号" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <button class="btn btn-default" onclick="SetChargeNo()">设置</button>
+    </div>
+
+    <div class="col-md-12" id="list25" style="display: none">
+        <div style="margin: 15px;">
+            <table id="table_list25"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto">
+                <thead>
+                    <tr>
+                        <th data-field="BUKRS" data-sortable="true">公司代码</th>
+                        <th data-field="NAMES" data-sortable="true">部门名称</th>
+                        <th data-field="KOSTL" data-sortable="true">成本中心</th>
+                        <th data-field="PROFIT" data-sortable="true">利润中心</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="list26" style="display: none">
+
+        <input type="text" class="form-control" autocomplete="off" placeholder="店柜名称/店柜编码" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <button class="btn btn-default" onclick="OperateShopStatus()">查询</button>
+
+        <div style="margin: 15px;">
+            <table id="table_list26"
+                   data-pagination="true"
+                   data-search="true"
+                   data-mobile-responsive="true"
+                   data-check-on-init="true" style="overflow: auto;">
+                <thead>
+                    <tr>
+                        <th data-field="CODE" data-sortable="true">店柜代码</th>
+                        <th data-field="NAME" data-sortable="true">店柜名称</th>
+                        <th data-field="CREATEDATE" data-sortable="true">创建时间</th>
+                        <th data-field="AVAILABLE" data-sortable="true">店柜状态</th>
+                        <th data-field="Operation" data-sortable="true">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div id="list27" class="col-md-12" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="单号，只允许单个" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+
+        <select style="margin-left:30px;">
+            <option selected="selected">中心负责人</option>
+            <option>片区负责人</option>
+            <option>审批岗</option>
+            <option>审批岗1</option>
+            <option>审批岗2</option>
+            <option>财务会计</option>
+            <option>总经办</option>
+            <option>出纳</option>
+        </select>
+
+        <button style="margin-left:30px;" class="btn btn-default" onclick="SearchPerson()">查询</button>
+
+        <textarea style="width:25%;height:100px; margin-left:30px;"></textarea>
+    </div>
+
+    <div id="list28" class="col-md-8" style="display: none">
+        <input type="text" class="form-control" autocomplete="off" placeholder="输入单号，可多个" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <button class="btn btn-default" onclick="RepairBill()">单据再次推送</button>
+    </div>
+
+    <div id="list29" class="col-md-8" style="display: none">
+        @*<input type="text" class="form-control" autocomplete="off" placeholder="输入单号" style="width: 25%; margin-left: 10px; display: -webkit-inline-box">
+        <button class="btn btn-default" onclick="RejectBill()">驳回</button>*@
+    </div>
+
+</div>
+
+
+<input type="hidden" id="hiddenID" />
+
+<div class="weui_dialog_confirm" id="dialogShowProviderInfo" style="display: none;">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 130px; background-color: antiquewhite">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">确定要删除吗？无法撤回！！</strong></div>
+        <div class="weui_dialog_bd">
+        </div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default" onclick="HideBanners('dialogShowProviderInfo')">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary" onclick="PublicDelOperation()">确定</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogEidtProviderInfo" style="display: none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 230px; width: 50%; background-color: antiquewhite">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="EditContentView">编辑供应商银行信息</strong></div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                供应商编码：
+                <input type="text" class="form-control" autocomplete="off" placeholder="输入供应商编码" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="ProviderCodeForTransfer">
+            </div>
+
+            <div class="col-md-6">
+                公司编码：
+                <input type="number" class="form-control" autocomplete="off" placeholder="所属公司编码" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="CompanyCodeForTransfer">
+            </div>
+        </div>
+
+
+
+        <div class="row" style="margin-top: 5px;">
+
+            <div class="col-md-6">
+                <span style="margin-left: 14px;">银行名称：</span>
+                <input type="text" class="form-control" autocomplete="off" placeholder="输入银行名称" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="BankNameForTransfer">
+            </div>
+
+            <div class="col-md-6">
+                银行账号：
+                <input type="text" class="form-control" autocomplete="off" placeholder="输入银行账号" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="BankCodeForTransfer">
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 5px;">
+
+            <div class="col-md-6">
+                <span style="margin-left: 14px;">SWIFT码：</span>
+                <input type="text" class="form-control" autocomplete="off" placeholder="输入SWIFT码" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="SWFITCodeForTransfer">
+            </div>
+
+            <div class="col-md-6">
+                IBAN码：
+                <input type="text" class="form-control" autocomplete="off" placeholder="输入IBAN码" style="width: 40%; margin-left: 3px; display: -webkit-inline-box;" id="IBANCodeForTransfer">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="SubmitProviderInfo()">提交</a>
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="HideBanners('dialogEidtProviderInfo')">取消</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogBorrowBillNo" style="display: none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 150px; width: 40%; background-color: antiquewhite">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">关联费用单</strong></div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                借款单号：
+                <input type="text" class="form-control" autocomplete="off" placeholder="借款单号" style="width: 50%; margin-left: -7px; display: -webkit-inline-box;" id="RelationBorrowNo">
+            </div>
+
+            <div class="col-md-6">
+                费用单号：
+                <input type="text" class="form-control" autocomplete="off" placeholder="费用单号" style="width: 50%; margin-left: -7px; display: -webkit-inline-box;" id="RelationFeeNo">
+            </div>
+        </div>
+
+        <div class="row">
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="RelationFEEOperation()">确认关联</a>
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="HideBanners('dialogBorrowBillNo')">取消</a>
+        </div>
+    </div>
+</div>
+
+
+<div class="weui_dialog_confirm" id="EditOverTime" style="display: none;">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 130px; background-color: antiquewhite">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">修改办结日期</strong></div>
+        <div class="weui_dialog_bd">
+            <input class="weui_input" id="EditOverTime1" style="color: red;" />
+        </div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default" onclick="HideBanners('EditOverTime')">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary" onclick="SubmitOverTime()">确定</a>
+        </div>
+    </div>
+</div>
+<div class="weui_dialog_confirm" id="dialogPersonBankInfo" style="display: none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 230px; width: 50%; background-color: antiquewhite">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="PB1">编辑个人银行信息</strong></div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                工号：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <input type="text" class="form-control" autocomplete="off" placeholder="工号" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="PB2">
+            </div>
+
+            <div class="col-md-6">
+                姓名：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <input type="text" class="form-control" autocomplete="off" placeholder="姓名" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="PB3">
+            </div>
+        </div>
+
+
+
+        <div class="row" style="margin-top: 5px;">
+
+            <div class="col-md-6">
+                银行名称：
+                <input type="text" class="form-control" autocomplete="off" placeholder="职位" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="PB4">
+            </div>
+
+            <div class="col-md-6">
+                银行账号：
+                <input type="text" class="form-control" autocomplete="off" placeholder="银行账号" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="PB5">
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 5px;">
+
+            <div class="col-md-6">
+                开户行：&nbsp&nbsp&nbsp
+                <input type="text" class="form-control" autocomplete="off" placeholder="开户行" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="PB6">
+            </div>
+
+            <div class="col-md-6">
+                开卡城市:
+                <input type="text" class="form-control" autocomplete="off" placeholder="开卡城市" style="width: 40%; margin-left: 3px; display: -webkit-inline-box;" id="PB7">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="CommitMethod1()">提交</a>
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="HideBanners('dialogPersonBankInfo')">取消</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogDepartCosterCenter" style="display: none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 135px; width: 40%; background-color: antiquewhite">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="DC1">编辑个人银行信息</strong></div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                部门：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <input type="text" class="form-control" autocomplete="off" placeholder="部门" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DC2">
+            </div>
+
+            <div class="col-md-6">
+                成本中心：
+                <input type="text" class="form-control" autocomplete="off" placeholder="成本中心" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DC3">
+            </div>
+        </div>
+
+        <div class="row">
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="CommitDepartCosterCenter()">提交</a>
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="HideBanners('dialogDepartCosterCenter')">取消</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogConfigInfo" style="display: none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 135px; width: 40%; background-color: antiquewhite">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title" id="DCI1">增加</strong></div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+                ID：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <input type="text" readonly="readonly" class="form-control" autocomplete="off" placeholder="ID" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DCI2">
+            </div>
+
+            <div class="col-md-6">
+                值：
+                <input type="text" class="form-control" autocomplete="off" placeholder="值" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="DCI3">
+            </div>
+        </div>
+
+        <div class="row">
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="ConfigCommitOperation()">提交</a>
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="HideBanners('dialogConfigInfo')">取消</a>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_confirm" id="dialogFeeAccount" style="display: none">
+    <div class="weui_maskNew"></div>
+    <div class="weui_dialog" style="height: 200px; width: 40%; background-color: antiquewhite">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-6">
+                费用项：
+                <input type="text" class="form-control" autocomplete="off" placeholder="ID" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="FeeName">
+            </div>
+            <div class="col-md-6">
+                可见性：
+                <select id="IsShow">
+                    <option value="0">总部可见片区不可见</option>
+                    <option value="1">都可见</option>
+                    <option value="2">片区可见总部不可见</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-6">
+                是否考核：
+                <select id="IsMarket">
+                    <option value="0">不考核</option>
+                    <option value="1">考核</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                排序号：
+                <input type="number" class="form-control" autocomplete="off" placeholder="值" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="SortId">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-6">
+                老名称：
+                <input type="text" class="form-control" autocomplete="off" placeholder="值" style="width: 40%; margin-left: -7px; display: -webkit-inline-box;" id="OldName">
+            </div>
+            <div class="col-md-6">
+                大类：
+                <select id="BigClass"></select>
+            </div>
+        </div>
+        <div class="row">
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="CommitFeeAccountEidt()">提交</a>
+            <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_primary" onclick="HideBanners('dialogFeeAccount')">取消</a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $("#OperateMyBIllNo").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                OperateMyBillNo();
+            }
+        });
+        $("#OperateBorrowBill").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                OperateBorrowBillNo();
+            }
+        });
+        $("#OperatePersonNo").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                LookBorrowBill();
+            }
+        });
+        $("#ChangeOverTime").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                ChangeOverTime();
+            }
+        });
+        $("#EditPayCode").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                GetEditPayCodeList();
+            }
+        });
+
+        $("#CollectionInfoSubbranchBank").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                loadAutoSubBranch("CollectionInfoSubbranchBank", "SubbranchBankFather");
+            }
+        });
+
+        $("#ProviderBankName").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                loadAutoSubBranch("ProviderBankName", "ProviderBankNameFather");
+            }
+        });
+
+        $("#AllBillNo").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                GetAllBillNo();
+            }
+        });
+
+
+        loadAutoComplete();
+
+
+        OnceProviderloadAutoComplete();
+
+        GetAllBigClass();  //加载费用类别
+    })
+
+    function EditOverTime(time, BillNo, Type) {
+        $("#EditOverTime").show();
+        $("#EditOverTime1").val(time);
+        $("#EditOverTime1").attr("BillNo", BillNo);
+        $("#EditOverTime1").attr("Type", Type);
+    }
+
+    function SubmitOverTime() {
+        //更改办结日期
+        var time = $("#EditOverTime1").val();
+        if (time) {
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/EditApprovalTime/")",
+                data: { time: time, BillNo: $("#EditOverTime1").attr("BillNo"), Type: $("#EditOverTime1").attr("Type") },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    if (result == "Success") {
+                        submitMessageShow("修改成功!");
+                        //刷新数据
+                        ChangeOverTime();
+                    }
+                    else {
+                        submitMessageShow("提交失败!", "error");
+                    }
+                    HideBanners('EditOverTime');
+                }
+            })
+        }
+        else {
+            submitMessageShow("办结日期不能为空!", "error");
+            return false;
+        }
+    }
+
+
+    function LookBorrowBill() {
+        $("#listSix1").show();
+        $("#loadingToast").show();
+        var no = $("#OperatePersonNo").val();
+        if (no == "" || no == undefined) {
+            submitMessageShow("工号不能为空!", "error");
+            return false;
+        }
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/GetPersonBorrowBill/")",
+            data: { No: no },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#loadingToast").hide();
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+
+                    if (result.length <= 0) {
+                        submitMessageShow("无借款记录!", "error");
+                        return false;
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        var tempModel = { BillNo: "", Brand: "", Creator: "", Owner: "", TotalMoney: "", SurplusMoney: "", CreateTime: "", ApprovalTime: "", Remark: "", Operation: "" }
+                        var Brand = "";
+                        if (result[i].PersonInfo != undefined && result[i].PersonInfo.Brand != undefined && result[i].PersonInfo.Brand.length > 0) {
+                            for (var k = 0; k < result[i].PersonInfo.Brand.length; k++) {
+                                if (k < result[i].PersonInfo.Brand.length - 1) {
+                                    Brand += result[i].PersonInfo.Brand[k] + ","
+                                }
+                                else {
+                                    Brand += result[i].PersonInfo.Brand[k];
+                                }
+                            }
+                        }
+                        else {
+                            Brand = "无记账品牌";
+                        }
+                        tempModel.BillNo = result[i].BillNo;
+                        tempModel.Brand = Brand;
+                        tempModel.Creator = result[i].Creator;
+                        tempModel.Owner = result[i].Owner;
+                        tempModel.TotalMoney = result[i].TotalMoney;
+                        tempModel.SurplusMoney = result[i].SurplusMoney;
+                        tempModel.CreateTime = result[i].CreateTime == null ? "" : result[i].CreateTime.split('T')[0];
+                        tempModel.ApprovalTime = result[i].ApprovalTime == null ? "" : result[i].ApprovalTime.split('T')[0];
+                        tempModel.Remark = result[i].Remark;
+                        tempModel.ApprovalStatus = ApprovalStatusMean(result[i].ApprovalStatus, result[i].ApprovalPost);
+
+                        if (result[i].SurplusMoney > 0) {
+                            tempModel.Operation = "<a href=\"@Url.Content("~/RefundBill/RefundOperate")?BorrowNo=" + result[i].BillNo + "&RefundType=FeeBill\">费用单还款</a>&nbsp;&nbsp;<a href=\"@Url.Content("~/RefundBill/RefundOperate")?BorrowNo=" + result[i].BillNo + "&RefundType=Cash\">现金还款</a>&nbsp;&nbsp;<a style=\"cursor:pointer;\" onclick=\"RelationFeeAndBorrow('" + result[i].BillNo + "')\">关联费用单</a>&nbsp;&nbsp;<a href=\"@Url.Content("~/RefundBill/CheckRefundRecode")?BorrowNo=" + result[i].BillNo + "\">查看还款记录</a>";
+                        }
+                        else {
+                            tempModel.Operation = "<a href=\"@Url.Content("~/RefundBill/CheckRefundRecode")?BorrowNo=" + result[i].BillNo + "\">查看还款记录</a>";
+                        }
+                        newlist.push(tempModel);
+                    }
+                    $('#table2').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table2').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+
+
+    function RelationFEEOperation() {
+        var BorrowNo = $("#RelationBorrowNo").val();
+        var FeeNo = $("#RelationFeeNo").val();
+        if (BorrowNo == "" || BorrowNo == undefined) {
+            submitMessageShow("借款单号不能为空!", "error");
+            return false;
+        }
+        if (FeeNo == "" || FeeNo == undefined) {
+            submitMessageShow("费用单号不能为空!", "error");
+            return false;
+        }
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/ReationOperation/")",
+            data: { BorrowNo: BorrowNo, FeeNo: FeeNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result == "Success") {
+                    submitMessageShow("关联成功!");
+                }
+                else {
+                    submitMessageShow(result, "error");
+                }
+                $("#dialogBorrowBillNo").hide();
+            }
+        })
+    }
+
+
+    function RelationFeeAndBorrow(RelationBorrowNo) {
+        $("#RelationBorrowNo").val(RelationBorrowNo);
+        $("#dialogBorrowBillNo").show();
+    }
+
+
+    function DeleteRealOperation() {
+        var BillNo = $("#hiddenID").attr("code");
+        var Type = $("#hiddenID").attr("Dtype");
+        $.ajax({
+            url: "@Url.Content("~/Print/DelectMyBill/")",
+            data: { BillNo: BillNo, Type: Type },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    submitMessageShow("删除成功!");
+                    OperateMyBillNo();
+                }
+                else {
+                    submitMessageShow("删除失败!", "error");
+                }
+            }
+        });
+    }
+
+
+    function DealDepartCosterCenter(Type, DpId) {
+        $("#dialogDepartCosterCenter").show();
+        if (Type == "ADD") {
+            $("#DC1").text("新增部门成本中心");
+            $("#DC1").attr("role", "ADD");
+            $("#DC2").val(DpId);
+            $("#DC2").attr("readonly", true);
+            $("#DC3").val("")
+        }
+        else if (Type == "EDIT") {
+            $("#DC1").text("修改部门成本中心");
+            $("#DC1").attr("role", "EDIT");
+            $("#DC2").val(DpId);
+            $("#DC2").attr("readonly", true);
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/GetsingleCosterCenter/")",
+                data: { Id: DpId },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    $("#DC3").val(result);
+                }
+            })
+        }
+    }
+
+
+    function CommitDepartCosterCenter() {
+        var role = $("#DC1").attr("role");
+        var departId = $("#DC2").val();
+        var value = $("#DC3").val();
+
+        if (departId == undefined) {
+            submitMessageShow("部门ID不能为空", "error");
+            return;
+        }
+        if (value == undefined) {
+            submitMessageShow("成本中心不能为空", "error");
+            return;
+        }
+        if (value.length < 6) {
+            submitMessageShow("成本中心不符", "error");
+            return;
+        }
+
+        if (role == "ADD") {
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/AddDepartCosterCenter/")",
+                data: { departId: departId, value: value },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    result = JSON.parse(result);
+                    if (result.error == "0") {
+                        submitMessageShow(result.msg);
+                        GetDepartCostercenterExtend();
+                        HideBanners('dialogDepartCosterCenter');
+                    }
+                    else {
+                        submitMessageShow(result.msg, "error");
+                    }
+                }
+            })
+        }
+        else if (role == "EDIT") {
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/EditDepartCosterCenter/")",
+                data: { departId: departId, value: value },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    result = JSON.parse(result);
+                    if (result.error == "0") {
+                        submitMessageShow(result.msg);
+                        GetDepartCostercenterExtend();
+                        HideBanners('dialogDepartCosterCenter');
+                    }
+                    else {
+                        submitMessageShow(result.msg, "error");
+                    }
+                }
+            })
+        }
+    }
+
+
+
+    function GetPersonalData() {
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/GetPesonalRecord/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    $("#PersonalData").children().remove();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        $("<p>" + result[i] + "<p>").appendTo($("#PersonalData"));
+                    }
+                }
+            }
+        })
+    }
+
+
+    //异步上传文件
+    function UpLoadExcel() {
+        $.ajaxFileUpload
+           (
+               {
+                   url: "@Url.Content("~/RecoverBill/LoadExcelData/")", //用于文件上传的服务器端请求地址
+                   secureuri: false, //是否需要安全协议，一般设置为false
+                   data: { listFourSelect: $("#listFourSelect").val(), listFourSelect2: $("#listFourSelect2").val(), Time1: $("#Time1").val() }, //此参数非常严谨，写错一个引号都不行
+                   fileElementId: 'uploadfile', //文件上传域的ID
+                   dataType: 'json', //返回值类型 一般设置为json
+                   success: function (data, status)  //服务器成功响应处理函数
+                   {
+                       if (typeof (data.error) != 'undefined') {
+                           if (data.error != '') {
+                               submitMessageShow(data.error, "error");
+                           } else {
+                               submitMessageShow(data.msg);
+                               GetPersonalData();
+                           }
+                       }
+                   },
+                   error: function (data, status, e)//服务器响应失败处理函数
+                   {
+                       submitMessageShow(e);
+                   }
+               }
+               )
+        return false;
+    }
+
+    function UpLoadSaleExcel() {
+        $.ajaxFileUpload
+           (
+               {
+                   url: "@Url.Content("~/RecoverBill/UploadSaleExcel/")", //用于文件上传的服务器端请求地址
+                   secureuri: false, //是否需要安全协议，一般设置为false
+                   data: {}, //此参数非常严谨，写错一个引号都不行
+                   fileElementId: 'uploadfile2', //文件上传域的ID
+                   dataType: 'json', //返回值类型 一般设置为json
+                   success: function (data, status)  //服务器成功响应处理函数
+                   {
+                       if (typeof (data.error) != 'undefined') {
+                           if (data.error != '') {
+                               submitMessageShow(data.error, "error");
+                           } else {
+                               submitMessageShow(data.msg);
+                           }
+                       }
+                   },
+                   error: function (data, status, e)//服务器响应失败处理函数
+                   {
+                       submitMessageShow(e);
+                   }
+               }
+               )
+        return false;
+    }
+    function UpLoadNotice() {
+        $.ajaxFileUpload
+           (
+               {
+                   url: "@Url.Content("~/RecoverBill/UpLoadNotice/")", //用于文件上传的服务器端请求地址
+                   secureuri: false, //是否需要安全协议，一般设置为false
+                   data: {}, //此参数非常严谨，写错一个引号都不行
+                   fileElementId: 'uploadfile3', //文件上传域的ID
+                   dataType: 'json', //返回值类型 一般设置为json
+                   success: function (data, status)  //服务器成功响应处理函数
+                   {
+                       if (typeof (data.error) != 'undefined') {
+                           if (data.error != '0') {
+                               submitMessageShow(data.msg, "error");
+                           } else {
+                               submitMessageShow(data.msg);
+                               GetNoticeList();
+                           }
+                       }
+                   },
+                   error: function (data, status, e)//服务器响应失败处理函数
+                   {
+                       submitMessageShow(e);
+                   }
+               }
+               )
+        return false;
+    }
+
+    //异步上传文件
+    function uploadErrorFile() {
+        $.ajaxFileUpload
+           (
+               {
+                   url: "@Url.Content("~/Items/GetErrorModel/")", //用于文件上传的服务器端请求地址
+                   secureuri: false, //是否需要安全协议，一般设置为false
+                   data: {}, //此参数非常严谨，写错一个引号都不行
+                   fileElementId: 'uploadErrorFile', //文件上传域的ID
+                   dataType: 'json', //返回值类型 一般设置为json
+                   success: function (data, status)  //服务器成功响应处理函数
+                   {
+                       if (typeof (data.error) != 'undefined') {
+                           if (data.error != '0') {
+                               submitMessageShow(data.msg, "error");
+                           } else {
+                               submitMessageShow(data.msg);
+
+                               result = data.data;
+                               var newlist = new Array();
+                               for (var i = 0; i < result.length; i++) {
+                                   var model = { BillNo: "", Department: "", Creator: "", WorkFlowID: "", Operation: "" };
+                                   model.BillNo = result[i].BillNo;
+                                   model.Department = result[i].PersonInfo.Department;
+                                   model.Creator = result[i].Creator;
+                                   model.WorkFlowID = result[i].WorkFlowID;
+
+                                   model.Operation = "<a onclick=\"showDialog('" + result[i].BillNo + "','" + result[i].PageName + "')\"  style=\"cursor: pointer;\">查看</a>&nbsp<a onclick=\"DelErrorModel('" + result[i].WorkFlowID + "')\" style=\"cursor: pointer;\">删除</a>";
+                                   newlist.push(model);
+                               }
+                               $('#table5').bootstrapTable({
+                                   data: newlist
+                               });
+
+                               $('#table5').bootstrapTable('refreshOptions', {
+                                   data: newlist
+                               });
+                           }
+                       }
+                   },
+                   error: function (data, status, e)//服务器响应失败处理函数
+                   {
+                       submitMessageShow(e);
+                   }
+               }
+               )
+        return false;
+    }
+
+
+    function ExportExcelForTransfer() {
+        var Brand = $("#listFourSelect").val();
+        var Currency = $("#listFourSelect2").val();
+        var time = $("#Time1").val();
+        if (time == "") {
+            submitMessageShow("业务时间不能为空", "error");
+        }
+        var file = $("#FileForTransfer").val();
+        if (file == "") {
+            submitMessageShow("请选择Excel文件", "error");
+        }
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/LoadExcelData/")",
+            data: { Brand: Brand, Currency: Currency, Time: time, Path: file },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+
+            }
+        })
+    }
+
+    function UpdatePayCode() {
+        var str = $("#EditPayCode").val();
+        if (str == "" || str == undefined) {
+            submitMessageShow("需填写单号", "error");
+            return;
+        }
+        $.ajax({
+            url: "@Url.Content("~/Items/UpdatePayCode/")",
+            data: { BillNo: str, code: $("#PayCodeSelect").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    result = JSON.parse(result);
+                    if (result.error == "1") {
+                        submitMessageShow(result.msg, "error");
+                    }
+                    else {
+                        submitMessageShow(result.msg);
+                        GetEditPayCodeList();  //刷新数据
+                    }
+                }
+            }
+        })
+    }
+
+
+    function GetEditPayCodeList() {
+        $("#list17").show();
+        $("#loadingToast").show();
+        var str = $("#EditPayCode").val();
+        if (str == "" || str == undefined) {
+            submitMessageShow("需填写单号", "error");
+            return;
+        }
+        $.ajax({
+            url: "@Url.Content("~/Items/GetEditPayCodeList/")",
+            data: { BillNo: str },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#loadingToast").hide();
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var tempModel = { c1: "", c2: "", c3: "", c4: "", c5: "", c6: "", c7: "", c8: "" }
+                        tempModel.c1 = result[i].c1;
+                        tempModel.c2 = result[i].c2;
+                        tempModel.c3 = result[i].c3;
+                        tempModel.c4 = result[i].c4;
+                        tempModel.c5 = result[i].c5;
+                        tempModel.c6 = result[i].c6;
+                        tempModel.c7 = result[i].c7;
+                        tempModel.c8 = result[i].c8;
+
+                        newlist.push(tempModel);
+                    }
+                    $('#table9').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table9').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        });
+    }
+
+
+    function OperateBorrowBillNo() {
+        $("#listSix1").show();
+        $("#loadingToast").show();
+        var str = $("#OperateBorrowBill").val();
+        if (str == "" || str == undefined) {
+            submitMessageShow("需填写单号", "error");
+            return;
+        }
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/OperateBorrowBill/")",
+            data: { Bill: str },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#loadingToast").hide();
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var tempModel = { BillNo: "", Brand: "", Creator: "", Owner: "", TotalMoney: "", SurplusMoney: "", CreateTime: "", ApprovalTime: "", Remark: "", Operation: "" }
+                        var Brand = "";
+                        if (result[i].PersonInfo != undefined && result[i].PersonInfo.Brand != undefined && result[i].PersonInfo.Brand.length > 0) {
+                            for (var k = 0; k < result[i].PersonInfo.Brand.length; k++) {
+                                if (k < result[i].PersonInfo.Brand.length - 1) {
+                                    Brand += result[i].PersonInfo.Brand[k] + ","
+                                }
+                                else {
+                                    Brand += result[i].PersonInfo.Brand[k];
+                                }
+                            }
+                        }
+                        else {
+                            Brand = "无记账品牌";
+                        }
+                        tempModel.BillNo = result[i].BillNo;
+                        tempModel.Brand = Brand;
+                        tempModel.Creator = result[i].Creator;
+                        tempModel.Owner = result[i].Owner;
+                        tempModel.TotalMoney = result[i].TotalMoney;
+                        tempModel.SurplusMoney = result[i].SurplusMoney;
+                        tempModel.CreateTime = result[i].CreateTime == null ? "" : result[i].CreateTime.split('T')[0];
+                        tempModel.ApprovalTime = result[i].ApprovalTime == null ? "" : result[i].ApprovalTime.split('T')[0];
+                        tempModel.Remark = result[i].Remark;
+                        tempModel.ApprovalStatus = ApprovalStatusMean(result[i].ApprovalStatus, result[i].ApprovalPost);
+
+                        if (result[i].SurplusMoney > 0) {
+                            tempModel.Operation = "<a href=\"@Url.Content("~/RefundBill/RefundOperate")?BorrowNo=" + result[i].BillNo + "&RefundType=FeeBill\">费用单还款</a>&nbsp;&nbsp;<a href=\"@Url.Content("~/RefundBill/RefundOperate")?BorrowNo=" + result[i].BillNo + "&RefundType=Cash\">现金还款</a>&nbsp;&nbsp;<a style=\"cursor:pointer;\" onclick=\"RelationFeeAndBorrow('" + result[i].BillNo + "')\">关联费用单</a>&nbsp;&nbsp;<a href=\"@Url.Content("~/RefundBill/CheckRefundRecode")?BorrowNo=" + result[i].BillNo + "\">查看还款记录</a>";
+                        }
+                        else {
+                            tempModel.Operation = "<a href=\"@Url.Content("~/RefundBill/CheckRefundRecode")?BorrowNo=" + result[i].BillNo + "\">查看还款记录</a>";
+                        }
+                        newlist.push(tempModel);
+                    }
+                    $('#table2').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table2').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        });
+    }
+
+
+    function ChangeOverTime() {
+        var str = $("#ChangeOverTime").val();
+        if (str == "" || str == undefined) {
+            submitMessageShow("需填写单号", "error");
+            return;
+        }
+        $("#listFive1").show();
+        $("#loadingToast").show();
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/OperateBill/")",
+            data: { Bill: str, IsOver: "2" },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#loadingToast").hide();
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var tempModel = { BillNo: "", Type: "", Brand: "", Owner: "", TotalMoney: "", CreateTime: "", ApprovalStatus: "", Remark: "", Operation: "" }
+                        var Brand = "";
+                        if (result[i].PersonInfo != undefined && result[i].PersonInfo.Brand != undefined && result[i].PersonInfo.Brand.length > 0) {
+                            for (var k = 0; k < result[i].PersonInfo.Brand.length; k++) {
+                                if (k < result[i].PersonInfo.Brand.length - 1) {
+                                    Brand += result[i].PersonInfo.Brand[k] + ","
+                                }
+                                else {
+                                    Brand += result[i].PersonInfo.Brand[k];
+                                }
+                            }
+                        }
+                        else {
+                            Brand = "无记账品牌";
+                        }
+                        tempModel.BillNo = result[i].BillNo;
+                        tempModel.Type = tagsMean(result[i].PageName);
+                        tempModel.Brand = Brand;
+                        tempModel.Owner = result[i].Owner;
+                        tempModel.TotalMoney = result[i].TotalMoney;
+                        tempModel.ApprovalTime = result[i].ApprovalTime == null ? "" : result[i].ApprovalTime.split('T')[0];
+                        tempModel.Remark = result[i].Remark;
+                        tempModel.ApprovalStatus = ApprovalStatusMean(result[i].ApprovalStatus, result[i].ApprovalPost);
+                        tempModel.Operation = "<a onclick=\"EditOverTime('" + tempModel.ApprovalTime + "','" + tempModel.BillNo + "','" + result[i].PageName + "')\" style='color:blue;cursor:pointer;'>" + '修改办结时间' + "</a>";
+
+                        newlist.push(tempModel);  //EditOverTime
+                    }
+
+
+                    var $columns = [];
+
+                    $columns.push({
+                        field: "BillNo",
+                        title: "单号"
+                    });
+                    $columns.push({
+                        field: "Type",
+                        title: "单据类型"
+                    });
+                    $columns.push({
+                        field: "Brand",
+                        title: "发生品牌"
+                    });
+                    $columns.push({
+                        field: "Owner",
+                        title: "业务人"
+                    });
+                    $columns.push({
+                        field: "TotalMoney",
+                        title: "总金额"
+                    });
+                    $columns.push({
+                        field: "ApprovalTime",
+                        title: "办结日期"
+                    })
+                    $columns.push({
+                        field: "ApprovalStatus",
+                        title: "审核状态"
+                    });
+
+                    $columns.push({
+                        field: "Remark",
+                        title: "备注"
+                    });
+                    $columns.push({
+                        field: "Operation",
+                        title: "操作"
+                    });
+
+                    $('#table1').bootstrapTable({
+                        data: newlist,
+                        columns: $columns
+                    });
+
+                    $('#table1').bootstrapTable('refreshOptions', {
+                        data: newlist,
+                        columns: $columns
+                    });
+                }
+            }
+        });
+    }
+
+
+    function OperateMyBillNo() {
+        var str = $("#OperateMyBIllNo").val();
+        if (str == "" || str == undefined) {
+            submitMessageShow("需填写单号", "error");
+            return;
+        }
+        $("#listFive1").show();
+        $("#loadingToast").show();
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/OperateBill/")",
+            data: { Bill: str },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#loadingToast").hide();
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var tempModel = { BillNo: "", Type: "", Brand: "", Owner: "", TotalMoney: "", CreateTime: "", ApprovalStatus: "", Remark: "", Operation: "" }
+                        var Brand = "";
+                        if (result[i].PersonInfo != undefined && result[i].PersonInfo.Brand != undefined && result[i].PersonInfo.Brand.length > 0) {
+                            for (var k = 0; k < result[i].PersonInfo.Brand.length; k++) {
+                                if (k < result[i].PersonInfo.Brand.length - 1) {
+                                    Brand += result[i].PersonInfo.Brand[k] + ","
+                                }
+                                else {
+                                    Brand += result[i].PersonInfo.Brand[k];
+                                }
+                            }
+                        }
+                        else {
+                            Brand = "无记账品牌";
+                        }
+                        tempModel.BillNo = result[i].BillNo;
+                        tempModel.Type = tagsMean(result[i].PageName);
+                        tempModel.Brand = Brand;
+                        tempModel.Owner = result[i].Owner;
+                        tempModel.TotalMoney = result[i].TotalMoney;
+                        tempModel.CreateTime = result[i].CreateTime == null ? "" : result[i].CreateTime.split('T')[0];
+                        tempModel.Remark = result[i].Remark;
+                        tempModel.ApprovalStatus = ApprovalStatusMean(result[i].ApprovalStatus, result[i].ApprovalPost);
+                        tempModel.Operation = "<a onclick=\"EditViewLoadDate('" + result[i].BillNo + "'," + EditTagsMean(result[i].PageName) + ")\" style='color:blue;cursor:pointer;'>" + '编辑' + "</a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick=\"PublicDelMethod('" + result[i].BillNo + "','" + EditTagsMean(result[i].PageName) + "','单据操作')\" style='color:blue;cursor:pointer;'>" + '删除' + "</a>";
+                        newlist.push(tempModel);
+                    }
+
+
+                    var $columns = [];
+
+                    $columns.push({
+                        field: "BillNo",
+                        title: "单号"
+                    });
+                    $columns.push({
+                        field: "Type",
+                        title: "单据类型"
+                    });
+                    $columns.push({
+                        field: "Brand",
+                        title: "发生品牌"
+                    });
+                    $columns.push({
+                        field: "Owner",
+                        title: "业务人"
+                    });
+                    $columns.push({
+                        field: "TotalMoney",
+                        title: "总金额"
+                    });
+                    $columns.push({
+                        field: "CreateTime",
+                        title: "创建日期"
+                    })
+                    $columns.push({
+                        field: "ApprovalStatus",
+                        title: "审核状态"
+                    });
+
+                    $columns.push({
+                        field: "Remark",
+                        title: "备注"
+                    });
+                    $columns.push({
+                        field: "Operation",
+                        title: "操作"
+                    });
+
+                    $('#table1').bootstrapTable({
+                        data: newlist,
+                        columns: $columns
+                    });
+
+                    $('#table1').bootstrapTable('refreshOptions', {
+                        data: newlist,
+                        columns: $columns
+                    });
+                }
+            }
+        });
+    }
+
+
+    function ClearProviderInfo() {
+        $("#ProviderCodeForTransfer").val("");
+        $("#CompanyCodeForTransfer").val("");
+        $("#BankNameForTransfer").val("");
+        $("#BankCodeForTransfer").val("");
+        $("#SWFITCodeForTransfer").val("");
+        $("#IBANCodeForTransfer").val("");
+    }
+
+
+    //提交
+    function SubmitProviderInfo() {
+        var model = { CODE: "", COMPANYCODE: "", BANKNAME: "", BANKNO: "", SWIFT: "", IBAN: "", ID: "" };
+        model.CODE = $("#ProviderCodeForTransfer").val();
+        model.COMPANYCODE = $("#CompanyCodeForTransfer").val();
+        model.BANKNAME = $("#BankNameForTransfer").val();
+        model.BANKNO = $("#BankCodeForTransfer").val();
+        model.SWIFT = $("#SWFITCodeForTransfer").val();
+        model.IBAN = $("#IBANCodeForTransfer").val();
+        model.ID = $("#hiddenID").attr("EidtCode");
+        if (model.BANKCODE == "") {
+            submitMessageShow("供应商代码不能为空", "error");
+            return;
+        }
+        if (model.ID == undefined && model.COMPANYCODE == "") {
+            submitMessageShow("公司代码不能为空", "error");
+            return;
+        }
+        if (model.BANKNAME == "") {
+            submitMessageShow("银行名称不能为空", "error");
+            return;
+        }
+        if (model.BANKNO == "") {
+            submitMessageShow("银行账号不能为空", "error");
+            return;
+        }
+        $("#dialogEidtProviderInfo").hide();
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/SubmitProviderInfo/")",
+            data: JSON.stringify(model),
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "POST",
+            success: function (result) {
+                if (result == "Success") {
+                    if (model.ID) {
+                        submitMessageShow("编辑成功");
+                    }
+                    else {
+                        submitMessageShow("新增成功");
+                    }
+                }
+                else {
+                    if (model.ID) {
+                        submitMessageShow("编辑失败", "error");
+                    }
+                    else {
+                        submitMessageShow("新增失败", "error");
+                    }
+                }
+                //刷新数据
+                ShowTableDataFromProviderBank();
+            }
+        })
+    }
+
+    function EditOrAddProviderInfo(ID) {
+        $("#hiddenID").attr("EidtCode", ID);
+        ClearProviderInfo();
+        if (ID) {
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/GetProViderInfo/")",
+                data: { ID: ID },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    if (result) {
+                        result = JSON.parse(result);
+                        $("#ProviderCodeForTransfer").val(result.CODE);
+                        $("#CompanyCodeForTransfer").val(result.COMPANYCODE);
+                        $("#BankNameForTransfer").val(result.BANKNAME);
+                        $("#BankCodeForTransfer").val(result.BANKNO);
+                        $("#SWFITCodeForTransfer").val(result.SWIFT);
+                        $("#IBANCodeForTransfer").val(result.IBAN);
+                        $("#dialogEidtProviderInfo").show();
+                        $("#EditContentView").text("编辑供应商银行信息");
+                    }
+                }
+            })
+        }
+        else {
+            $("#dialogEidtProviderInfo").show();
+            $("#EditContentView").text("新增供应商银行信息");
+        }
+
+    }
+
+    function DeleteProviderBankInfo() {
+        $("#dialogShowProviderInfo").hide();
+        var ID = $("#hiddenID").attr("code");
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/DeleteProviderBankInfo/")",
+            data: { ID: ID },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result == "Success") {
+                    submitMessageShow("删除成功");
+                    //刷新数据
+                    ShowTableDataFromProviderBank();
+                }
+                else {
+                    submitMessageShow("删除失败", "error");
+                }
+            }
+        })
+    }
+
+
+    function PublicDelMethod(ID, Type, Role) {
+        $("#dialogShowProviderInfo").show();
+        $("#hiddenID").attr("code", ID);
+        $("#hiddenID").attr("Dtype", Type);
+        $("#hiddenID").attr("role", Role);
+    }
+
+
+    function PublicDelOperation() {
+        var role = $("#hiddenID").attr("role");
+        if (role == "供应商") {
+            DeleteProviderBankInfo();
+        }
+        else if (role == "单据操作") {
+            DeleteRealOperation();
+        }
+        else if (role == "银行卡信息") {
+            DelPersonBank();
+        }
+        $("#dialogShowProviderInfo").hide();
+    }
+
+
+
+    function DelPersonBank() {
+        var No = $("#hiddenID").attr("code");
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/DelOrQueryData/")",
+            data: { Type: "DEL", No: No },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    if (result == "Success") {
+                        submitMessageShow("删除成功");
+                    }
+                    else {
+                        submitMessageShow("删除失败", "error");
+                    }
+                }
+            }
+        })
+    }
+
+
+    function EditMyBillNo() {
+        var billNo = $("#EditMyBIllNo").val();
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/LoadBillNo/")",
+            data: { BillNo: billNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    EditViewLoadDate(billNo, parseFloat(result));//加载编辑数据
+                }
+                else {
+                    submitMessageShow("不存在此单据", "error");
+                }
+            }
+        })
+    }
+
+
+    function ShowTableDataFromProviderBank() {
+        $("#loadingToast").show();
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/LoadProviderBankInfo/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#loadingToast").hide();
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { PROVIDERNAME: "", CODE: "", BANKNAME: "", BANKNO: "", SWIFT: "", IBAN: "", ISUSERDATA: "", Operation: "" };
+                        model.PROVIDERNAME = result[i].PROVIDERNAME;
+                        model.CODE = result[i].CODE;
+                        model.BANKNAME = result[i].BANKNAME;
+                        model.BANKNO = result[i].BANKNO;
+                        model.SWIFT = result[i].SWIFT;
+                        model.IBAN = result[i].IBAN;
+                        model.ISUSERDATA = result[i].ISUSERDATA == "1" ? "用户自建数据" : "SAP数据";
+                        model.Operation = "<a onclick=\"EditOrAddProviderInfo()\"  style=\"cursor: pointer;\">增加</a>&nbsp<a onclick=\"EditOrAddProviderInfo('" + result[i].ID + "')\" style=\"cursor: pointer;\">修改</a>&nbsp<a onclick=\"PublicDelMethod('" + result[i].ID + "','','供应商')\" style=\"cursor: pointer;\">删除</a>";
+                        newlist.push(model);
+                    }
+                    $('#table').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+
+
+    function ShowMyList(Id) {
+        $("#FatherRow").children().each(function () {
+            $(this).hide();
+        });
+        $("#" + Id + "").show();
+        if (Id == "listTwo") {
+            ShowTableDataFromProviderBank();
+        }
+        if (Id == "listFour") {
+            GetPersonalData();
+        }
+        if (Id == "list9") {
+            GetPersonBankInfo();
+        }
+        if (Id == "list10") {
+            GetDepartCostercenterExtend();
+        }
+        if (Id == "list12") {
+            GetErrorModel();
+        }
+        if (Id == "list13") {
+            GetFeeItems();
+        }
+        if (Id == "list14") {
+            GetNoticeList();
+        }
+        if (Id == "list15") {
+            GetAreaExpenses();
+        }
+        if (Id == "list25") {
+            GetSAPData();
+        }
+    }
+
+
+    function GetAreaExpenses() {
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/GetAreaExpenses/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { c1: "", c2: "", c3: "", c4: "", c5: "", c6: "", c7: "", c8: "", Operation: "" };
+                        model.c1 = result[i].c1;
+                        model.c2 = result[i].c2;
+                        model.c3 = result[i].c3;
+                        model.c4 = result[i].c4;
+                        model.c5 = result[i].c5;
+                        model.c6 = result[i].c6;
+                        model.c7 = result[i].c7;
+                        model.c8 = result[i].c8;
+                        newlist.push(model);
+                    }
+                    $('#table8').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table8').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+
+
+
+    function GetNoticeList() {
+
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/GetNoticeList/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { NAME: "", Operation: "" };
+                        var src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/Notice/" + result[i];
+                        model.NAME = result[i];
+                        model.Operation = "<a  href=\"" + src_remoute + "\"  style=\"cursor: pointer;\">下载</a>&nbsp<a onclick=\"DelNotice('" + result[i] + "')\" style=\"cursor: pointer;\">删除</a>";
+                        newlist.push(model);
+                    }
+                    $('#table7').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table7').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+
+
+    function DelNotice(link) {
+
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/DelNotice/")",
+            data: { Link: link },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result.error == "1") {
+                    submitMessageShow(result.msg, "error");
+                }
+                else {
+                    submitMessageShow(result.msg);
+                    GetNoticeList();
+                }
+            }
+        })
+    }
+
+
+
+    function TransferBill() {
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/ShiftBill/")",
+            data: { Work1: $("#One").val(), Work2: $("#Two").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+
+                if (result != "Fail") {
+                    submitMessageShow(result, "error");
+                }
+                else {
+                    submitMessageShow(result);
+                }
+            }
+        })
+    }
+
+
+
+    function CommitMethod1() {
+        var PB1 = $("#PB1").attr("role");
+        var PB2 = $("#PB2").val();
+        if (PB2 == "" || PB2 == undefined || PB2 == null) {
+            submitMessageShow("工号不能为空", "error");
+            return;
+        }
+
+        var PB3 = $("#PB3").val();
+        var PB4 = $("#PB4").val();
+        var PB5 = $("#PB5").val();
+        var PB6 = $("#PB6").val();
+        var PB7 = $("#PB7").val();
+
+        var model = { NAME: PB3, NO: PB2, POSITION: PB4, BANKACCOUNT: PB5, OPENBANK: PB6, OPENCITY: PB7 };
+
+        if (PB1 == "ADD") {
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/AddtBankInfo/")",
+                data: JSON.stringify(model),
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "POST",
+                success: function (result) {
+                    result = JSON.parse(result);
+                    if (result.error == "0") {
+                        submitMessageShow(result.msg);
+                        GetPersonBankInfo();
+                    }
+                    else {
+                        submitMessageShow(result.msg, "error");
+                    }
+                }
+            })
+        }
+        else if (PB1 == "EDIT") {
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/EditBankInfo/")",
+                data: JSON.stringify(model),
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "POST",
+                success: function (result) {
+                    result = JSON.parse(result);
+                    if (result.error == "0") {
+                        submitMessageShow(result.msg);
+                        GetPersonBankInfo();
+                    }
+                    else {
+                        submitMessageShow(result.msg, "error");
+                    }
+                }
+            })
+        }
+        HideBanners('dialogPersonBankInfo');
+    }
+
+
+    function PublicOperation(Type, No) {
+        if (Type == "ADD") {
+            $("#PB1").text("新增个人银行卡信息");
+            $("#PB1").attr("role", "ADD");
+            $("#PB2").val("");
+            $("#PB2").attr("readonly", false);
+            $("#PB3").val("");
+            $("#PB4").val("");
+            $("#PB5").val("");
+            $("#PB6").val("");
+            $("#PB7").val("");
+            $("#dialogPersonBankInfo").show();
+        }
+        else if (Type == "EDIT") {
+            $("#PB1").text("编辑个人银行卡信息");
+            $("#PB1").attr("role", "EDIT");
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/DelOrQueryData/")",
+                data: { Type: Type, No: No },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    if (result) {
+                        result = JSON.parse(result);
+                        $("#PB2").val(result.NO);
+                        $("#PB2").attr("readonly", true);
+                        $("#PB3").val(result.NAME);
+                        $("#PB4").val(result.POSITION);
+                        $("#PB5").val(result.BANKACCOUNT);
+                        $("#PB6").val(result.OPENBANK);
+                        $("#PB7").val(result.OPENCITY);
+                        $("#dialogPersonBankInfo").show();
+                    }
+                }
+            })
+        }
+        else if (Type == "DEL") {
+            //弹出删除框
+        }
+    }
+
+
+
+    function GetPersonBankInfo() {
+
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/GetPersonBankInfo/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { NO: "", NAME: "", POSITION: "", BANKNO: "", OPENBANK: "", OPENCITY: "", Operation: "" };
+                        model.NO = result[i].NO;
+                        model.NAME = result[i].NAME;
+                        model.POSITION = result[i].POSITION;
+                        model.BANKNO = result[i].BANKACCOUNT;
+                        model.OPENBANK = result[i].OPENBANK;
+                        model.OPENCITY = result[i].OPENCITY;
+
+                        model.Operation = "<a onclick=\"PublicOperation('ADD')\"  style=\"cursor: pointer;\">增加</a>&nbsp<a onclick=\"PublicOperation('EDIT','" + result[i].NO + "')\" style=\"cursor: pointer;\">修改</a>&nbsp<a onclick=\"PublicDelMethod('" + result[i].NO + "','','银行卡信息')\" style=\"cursor: pointer;\">删除</a>";
+                        newlist.push(model);
+                    }
+                    $('#table3').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table3').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+
+
+    function GetDepartCostercenterExtend() {
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/GetDepartCostercenterExtend/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { DEPARTMENTID: "", NAME: "", COMPANYCODE: "", COSTERCENTER: "", Operation: "" };
+                        model.DEPARTMENTID = result[i].DEPARTMENTID;
+                        model.NAME = result[i].NAME;
+                        model.COSTERCENTER = result[i].COSTERCENTER;
+                        model.COMPANYCODE = result[i].COMPANYCODE;
+
+                        model.Operation = "<a onclick=\"DealDepartCosterCenter('ADD','" + result[i].DEPARTMENTID + "')\"  style=\"cursor: pointer;\">增加</a>&nbsp<a onclick=\"DealDepartCosterCenter('EDIT','" + result[i].DEPARTMENTID + "')\" style=\"cursor: pointer;\">修改</a>";
+                        newlist.push(model);
+                    }
+                    $('#table4').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table4').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+
+
+    function newGuid() {
+        var guid = "";
+        for (var i = 1; i <= 32; i++) {
+            var n = Math.floor(Math.random() * 16.0).toString(16);
+            guid += n;
+            if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+                guid += "-";
+        }
+        return guid;
+    }
+
+    function tagsMean(tags) {
+        if (tags == "FeeBill") {
+            return "费用报销单";
+        }
+        else if (tags == "NoticeBill") {
+            return "付款通知书";
+        }
+        else if (tags == "BorrowBill") {
+            return "借款单";
+        }
+        else if (tags == "RefundBill") {
+            return "还款单";
+        }
+    }
+
+    function EditTagsMean(tags) {
+        if (tags == "FeeBill") {
+            return "1";
+        }
+        else if (tags == "NoticeBill") {
+            return "2";
+        }
+        else if (tags == "BorrowBill") {
+            return "3";
+        }
+        else if (tags == "RefundBill") {
+            return "4";
+        }
+    }
+
+
+    function ApprovalStatusMean(ApprovalStatus, ApprovalPost) {
+        if (ApprovalStatus == 2) {
+            return "通过";
+        }
+        if (ApprovalStatus == 3) {
+            return "拒绝";
+        }
+        if (ApprovalStatus == 5) {
+            return "搁置中,理由为：" + ApprovalPost;
+        }
+        if (ApprovalPost) {
+            return ApprovalPost + "审核中";
+        }
+    }
+
+
+    function ConfigCommitOperation() {
+        var value = $("#DCI3").val();
+        if (value) {
+            var type = $("#dialogConfigInfo").attr("RoleType");
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/PublicConfigEditMethod/")",
+                data: { ID: $("#DCI2").val(), Value: value, Role: $("#list11").attr("role") },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    if (result) {
+                        result = JSON.parse(result);
+                        if (result.error == "1") {
+                            submitMessageShow(result.msg, "error");
+                        }
+                        else {
+                            submitMessageShow(result.msg);
+                            PublicConfigInfo($("#list11").attr("role"));
+                            $("#dialogConfigInfo").hide();
+                        }
+                    }
+                }
+            })
+        }
+        else {
+            submitMessageShow("值不能为空", "error");
+            return;
+        }
+    }
+
+
+    function ConfigPublicAddOrEditMethod(ID, Type) {
+        $("#dialogConfigInfo").attr("RoleType", Type);
+        $("#DCI2").val(ID);
+        $("#DCI3").val("");
+        if (Type == "EDIT") {
+            $("#DCI1").text("编辑");
+            $.ajax({
+                url: "@Url.Content("~/RecoverBill/GetConfigEditValue/")",
+                data: { ID: ID, Role: $("#list11").attr("role") },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                success: function (result) {
+                    if (result) {
+                        $("#DCI3").val(result);
+                        $("#dialogConfigInfo").show();
+                    }
+                }
+            })
+        }
+        else {
+            $("#DCI1").text("新增");
+            $("#dialogConfigInfo").show();
+        }
+    }
+
+    function PublicConfigInfo(role) {
+        $("#list11").attr("role", role);
+        $("#Phead").children().remove();
+        $("#Pbody").children().remove();
+        $.ajax({
+            url: "@Url.Content("~/RecoverBill/GetOracleConfigurationInfo/")",
+            data: { role: role },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    result = JSON.parse(result);
+                    if (result.error == "1") {
+                        submitMessageShow(result.msg, "error");
+                        return;
+                    }
+                    else {
+                        var Columns = result.data.Columns;
+                        var Rows = result.data.Rows;
+
+                        if (Columns.length > 0) {
+                            var phead = "<tr>";
+                            var keys1 = [];
+
+                            for (var i = 0; i < Columns.length; i++) {
+                                keys1.push(Columns[i])
+                            }
+                            for (var i = 0; i < keys1.length; i++) {
+                                phead += "<td>" + keys1[i] + "</td>"
+                            }
+                            phead += "</tr>";
+                            $(phead).appendTo($("#Phead"));
+                            for (var i = 0; i < Rows.length; i++) {
+                                var pbody = "<tr>";
+
+                                for (var T = 0; T < Rows[i].length; T++) {
+                                    if (Rows[i][T]) {
+                                        pbody += "<td>" + Rows[i][T] + "</td>";
+                                    }
+                                    else {
+                                        pbody += "<td></td>";
+                                    }
+                                }
+
+                                //这里作为操作额外添加
+                                switch (role) {
+                                    case "system":
+                                        pbody += "<td><a onclick=\"ConfigPublicAddOrEditMethod('" + Rows[i][0] + "','ADD')\">增加&nbsp&nbsp</a></td>";
+                                        break;
+                                    case "extradata":
+                                        pbody += "<td><a onclick=\"ConfigPublicAddOrEditMethod('" + Rows[i][0] + "','EDIT')\">修改&nbsp&nbsp</a></td>";
+                                        break;
+                                    case "company":
+                                        pbody += "<td><a onclick=\"ConfigPublicAddOrEditMethod('" + Rows[i][0] + "','ADD')\">增加&nbsp&nbsp</a></td>";
+                                        break;
+                                    case "Items":
+                                        pbody += "<td><a onclick=\"ConfigPublicAddOrEditMethod('" + Rows[i][0] + "','ADD')\">增加&nbsp&nbsp</a></td>";
+                                        break;
+                                    case "EmployeeNo":
+                                        pbody += "<td><a onclick=\"ConfigPublicAddOrEditMethod('" + Rows[i][0] + "','EDIT')\">修改&nbsp&nbsp</a></td>";
+                                        break;
+                                    case "SuFOB":
+                                        pbody += "<td><a onclick=\"ConfigPublicAddOrEditMethod('" + Rows[i][0] + "','EDIT')\">修改&nbsp&nbsp</a></td>";
+                                    case "PaymentCode":
+                                        pbody += "<td><a onclick=\"ConfigPublicAddOrEditMethod('" + Rows[i][0] + "','ADD')\">增加&nbsp&nbsp</a></td>";
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                pbody += "</tr>";
+                                $(pbody).appendTo($("#Pbody"));
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+
+    function GetErrorModel() {
+        $.ajax({
+            url: "@Url.Content("~/Items/GetErrorModel/")",
+            data: { path: $("#InputFile").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    result = result.data;
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { BillNo: "", Department: "", Creator: "", WorkFlowID: "", Operation: "" };
+                        model.BillNo = result[i].BillNo;
+                        model.Department = result[i].PersonInfo.Department;
+                        model.Creator = result[i].Creator;
+                        model.WorkFlowID = result[i].WorkFlowID;
+
+                        model.Operation = "<a onclick=\"showDialog('" + result[i].BillNo + "','" + result[i].PageName + "')\"  style=\"cursor: pointer;\">查看</a>&nbsp<a onclick=\"DelErrorModel('" + result[i].WorkFlowID + "')\" style=\"cursor: pointer;\">删除</a>";
+                        newlist.push(model);
+                    }
+                    $('#table5').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table5').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+
+
+    function DelErrorModel(WorkID) {
+        $.ajax({
+            url: "@Url.Content("~/Items/DelErrorModel/")",
+            data: { wkID: WorkID },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result == "Success") {
+                    submitMessageShow("删除成功");
+                    GetErrorModel();
+                }
+                else {
+                    submitMessageShow("删除失败", "error");
+                }
+            }
+        })
+    }
+
+    function GetFeeItems() {
+        $.ajax({
+            url: "@Url.Content("~/Items/GetFeeItems/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var newlist = new Array();
+                    result = JSON.parse(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { c1: "", c2: "", c3: "", c4: "", c5: "", c6: "", c7: "", c8: "", c9: "" };
+                        model.c1 = result[i].c1;
+                        model.c2 = result[i].c2;
+                        model.c3 = result[i].c3;
+                        model.c4 = result[i].c4;
+                        model.c5 = result[i].c5;
+                        model.c6 = result[i].c6;
+                        model.c7 = result[i].c7;
+                        model.c8 = result[i].c8;
+                        model.c9 = "<a onclick=\"EditFeeAccount('" + result[i].c9 + "','" + result[i].c2 + "','" + result[i].c4 + "','" + result[i].c5 + "','" + result[i].c7 + "','" + result[i].c10 + "')\">操作</a>";
+
+                        newlist.push(model);
+                    }
+                    $('#table6').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table6').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        })
+    }
+
+
+    //获取指定支行
+    function loadAutoSubBranch(ID, IDFather) {
+        var value = $("#" + ID + "").val();
+
+        if (value == "") {
+            submitMessageShow("请输入检索条件!", "error");
+            return;
+        }
+
+        $("#" + IDFather + "").children().remove();
+        if (IDFather == "ProviderBankNameFather") {
+            $("#" + IDFather + "").append(" <input id=\"ProviderBankName\" class=\"weui_input\" style=\"margin-left: 15px;\" pattern=\"*\" placeholder=\"如 民生 深圳 皇岗 点回车\"  value=\"" + value + "\"/>");
+        }
+        else {
+            $("#" + IDFather + "").append("<input class=\"weui_input\" type=\"text\" placeholder=\"如 民生 深圳 皇岗 点回车\" val=\"5\" id=\"CollectionInfoSubbranchBank\"  value=\"" + value + "\">");
+        }
+
+
+        //绑定change事件
+        $("#" + ID + "").bind("keydown", function (event) {
+            if (event.keyCode == "13") {
+                loadAutoSubBranch(ID, IDFather);
+            }
+        });
+
+
+        var input = document.getElementById(ID);
+
+
+        $.ajax({
+            url: "@Url.Content("~/FeeBill/LoadSubBankData/")",
+            data: { value: value },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            synch: true,
+            success: function (result) {
+
+                if (result != "" && result != "[]") {
+                    var result = JSON.parse(result);
+                    var complete = new Awesomplete(input, {
+                        list: result,
+                        replace: function (text) {
+                            this.input.setAttribute("completeValue", text);
+                            this.input.value = text;
+                            this.input.setAttribute("code", text.value);
+                        },
+                    });
+                    if ($.isNumeric(value)) {
+                        $("#" + ID + "").val(result[0])
+                    }
+                    $("#" + ID + "").focus();
+                    complete.evaluate();
+
+                    events(input, 'awesomplete-selectcomplete', function (e) {
+                        var completeValue = input.getAttribute("completeValue");
+                        $("#" + ID + "").val(completeValue);
+
+                        $.ajax({
+                            url: "@Url.Content("~/FeeBill/GetSubbranchBankCode/")",
+                            data: { name: completeValue },
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            type: "GET",
+                            success: function (result) {
+                                if (result) {
+                                    $("#Unionlinenumber").val(result);
+                                    $("#" + ID + "").attr("style", "");
+                                    $("#UnionNumer").val(result);
+                                }
+                                else {
+                                    submitMessageShow("支行数据错误!", "error");
+                                }
+                            }
+                        });
+                    });
+                }
+                else {
+                    submitMessageShow("无相应数据!", "error");
+                }
+            }
+        });
+    }
+
+
+    function loadAutoComplete() {
+
+        //$("#ProviderBankName").attr("readonly", "readonly");
+        $("#ProviderBankNo").attr("readonly", "readonly");
+        $("#providerFather").children().remove();
+        $("#providerFather").append("<input id=\"providerText\" class=\"weui_input awesomplete\" style=\"min-width: 250px;\" pattern=\"*\" placeholder=\"输入模糊信息\" />")
+        var input = document.getElementById("providerText");
+        var companyCode = employeeInfo.CompanyCode;
+
+        $.ajax({
+            url: "@Url.Content("~/NoticeBill/GetProviderInfo/")",
+            data: { CompanyCode: companyCode },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    var complete = new Awesomplete(input, {
+                        list: result,
+                        replace: function (text) {
+                            this.input.setAttribute("completeValue", text);
+                            this.input.value = text;
+                            this.input.setAttribute("code", text.value);
+
+                        }
+                    });
+
+                    events(input, 'awesomplete-selectcomplete', function (e) {
+                        var inputcode = input.getAttribute("code");
+                        var completeValue = input.getAttribute("completeValue");
+                        if (completeValue.split('--')[0].indexOf('一次性') > -1) {
+                            $("#ProviderName").removeAttr("readonly");
+                            //$("#ProviderBankName").removeAttr("readonly");
+                            $("#ProviderBankNo").removeAttr("readonly");
+                        }
+                        else {
+                            $("#ProviderName").attr("readonly", "readonly");
+                            //$("#ProviderBankName").attr("readonly", "readonly");
+                            $("#ProviderBankNo").attr("readonly", "readonly");
+                        }
+                        $("#ProviderName").val(completeValue.split('--')[0]);
+                        $("#ProviderName").attr("code", inputcode);
+                        $("#ProviderName").attr("CompanyCode", employeeInfo.CompanyCode);
+                        $("#ProviderBankName").val("");
+                        $("#ProviderBankNo").val("");
+                        $("#ProviderIBAN").val("");
+                        $("#ProviderBankCode").val("");
+                        //得到国家名称
+                        $.ajax({
+                            url: "@Url.Content("~/NoticeBill/GetCountryName/")",
+                            data: { CODE: inputcode },
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            type: "GET",
+                            success: function (result) {
+                                $("#IBANNAME").text("IBAN(" + result + ")");
+                                //国外的让其能够编辑
+                                if (result != "" && result != "中国") {
+                                    //$("#ProviderBankName").removeAttr("readonly");
+                                    $("#ProviderBankNo").removeAttr("readonly");
+                                }
+                            }
+                        });
+                        //得到供应商银行信息
+                        $.ajax({
+                            url: "@Url.Content("~/NoticeBill/GetProviderBankInfo/")",
+                            data: { COMPANYCODE: employeeInfo.CompanyCode, CODE: inputcode, BANKNAME: completeValue.split('--')[1], BANKNO: completeValue.split('--')[2] },
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            type: "GET",
+                            success: function (result) {
+                                if (result) {
+                                    var result = JSON.parse(result);
+                                    $("#ProviderBankName").val(result.BankName);
+                                    $("#ProviderBankNo").val(result.BankNo);
+                                    if (result.IBAN) { $("#ProviderIBAN").val(result.IBAN) }
+                                    if (result.Swift) { $("#ProviderBankCode").val(result.Swift) }
+                                }
+                            }
+                        });
+                    })
+                }
+            }
+        });
+    }
+
+
+
+    function OnceProviderloadAutoComplete() {
+        var input = document.getElementById("ProviderName");
+        $.ajax({
+            url: "@Url.Content("~/NoticeBill/OnceProviderInfo/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var result = JSON.parse(result);
+                    var complete = new Awesomplete(input, {
+                        list: result,
+                        replace: function (text) {
+                            this.input.setAttribute("completeValue", text);
+                            this.input.value = text;
+                            //this.input.setAttribute("code", text.value);
+                        },
+
+                    });
+                    events(input, 'awesomplete-selectcomplete', function (e) {
+                        var completeValue = input.getAttribute("completeValue");
+                        $("#ProviderName").val(completeValue.split('--')[0]);
+                        $("#ProviderBankName").val(completeValue.split('--')[1]);
+                        $("#ProviderBankNo").val(completeValue.split('--')[2]);
+                        if (completeValue.split('--')[3] != "自建数据" && completeValue.split('--')[3] != "SAP数据" && completeValue.split('--')[3] != undefined) {
+                            $("#ProviderBankCode").val(completeValue.split('--')[3]);
+                        }
+                        if (completeValue.split('--')[4] != "自建数据" && completeValue.split('--')[4] != "SAP数据" && completeValue.split('--')[4] != undefined) {
+                            $("#ProviderIBAN").val(completeValue.split('--')[4]);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+    function EidtCollection() {
+        var billNo = $("#CollectionList").val();
+        var username = $("#CollectionInfoName").val();
+        var bankname = $("#CollectionInfoSubbranchBank").val();
+        var code = $("#CollectionInfoBankCode").val();
+        var number = $("#Unionlinenumber").val();
+        if (billNo == "") {
+            submitMessageShow("单号不能为空!", "error");
+            return;
+        }
+        if (username && bankname && code && number) {
+
+            $.ajax({
+                url: "@Url.Content("~/Items/EditColletion/")",
+                data: { BillList: billNo, username: username, bankname: bankname, code: code, number: number },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                synch: true,
+                success: function (result) {
+                    result = JSON.parse(result);
+                    if (result.error == "0") {
+                        submitMessageShow(result.msg);
+                    }
+                    else {
+                        submitMessageShow(result.msg, "error");
+                    }
+                }
+            })
+        }
+        else {
+            submitMessageShow("收款信息不能为空!", "error");
+            return;
+        }
+    }
+
+    function EditProviderInfo() {
+        var BillList = $("#ProViderInfoList").val();
+        var name = $("#ProviderName").val()
+        var bank = $("#ProviderBankName").val();
+        var code = $("#ProviderBankNo").val();
+        var swift = $("#ProviderBankCode").val();
+        var iban = $("#ProviderIBAN").val();
+        var number = $("#UnionNumer").val();
+        var Providercode = $("#ProviderName").attr("code");
+
+        if (BillList == "") {
+            submitMessageShow("单号不能为空!", "error");
+            return;
+        }
+        if (name && bank && code) {
+            $.ajax({
+                url: "@Url.Content("~/Items/EditPrividerInfo/")",
+                data: { billno: BillList, name: name, bankname: bank, bankcode: code, swift: swift, iban: iban, num: number, providercode: Providercode, companycode: employeeInfo.CompanyCode },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                synch: true,
+                success: function (result) {
+                    result = JSON.parse(result);
+                    if (result.error == "0") {
+                        submitMessageShow(result.msg);
+                    }
+                    else {
+                        submitMessageShow(result.msg, "error");
+                    }
+                }
+            })
+        }
+        else {
+            submitMessageShow("供应商信息缺失!", "error");
+            return;
+        }
+    }
+    function GetAllBillNo() {
+        var No = $("#AllBillNo").val();
+        $("#list20son").show();
+        if (No) {
+            $("#loadingToast").show();
+            $.ajax({
+                url: "@Url.Content("~/Items/GetAllBillNo/")",
+                data: { No: No },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                synch: true,
+                success: function (result) {
+                    $("#loadingToast").hide();
+                    if (result) {
+                        var newlist = new Array();
+                        if (result.length <= 0) {
+                            submitMessageShow("无相应单据!", "error");
+                            return false;
+                        }
+                        for (var i = 0; i < result.length; i++) {
+                            var tempModel = { BillNo: "", Brand: "", Creator: "", Owner: "", TotalMoney: "", SurplusMoney: "", CreateTime: "", ApprovalTime: "", Remark: "", Operation: "" }
+                            var Brand = "";
+                            if (result[i].PersonInfo != undefined && result[i].PersonInfo.Brand != undefined && result[i].PersonInfo.Brand.length > 0) {
+                                for (var k = 0; k < result[i].PersonInfo.Brand.length; k++) {
+                                    if (k < result[i].PersonInfo.Brand.length - 1) {
+                                        Brand += result[i].PersonInfo.Brand[k] + ","
+                                    }
+                                    else {
+                                        Brand += result[i].PersonInfo.Brand[k];
+                                    }
+                                }
+                            }
+                            else {
+                                Brand = "无记账品牌";
+                            }
+                            tempModel.BillNo = result[i].BillNo;
+                            tempModel.PageName = result[i].PageName;
+                            tempModel.Brand = Brand;
+                            tempModel.Creator = result[i].Creator;
+                            tempModel.Owner = result[i].Owner;
+                            tempModel.TotalMoney = result[i].TotalMoney;
+                            tempModel.CreateTime = result[i].StringTime;
+                            tempModel.Delete = result[i].Status == 0 ? "未删除" : "已删除";
+                            if (result[i].PageName == "付款通知书") {
+                                tempModel.MissBill = result[i].MissBill == 1 ? "已回收" : "未回收";
+                            }
+                            if (result[i].PageName == "借款单") {
+                                tempModel.Borrow = result[i].SurplusMoney == 0 ? "已还清" : "未还清";
+                            }
+
+                            tempModel.ApprovalStatus = ApprovalStatusMean(result[i].ApprovalStatus, result[i].ApprovalPost);
+                            newlist.push(tempModel);
+                        }
+                        $('#table10').bootstrapTable({
+                            data: newlist
+                        });
+
+                        $('#table10').bootstrapTable('refreshOptions', {
+                            data: newlist
+                        });
+                    }
+                }
+            })
+        }
+        else {
+            submitMessageShow("请填写工号!", "error");
+        }
+    }
+
+    function DownLoadFeeSystemFeeAccount() {
+        $.ajax({
+            url: "@Url.Content("~/Items/DownLoadFeeAccount/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                var src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/ExcelDownLoad/" + result;
+                window.location.href = src_remoute;
+                submitMessageShow(result.msg);
+            }
+        })
+    }
+
+    function EditFeeAccount(ID, FeeName, IsShow, ISmarket, SortId, bigclass) {
+        $("#dialogFeeAccount").show();
+
+        var IsShow_num;
+        var IsMarket_num = (ISmarket == "考核" ? 1 : 0);
+
+        if (IsShow == "总部可见片区不可见") {
+            IsShow_num = 0;
+        }
+        else if (IsShow == "都可见") {
+            IsShow_num = 1;
+        }
+        else {
+            IsShow_num = 2;
+        }
+
+        $("#FeeName").val(FeeName);
+        $("#FeeName").attr("FEEID", ID);
+        $("#IsShow").val(IsShow_num);
+        $("#IsMarket").val(IsMarket_num);
+        $("#SortId").val(SortId);
+        $("#OldName").val(FeeName);
+        $("#BigClass").val(bigclass);
+    }
+
+
+    function CommitFeeAccountEidt() {
+        $.ajax({
+            url: "@Url.Content("~/Items/EditFeeAccount/")",
+            data: { Id: $("#FeeName").attr("FEEID"), FeeName: $("#FeeName").val(), IsShow: $("#IsShow").val(), IsMarket: $("#IsMarket").val(), SortId: $("#SortId").val(), OldName: $("#OldName").val(), BigClass: $("#BigClass").val() },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result == "Success") {
+                    submitMessageShow("编辑成功!");
+                    GetFeeItems();
+                    $("#dialogFeeAccount").hide();
+                }
+                else {
+                    submitMessageShow("编辑失败!", "error");
+                }
+            }
+        })
+    }
+
+
+    function TransferAuditor() {
+
+        var billNo = $("#list21 input").eq(0).val();
+        var No = $("#list21 input").eq(1).val();
+        if (!billNo) {
+            submitMessageShow("单号不能为空!", "error");
+            return;
+        }
+        if (!No) {
+            submitMessageShow("工号不能为空!", "error");
+            return;
+        }
+        $.ajax({
+            url: "@Url.Content("~/Items/TransferAuditor/")",
+            data: { BillNos: billNo, No: No },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result.Status == "success") {
+                    if (result.Msg || result.Msg == "") {
+                        submitMessageShow("转移成功!");
+                    }
+                    else {
+                        submitMessageShow(result.Msg, "error");
+                    }
+                }
+                else {
+                    submitMessageShow("转移失败!", "error");
+                }
+            }
+        })
+    }
+
+
+    function QueryPassword() {
+        var No = $("#list22 input").eq(0).val();
+        if (!No) {
+            submitMessageShow("工号不能为空!", "error");
+            return;
+        }
+        if (employeeInfo.RootDepartmentID != "4822") {
+            submitMessageShow("您没有权限!", "error");
+            return;
+        }
+
+        $.ajax({
+            url: "@Url.Content("~/Items/QueryPassword/")",
+            data: { No: No },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result) {
+                    submitMessageShow("查询成功!");
+                    $("#list22 input").eq(1).val(result);
+                }
+                else {
+                    submitMessageShow("查询失败!", "error");
+                }
+            }
+        });
+    }
+
+
+    function EditProviderName() {
+        var BillNos = $("#list23 input").eq(0).val();
+        var Name = $("#list23 input").eq(1).val();
+        if (!BillNos) {
+            submitMessageShow("单号不能为空!", "error");
+            return;
+        }
+        if (!Name) {
+            submitMessageShow("供应商名称不能为空!", "error");
+            return;
+        }
+        $.ajax({
+            url: "@Url.Content("~/Items/EditProviderName/")",
+            data: { BillNos: BillNos, Name: Name },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result.Status == "success") {
+                    if (result.Msg || result.Msg == "") {
+                        submitMessageShow("修改成功!");
+                    }
+                    else {
+                        submitMessageShow(result.Msg, "error");
+                    }
+                }
+                else {
+                    submitMessageShow("修改失败!", "error");
+                }
+            }
+        });
+    }
+
+
+    function SetChargeNo() {
+        var Dp_ID = $("#list24 input").eq(0).val();
+        var No = $("#list24 input").eq(1).val();
+        if (!Dp_ID) {
+            submitMessageShow("部门ID不能为空!", "error");
+            return;
+        }
+        if (!No) {
+            submitMessageShow("工号不能为空!", "error");
+            return;
+        }
+        $.ajax({
+            url: "@Url.Content("~/Items/SetChargeNo/")",
+            data: { DparId: Dp_ID, No: No },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                if (result.Status == "success") {
+                    submitMessageShow("修改成功!");
+                }
+                else {
+                    submitMessageShow("修改失败!", "error");
+                }
+            }
+        });
+    }
+
+
+
+    function GetSAPData() {
+        $("#loadingToast").show();
+        $.ajax({
+            url: "@Url.Content("~/Items/GetSAPData/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#loadingToast").hide();
+                if (result) {
+                    $('#table_list25').bootstrapTable({
+                        data: result
+                    });
+
+                    $('#table_list25').bootstrapTable('refreshOptions', {
+                        data: result
+                    });
+                }
+            }
+        })
+    }
+
+    function OperateShopStatus() {
+        var key = $("#list26 input").eq(0).val();
+        if (!key) {
+            submitMessageShow("请输入关键信息!", "error");
+            return;
+        }
+        $.ajax({
+            url: "@Url.Content("~/Items/OperateShopStatus/")",
+            data: { key: key },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result) {
+                    var newlist = new Array();
+                    for (var i = 0; i < result.length; i++) {
+                        var model = { CODE: "", NAME: "", CREATEDATE: "", AVAILABLE: "", Operation: "" };
+                        model.CODE = result[i].CODE;
+                        model.NAME = result[i].NAME;
+                        model.CREATEDATE = result[i].CREATEDATE;
+                        model.AVAILABLE = result[i].AVAILABLE == "1" ? "正常" : "撤柜";
+                        model.Operation = "<a onclick=\"UpdateShopStatus('1','" + model.CODE + "')\"  style=\"cursor: pointer;\">设置门店可用</a>&nbsp&nbsp&nbsp&nbsp<a onclick=\"UpdateShopStatus('0','" + model.CODE + "')\" style=\"cursor: pointer;\">设置门店不可用</a>";
+                        newlist.push(model);
+                    }
+
+                    $('#table_list26').bootstrapTable({
+                        data: newlist
+                    });
+
+                    $('#table_list26').bootstrapTable('refreshOptions', {
+                        data: newlist
+                    });
+                }
+            }
+        });
+    }
+
+    function UpdateShopStatus(status, code) {
+        $.ajax({
+            url: "@Url.Content("~/Items/UpdateShopStatus/")",
+            data: { status: status, code: code },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result.Status == "success") {
+                    submitMessageShow("修改成功!");
+                }
+                else {
+                    submitMessageShow("修改失败!", "error");
+                }
+                OperateShopStatus();
+            }
+        });
+    }
+
+
+    function GetAllBigClass() {
+
+        $.ajax({
+            url: "@Url.Content("~/Items/GetAllBigClass/")",
+            data: {},
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+
+                var str = "";
+                for (var i = 0; i < result.length; i++) {
+                    str += "<option value=\"" + result[i].CODE + "\">" + result[i].NAME + "</option>";
+                }
+                if (str) {
+                    $("#BigClass").append(str);
+                }
+            }
+        });
+    }
+
+    function SearchPerson() {
+        var BillNo = $("#list27 input").eq(0).val();
+        if (!BillNo) {
+            submitMessageShow("请输入单号!", "error");
+            return;
+        }
+        $("#list27 textarea").eq(0).val("");
+        var position = $("#list27 select").eq(0).val();
+
+        $.ajax({
+            url: "@Url.Content("~/Items/SearchPerson/")",
+            data: { BillNo: BillNo, position: position },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                $("#list27 textarea").eq(0).val(result);
+            }
+        });
+    }
+
+    function RepairBill() {
+        var BillNo = $("#list28 input").eq(0).val();
+        $.ajax({
+            url: "@Url.Content("~/Items/RepairBill/")",
+            data: { BillNo: BillNo },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            success: function (result) {
+                if (result.Status == "success") {
+                    submitMessageShow("修复成功!");
+                }
+                else {
+                    submitMessageShow("修复失败!", "error");
+                }
+            }
+        });
+    }
+
+</script>
+
+
+@Html.Partial("~/Views/FinanceApproval/EditView.cshtml")
+@Html.Partial("~/Views/Shared/MyBillList.cshtml")
+@Html.Partial("~/Views/Shared/PublicPrint.cshtml")
+<link href="~/Scripts/Bootstrap/css/bootstrap-table.css" rel="stylesheet" />
+<script src="~/Scripts/Bootstrap/js/bootstrap-table.js"></script>
+<script src="~/Scripts/Bootstrap/js/bootstrap-table-mobile.js"></script>

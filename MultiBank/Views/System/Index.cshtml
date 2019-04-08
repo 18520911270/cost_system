@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel blue-bg" style="margin-top: 70px;">
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-md-12">
+                <span class="state-title" style="color: #313131; font-family: 'Microsoft YaHei'; font-size: 30px; text-align: center;">系统管理</span>
+                <span class="state-title" style="color: #313131; font-family: 'Microsoft YaHei'; font-size: 16px; text-align: center;">对系统的一系列操作</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div style="border-top: #cccccc 1px dotted; overflow: hidden; height: 1px">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-8">
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-success" id="btnAdd" onclick="btnAdd()"><i class="iconfont">&#xe615;</i>&nbsp;新增</button>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-success" id="btnEdit" onclick=""><i class="iconfont">&#xe621;</i>&nbsp;修改</button>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-success" id="btnDel" onclick=""><i class="iconfont">&#xe627;</i>&nbsp;删除</button>
+                </div>
+
+                <div class="col-md-1">
+                    <button class="btn btn-success" id="btnLook" onclick=""><i class="iconfont">&#xe62d;</i>&nbsp;查看</button>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12">
+                <ul class="nav nav-tabs" role="tablist" style="cursor: pointer" id="tablist">
+                    <li role="presentation" class="active"><a aria-controls="person" role="tab" data-toggle="tab" onclick="GetSysUsers()">人员清单</a></li>
+                    <li role="presentation"><a aria-controls="replenishment" role="tab" data-toggle="tab">暂未开发</a></li>
+                    <li role="presentation"><a aria-controls="replenishment" role="tab" data-toggle="tab">暂未开发</a></li>
+                    <li role="presentation"><a aria-controls="allot" role="tab" data-toggle="tab">暂未开发</a></li>
+                    <li role="presentation"><a aria-controls="allot" role="tab" data-toggle="tab">暂未开发</a></li>
+                    <li role="presentation"><a aria-controls="takestock" role="tab" data-toggle="tab">暂未开发</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="apply">
+                        <section class="panel">
+                            <div class="panel-body">
+                                <div class="dt-grid-container" style="margin-top: 25px;">
+                                    <table class="dt-grid table table-bordered table-hover table-responsive" id="_SystemTable">
+                                    </table>
+                                </div>
+                                <div id="NoData" class="dt-grid-container">
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("Js", "System")

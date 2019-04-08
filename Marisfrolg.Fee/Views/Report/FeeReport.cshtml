@@ -1,0 +1,241 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=0" />
+
+    <title>费用率报表</title>
+    <link rel="stylesheet" href="http://210.75.13.196/icpos/Content/Monitor/report.css" />
+    <link rel="stylesheet" href="http://210.75.13.196/icpos/Content/Monitor/monitor0.css" />
+    <link rel="stylesheet" href="http://210.75.13.196/icpos/Content/weui/weui.css" />
+    <link href="~/Content/mobiscroll-2.13.2.full.min.css" rel="stylesheet" />
+    <link href="~/Scripts/Bootstrap/css/bootstrap-select.css" rel="stylesheet" />
+    <link rel="stylesheet" href="http://210.75.13.196/ReportEngineAPI/Scripts/Bootstrap/css/bootstrap.css" />
+    <script type="text/javascript" src="http://210.75.13.196/ReportEngineAPI/Scripts/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript" src="http://210.75.13.196/ReportEngineAPI/Scripts/Bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="http://210.75.13.196/ReportEngineAPI/Scripts/angular/angular.min.js"></script>
+    <script type="text/javascript" src="http://210.75.13.196/ReportEngineAPI/Scripts/jquery.cookies.2.2.0.min.js"></script>
+    <script src="~/Scripts/mobiscroll-2.13.2.full.min.js"></script>
+</head>
+
+<body data-ng-app="App017" data-ng-controller="Controller017">
+    <style>
+        .ShowStyle {
+            background-color: #E2E4E6;
+        }
+
+        .master_data {
+            width: 12.5%;
+            text-align: left;
+            color: black;
+        }
+
+        .data__money {
+            width: 12.5%;
+            text-align: left;
+        }
+    </style>
+
+    <div class="row" style="margin:0px;margin-top: 40px;">
+        <div class="col-md-2" id="SelectCity">
+            <div style="width: 90px; font-size: 12px; text-align: center; float: left;line-height:34px">所属区域:</div>
+            <select class="weui_select" style="height:34px">
+                <option val="{{item}}" ng-repeat="item in AreaList">{{item}}片区</option>
+            </select>
+        </div>
+
+        <div class="col-md-3" id="CheckTime">
+            <div style="width: 90px; font-size: 12px; text-align: center; float: left;line-height:34px">考核周期:</div>
+            <div class="input-group" style="display: table;">
+                <input type="text" class="form-control scrollTime" style="width: 90px; font-size: 12px;">
+                <div class="input-group-addon" style="width: 40px;">到</div>
+                <input type="text" class="form-control scrollTime" style="width: 90px; font-size: 12px;">
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div style="width: 60px; font-size: 12px; text-align: center; float: left;line-height:34px">操作:</div>
+            <button style="margin-left:10px;height:34px;width:45px;" type="button" class="btn btn-xs btn-danger" ng-click="testData('query')">查询</button>
+            <button style="margin-left:10px;height:34px;width:45px;" type="button" class="btn btn-xs btn-danger" ng-click="testData('down')">导出</button>
+        </div>
+    </div>
+
+    <div class="page__hd" style="margin-top: 40px; padding-left: 5px; padding-right: 5px;">
+        <h1 class="page__title" style="font-family: 'Microsoft YaHei';">品牌费用率报表  <small>单位(万元)</small></h1>
+    </div>
+
+    <div id="yaoView" style="margin-bottom: 20px;">
+        <!--头部表格部分-->
+        <div>
+            <ul class="table_tilte">
+                <li class="master_data" style="text-overflow: initial">品牌</li>
+                <li class="data__money">本期指标</li>
+                <li class="data__money">本期实际</li>
+                <li class="data__money">超指标</li>
+                <li class="data__money">考核费用/万</li>
+                <li class="data__money">考核业绩/万</li>
+                <li class="data__money">品牌直接考核费用/万</li>
+                <li class="data__money">已分摊到品牌的考核费用/万</li>
+            </ul>
+            <div>
+                <ul class="tabledatas table" ng-repeat="item in DataList" ng-class="item.Class">
+                    <li class="master_data">{{item.newFeeName}}</li>
+                    <li class="data__money">{{item.Current_Index==null?'-':item.Current_Index}}</li>
+                    <li class="data__money">{{item.Current_Actual==null?'-':item.Current_Actual}}</li>
+                    <li class="data__money">{{item.Super_Index==null?'-':item.Super_Index}}</li>
+                    <li class="data__money">{{item.Assess_Cost}}</li>
+                    <li class="data__money">{{item.Assess_Achieve==0?'-':item.Assess_Achieve}}</li>
+                    <li class="data__money">{{item.Brand_Assess_Cost}}</li>
+                    <li class="data__money">{{item.Share_Cost}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="submitmask" style="display: none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-loading weui-icon_toast"></i>
+            <p class="weui-toast__content">数据加载中</p>
+        </div>
+    </div>
+
+    <script>
+        var EmployeeNo = "";
+        var employeeInfo = eval("(" + $.cookie("EmployeeInfo") + ")");
+        if (employeeInfo) {
+            EmployeeNo = employeeInfo.EmployeeNo;
+        }
+        else {
+            EmployeeNo = GetQueryString("EmployeeNo");
+        }
+
+        var App017 = angular.module('App017', []);
+        var Controller017 = App017.controller('Controller017', function ($scope, $http) {
+
+            //绑定时间插件
+            $(".scrollTime").mobiscroll().date({
+                theme: "Default light",
+                lang: "zh",
+                cancelText: null,
+                dateFormat: 'yy-mm-dd', //返回结果格式化为年月格式
+            });
+
+
+            $scope.getUserArea = function () {
+                $http({
+                    method: "GET",
+                    url: "@Url.Content("~/Report/GetSelfArea/")",
+                    dataType: "json",
+                    params: { employeeNo: EmployeeNo }
+                }).then(function (response) {
+                    $scope.AreaList = response.data;
+                })
+            }
+
+            $scope.loadDaily = function () {
+                var nowDate = AddDays(new Date(), 0);
+                $("#CheckTime .scrollTime").eq(0).val("2017-12-01");
+                $("#CheckTime .scrollTime").eq(1).val(nowDate.getFullYear() + "-" + (nowDate.getMonth() + 1) + "-" + nowDate.getDate());
+            }
+
+            $scope.testData = function (mode) {
+                var startTime = $("#CheckTime .scrollTime").eq(0).val();
+                var endTime = $("#CheckTime .scrollTime").eq(1).val();
+                var city = $("#SelectCity .weui_select").eq(0).val();
+                if (city.indexOf("片区")) {
+                    city = city.split('片区')[0];
+                }
+                if (startTime && endTime && city) {
+                    if (mode == "query") {
+                        $scope.getData(startTime, endTime, city);
+                    }
+                    else {
+                        $scope.downLoadExcel(startTime, endTime, city);
+                    }
+                }
+            }
+
+            $scope.getData = function (startTime, endTime, city) {
+                $("#submitmask").show();
+                $http({
+                    method: "GET",
+                    url: "@Url.Content("~/Report/GetFeeReport/")",
+                    dataType: "json",
+                    params: { startTime: startTime, endTime: endTime, city: city }
+                }).then(function (response) {
+                    $("#submitmask").hide();
+                    $scope.DataList = dataSortOrder(response.data);
+                })
+            }
+
+            $scope.downLoadExcel = function (startTime, endTime, city) {
+                $("#submitmask").show();
+                $http({
+                    method: "GET",
+                    url: "@Url.Content("~/Report/ExportFeeReportExcel/")",
+                    dataType: "json",
+                    params: { startTime: startTime, endTime: endTime, city: city }
+                }).then(function (response) {
+                    debugger;
+                    $("#submitmask").hide();
+                    var src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/ExcelDownLoad/" + response.data;
+                    window.location.href = src_remoute;
+                })
+            }
+
+            $scope.getUserArea();
+            $scope.loadDaily();
+        });
+
+        function dataSortOrder(data) {
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].FeeName == "合计") {
+                    data[i].newFeeName = data[i].Brand + "（合计）";
+                    data[i].Class = "ShowStyle";
+                }
+                else {
+                    data[i].newFeeName = data[i].FeeName;
+                }
+            }
+
+            return data;
+        }
+
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+        function AddDays(date, value) {
+            date.setDate(date.getDate() + value);
+            return date;
+        }
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+
+    </script>
+</body>
+</html>

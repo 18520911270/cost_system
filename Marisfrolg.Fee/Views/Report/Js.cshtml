@@ -1,0 +1,533 @@
+﻿<script type="text/javascript">
+
+    function GetReportData(AreaCodeAndShopCode) {
+        var tags = $("#lunchBegins").find("option:selected").attr("val");  //报表类型
+        var Permisson = ReportGetPermission();
+        var AreaPermissonList = "";
+        if (tags == undefined) {
+            submitMessageShow("请选择报表类型", "error");
+            return;
+        }
+        //单据查询
+        if (tags == 5) {
+            if ($("#InputBillNo").val() == undefined || $("#InputBillNo").val() == "") {
+                submitMessageShow("请填写单号", "error");
+                return;
+            }
+            $.ajax({
+                url: "@Url.Content("~/Home/GetMyArea/")",
+                data: { IsHeadOffice: employeeInfo.IsHeadOffice, EmployeeNo: employeeInfo.EmployeeNo },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                type: "GET",
+                async: false,
+                success: function (result) {
+                    var ListResult = new Array();
+                    if (result) {
+                        var result = JSON.parse(result);
+                        for (var i = 0; i < result.length; i++) {
+                            AreaPermissonList += result[i].CODE + ","
+                        }
+                    }
+                    else {
+                        var ListOne = { label: "", value: "" }
+                        AreaPermissonList = employeeInfo.RootDepartmentID;
+                    }
+                }
+            })
+        }
+        var _Area = "";
+        var _AccountType = "";
+        var _AccountInfo = "";
+        var _BillType = "";
+        var _BeginTime = "";
+        var _EndTime = "";
+        var _BillStatus = "";
+        var _CompanyCode = "";
+        var _OverBeginTime = "";
+        var _OverEndTime = "";
+        var _SpecialProperty = "";
+        var _Remark = $("#InputRemark").val();
+        var _ProviderName = $("#InputProviderName").val();
+        var _MinMoney = $("#MinMoney").val();
+        var _MaxMoeny = $("#MaxMoney").val();
+        var _BillNo = $("#InputBillNo").val();
+        //财务需求报表
+        if (tags == 3 || tags == 4 || tags == 6 || tags == 7 || tags == 8 || tags == 9 || tags == 10) {
+            var Area = $("#InDepartment").val();
+            var AccountType = $("#SelectBigSort").val();
+            var AccountInfo = $("#SelectSmallSort").val()
+            var BillStatus = $("#BillTypes").val();
+            var MybillTypeSon = $("#MybillType").val();
+            var MyCompanycodeSon = $("#MyCompanycode").val();
+            var MySpecialProperty = $("#SpecialProperty").val();
+            _BeginTime = $("#AccountTime1").val();
+            _EndTime = $("#AccountTime2").val();
+            _OverBeginTime = $("#AccountTime3").val();
+            _OverEndTime = $("#AccountTime4").val();
+            if (Area == null) {
+                submitMessageShow("请选择部门", "error");
+                return;
+            }
+            if (tags == 4) {
+                if (AccountType == null) {
+                    submitMessageShow("请选择费用大类", "error");
+                    return;
+                }
+                if (AccountInfo == null) {
+                    submitMessageShow("请选择费用小类", "error");
+                    return;
+                }
+            }
+            if (Area != null) {
+                for (var i = 0; i < Area.length; i++) {
+                    _Area += Area[i] + ",";
+                }
+            }
+            if (AccountType != null) {
+                for (var i = 0; i < AccountType.length; i++) {
+                    _AccountType += AccountType[i] + ",";
+                }
+            }
+            if (AccountInfo != null) {
+
+                for (var i = 0; i < AccountInfo.length; i++) {
+                    _AccountInfo += AccountInfo[i] + ",";
+                }
+            }
+            if (BillStatus != null) {
+                for (var i = 0; i < BillStatus.length; i++) {
+                    _BillStatus += BillStatus[i] + ",";
+                }
+            }
+
+            if (MybillTypeSon == null) {
+                _BillType = "1,2,3,4"
+            }
+            else {
+                for (var i = 0; i < MybillTypeSon.length; i++) {
+                    _BillType += MybillTypeSon[i] + ",";
+                }
+            }
+
+            if (MyCompanycodeSon != null) {
+                for (var i = 0; i < MyCompanycodeSon.length; i++) {
+                    _CompanyCode += MyCompanycodeSon[i] + ",";
+                }
+            }
+
+            if (MySpecialProperty != null) {
+                for (var i = 0; i < MySpecialProperty.length; i++) {
+                    _SpecialProperty += MySpecialProperty[i] + ",";
+                }
+            }
+        }
+
+        var postData = {
+            ReportType: tags,
+            Area: _Area,
+            AccountType: _AccountType,
+            AccountInfo: _AccountInfo,
+            CreateBeginTime: _BeginTime,
+            CreateEndTime: _EndTime,
+            OverBeginTime: _OverBeginTime,
+            OverEndTime: _OverEndTime,
+            BillNo: _BillNo,
+            PermissonGrade: Permisson,
+            AreaPermissonList: AreaPermissonList,
+            BillType: _BillType,
+            BillStatus: _BillStatus,
+            CompanyCode: _CompanyCode,
+            AreaCodeAndShopCode: AreaCodeAndShopCode,
+            Remark: _Remark,
+            ProviderName: _ProviderName,
+            MinMoney: _MinMoney,
+            MaxMoney: _MaxMoeny,
+            SpecialProperty: _SpecialProperty
+        };
+        $("#loadingToast").show();
+        $("#ButtonSearch").hide();
+
+        $.ajax({
+            url: "@Url.Content("~/Report/GetEmployees/")",
+            data: JSON.stringify(postData),
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "POST",
+            success: function (result) {
+                $("#loadingToast").hide();
+                $("#ButtonSearch").show();
+                $("#Phead").children().remove();
+                $("#Pbody").children().remove();
+
+                if (result) {
+                    result = JSON.parse(result);
+                    var newlist = new Array();
+                    if (tags == 4) {
+                        if (result.length > 0) {
+                            var phead = "<tr>";
+                            var keys1 = [];
+                            for (var p1 in result[0]) {
+                                if (result[0].hasOwnProperty(p1))
+                                    keys1.push(p1)
+                            }
+                            for (var i = 0; i < keys1.length; i++) {
+                                phead += "<td>" + keys1[i] + "</td>"
+                            }
+                            phead += "</tr>";
+                            $(phead).appendTo($("#Phead"));
+                            for (var i = 0; i < result.length; i++) {
+                                var pbody = "<tr>";
+                                for (var key in result[i]) {
+                                    if (result[i][key]) {
+                                        if (result[i][key] > 0 && AreaCodeAndShopCode == '' && key != "店柜编码") {
+                                            var parameter = key + "," + result[i]["部门"] + ',' + result[i]["店柜编码"];
+                                            pbody += "<td style=\"color:red;cursor:pointer;\" onclick=ReportShowDetailData('" + parameter + "')   >" + result[i][key] + "</td>";
+                                        }
+                                        else {
+                                            pbody += "<td>" + result[i][key] + "</td>";
+                                        }
+                                    }
+                                    else {
+                                        pbody += "<td></td>";
+                                    }
+                                }
+                                pbody == ""
+                                pbody += "</tr>";
+                                $(pbody).appendTo($("#Pbody"));
+                            }
+                        }
+                    }
+                    else if (tags == 3 || tags == 5 || tags == 6 || tags == 7 || tags == 8 || tags == 9 || tags == 10) {
+                        if (result.length > 0) {
+                            var phead = "<tr>";
+                            var keys1 = [];
+                            for (var p1 in result[0]) {
+                                if (result[0].hasOwnProperty(p1))
+                                    keys1.push(p1)
+                            }
+                            for (var i = 0; i < keys1.length; i++) {
+                                phead += "<td>" + keys1[i] + "</td>"
+                            }
+                            phead += "</tr>";
+                            $(phead).appendTo($("#Phead"));
+                            var IM_TotalMoney = 0;
+                            for (var i = 0; i < result.length; i++) {
+                                var pbody = "<tr>";
+                                for (var key in result[i]) {
+                                    if (result[i][key]) {
+                                        if (key == "金额" || key == "财务汇款金额" || (tags == 5 && key == "总金额") || (tags == 10 && key == "待还金额")) {
+                                            IM_TotalMoney += parseFloat(result[i][key]);
+                                        }
+                                        if (key == "单号") {
+                                            if (tags == 10) {
+                                                result[i]["单据类型"] = "借款单";
+                                            }
+                                            pbody += "<td  style=\"color:red;cursor:pointer;\" onclick=\"showDialog('" + result[i]["单号"] + "','" + result[i]["单据类型"] + "')\">" + result[i][key] + "</td>";
+                                        }
+                                        else {
+                                            pbody += "<td>" + result[i][key] + "</td>";
+                                        }
+                                    }
+                                    else {
+                                        if (key == "备注") {
+                                            pbody += "<td style='width:200px'></td>";
+                                        }
+                                        else if (key == "操作" && Permisson == 3) {
+                                            pbody += "<td><a onclick=\"showDialog('" + result[i]["单号"] + "','" + result[i]["单据类型"] + "','')\" style='color:blue;cursor:pointer;'>" + '查看' + "</a><br><a onclick=\"PrintOneBill('" + result[i]["单号"] + "','" + result[i]["单据类型"] + "','')\" style='color:blue;cursor:pointer;'>" + '打印' + "</a></td>";
+                                        }
+                                        else {
+                                            pbody += "<td></td>";
+                                        }
+                                    }
+                                }
+                                pbody += "</tr>";
+                                $(pbody).appendTo($("#Pbody"));
+                            }
+
+                            var IM_text = "合计金额为：";
+                            if (tags == 7) {
+                                IM_text = "财务汇款总金额为：";
+                            }
+                            if (tags == 10) {
+                                IM_text = "未还借款合计：";
+                            }
+                            $("<tr><td colspan=\"" + keys1.length + "\">合计总单数为：" + result.length + "，" + IM_text + "" + toDecimal2(IM_TotalMoney) + "</td></tr>").appendTo($("#Pbody"));
+                        }
+                    }
+                }
+                else {
+                    submitMessageShow("无相应数据", "error");
+                    return;
+                }
+            }
+        })
+    }
+
+
+
+    function ReportShowDetailData(AreaCodeAndShopCode) {
+        var tags = $("#lunchBegins").find("option:selected").attr("val");  //报表类型
+        var _Area = "";
+        var _AccountType = "";
+        var _AccountInfo = "";
+        var _BillType = "";
+        var _BeginTime = "";
+        var _EndTime = "";
+        var _BillStatus = "";
+        var _CompanyCode = "";
+        var _OverBeginTime = "";
+        var _OverEndTime = "";
+        var _SpecialProperty = "";
+        var _Remark = $("#InputRemark").val();
+        var _ProviderName = $("#InputProviderName").val();
+        var _MinMoney = $("#MinMoney").val();
+        var _MaxMoeny = $("#MaxMoney").val();
+        var _BillNo = $("#InputBillNo").val();
+        //财务需求报表
+        if (tags == 3 || tags == 4) {
+            var Area = $("#InDepartment").val();
+            var AccountType = $("#SelectBigSort").val();
+            var AccountInfo = $("#SelectSmallSort").val()
+            var BillStatus = $("#BillTypes").val();
+            var MybillTypeSon = $("#MybillType").val();
+            var MyCompanycodeSon = $("#MyCompanycode").val();
+            var MySpecialProperty = $("#SpecialProperty").val();
+            _BeginTime = $("#AccountTime1").val();
+            _EndTime = $("#AccountTime2").val();
+            _OverBeginTime = $("#AccountTime3").val();
+            _OverEndTime = $("#AccountTime4").val();
+            if (Area == null) {
+                submitMessageShow("请选择部门", "error");
+                return;
+            }
+            if (Area != null) {
+                for (var i = 0; i < Area.length; i++) {
+                    _Area += Area[i] + ",";
+                }
+            }
+            if (AccountType != null) {
+                for (var i = 0; i < AccountType.length; i++) {
+                    _AccountType += AccountType[i] + ",";
+                }
+            }
+            if (AccountInfo != null) {
+
+                for (var i = 0; i < AccountInfo.length; i++) {
+                    _AccountInfo += AccountInfo[i] + ",";
+                }
+            }
+            if (BillStatus != null) {
+                for (var i = 0; i < BillStatus.length; i++) {
+                    _BillStatus += BillStatus[i] + ",";
+                }
+            }
+            if (MybillTypeSon == null) {
+                _BillType = "1,2,3,4"
+            }
+            else {
+                for (var i = 0; i < MybillTypeSon.length; i++) {
+                    _BillType += MybillTypeSon[i] + ",";
+                }
+            }
+            if (MyCompanycodeSon != null) {
+                for (var i = 0; i < MyCompanycodeSon.length; i++) {
+                    _CompanyCode += MyCompanycodeSon[i] + ",";
+                }
+            }
+            if (MySpecialProperty != null) {
+                for (var i = 0; i < MySpecialProperty.length; i++) {
+                    _SpecialProperty += MySpecialProperty[i] + ",";
+                }
+            }
+        }
+        var postData = {
+            ReportType: tags,
+            Area: _Area,
+            AccountType: _AccountType,
+            AccountInfo: _AccountInfo,
+            CreateBeginTime: _BeginTime,
+            CreateEndTime: _EndTime,
+            OverBeginTime: _OverBeginTime,
+            OverEndTime: _OverEndTime,
+            BillNo: _BillNo,
+            PermissonGrade: "",
+            AreaPermissonList: "",
+            BillType: _BillType,
+            BillStatus: _BillStatus,
+            CompanyCode: _CompanyCode,
+            AreaCodeAndShopCode: AreaCodeAndShopCode,
+            IsExport: IsExport,
+            Remark: _Remark,
+            ProviderName: _ProviderName,
+            MinMoney: _MinMoney,
+            MaxMoney: _MaxMoeny,
+            SpecialProperty: _SpecialProperty
+        };
+
+        $("#loadingToast").show();
+        $("#ButtonSearch").hide();
+
+        $.ajax({
+            url: "@Url.Content("~/Report/GetEmployees/")",
+            data: JSON.stringify(postData),
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "POST",
+            success: function (result) {
+                $("#ShowRelationData").children().remove();
+                $("#loadingToast").hide();
+                $("#ButtonSearch").show();
+                result = JSON.parse(result);
+                $("#dialogPhoto").show();
+
+                if (result.length > 0) {
+                    var phead = "<tr>";
+                    var keys1 = [];
+                    for (var p1 in result[0]) {
+                        if (result[0].hasOwnProperty(p1))
+                            keys1.push(p1)
+                    }
+                    for (var i = 0; i < keys1.length; i++) {
+                        phead += "<td>" + keys1[i] + "</td>"
+                    }
+                    phead += "</tr>";
+                    $(phead).appendTo($("#ShowRelationData"));
+
+                    for (var i = 0; i < result.length; i++) {
+                        var pbody = "<tr>";
+                        for (var key in result[i]) {
+                            if (result[i][key]) {
+                                pbody += "<td>" + result[i][key] + "</td>";
+                            }
+                            else {
+                                pbody += "<td></td>";
+                            }
+                        }
+                        pbody += "</tr>";
+                        $(pbody).appendTo($("#ShowRelationData"));
+                    }
+                }
+            }
+        })
+    }
+
+
+    function buildTable($el, columns, rows) {
+        var i, j, row,
+                $columns = [],
+                $data = [];
+        for (i = 0; i < columns.length; i++) {
+            if (i == 0) {
+                $columns.push({
+                    field: columns[i],
+                    title: columns[i],
+                    sortable: true
+                });
+                continue;
+            }
+            $columns.push({
+                field: columns[i],
+                title: columns[i],
+                sortable: false
+            });
+        }
+        for (i = 0; i < rows.length; i++) {
+            row = {};
+            for (j = 0; j < columns.length; j++) {
+                row[columns[j]] = rows[i][j];
+            }
+            $data.push(row);
+        }
+        $el.bootstrapTable('destroy').bootstrapTable({
+            columns: $columns,
+            data: $data,
+            search: false,
+            fixedColumns: false,
+            fixedNumber: 1,
+
+        });
+    }
+
+    //批量打印
+    function PrintTrNode() {
+        var Permission = ReportGetPermission();
+
+        var tags = $("#lunchBegins").find("option:selected").attr("val");  //报表类型
+        if (tags != "5") {
+            submitMessageShow("报表类型只能为查询单据", "error");
+            return false;
+        }
+        if (Permission != 3) {
+            submitMessageShow("您不具有批量打印的权限", "error");
+            return false;
+        }
+        var count = $("#Pbody tr").length;
+        if (count <= 0) {
+            submitMessageShow("请先查询出数据", "error");
+            return false;
+        }
+        var NewArray = new Array();
+
+        $("#Pbody tr").each(function (i) {
+            if (i < ($("#Pbody tr").length - 1)) {
+                var no = this.childNodes[0].innerText;
+                var type = this.childNodes[1].innerText
+                var tempdata = { BillNo: no, Type: type };
+                NewArray.push(tempdata);
+            }
+        });
+        PrintSupport(NewArray);
+    }
+
+
+    function GetExportOption() {
+        var tags = $("#lunchBegins").find("option:selected").val();  //报表类型
+        if (tags == "汇款明细查询") {
+            $("#dialogExportOption").show();
+        }
+        else {
+            DownloadFile();
+        }
+    }
+
+
+    function DownloadFile() {
+        var tags = $("#lunchBegins").find("option:selected").val();  //报表类型
+
+        var parameterList = "B";
+        if (tags == "汇款明细查询") {
+            var parameterList = "B";
+            if ($('#Ex2').is(':checked')) {
+                parameterList += ",C"
+            }
+            if ($('#Ex3').is(':checked')) {
+                parameterList += ",T"
+            }
+            $("#dialogExportOption").hide();
+        }
+
+        $.ajax({
+            url: "@Url.Content("~/Report/DownloadFile/")",
+            data: { flag: tags, parameterList: parameterList },
+            contentType: "application/json; charset=utf-8",
+            datatype: "json",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                result = JSON.parse(result);
+                if (result.error == "1") {
+                    submitMessageShow(result.msg, "error");
+                }
+                else {
+                    var src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/ExcelDownLoad/" + result.data;
+                    if (tags == "汇款明细查询") {
+                        src_remoute = "http://" + "@this.Request.Url.Host" + "@Request.ApplicationPath" + "/Upload/Details/" + result.data;
+                    }
+                    window.location.href = src_remoute;
+                    submitMessageShow(result.msg);
+                }
+            }
+        })
+    }
+</script>
